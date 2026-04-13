@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Publications - Stéphane Caron</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="Stéphane Caron's publications">
+        <meta name="generator" content="Pelican 4.8.0">
+
+        <meta property="og:title" content="Publications - Stéphane Caron">
+        <meta property="og:description" content="Stéphane Caron's publications">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info">
+        <meta property="og:type" content="website">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/publications.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/publications.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="publications.html">Publications</a></li>
+                <li><a href="robotics.html">Robotics</a></li>
+                <li><a href="talks.html">Talks</a></li>
+                <li><a href="teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+    <h1>Publications</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p>
+Below are my scientific publications grouped by topics. Article files all correspond to peer-reviewed revisions (i.e. the collaborative scientific process), made accessible thanks to open repositories like <a href="https://arxiv.org/">arXiv</a> and <a href="https://hal.archives-ouvertes.fr">HAL</a>.
+</p>
+
+
+<ul class="tags">
+<li><a href="publications.html#recent-works">Recent works</a></li>
+<li><a href="publications.html#perception">Perception</a></li>
+<li><a href="publications.html#walking-stabilization">Walking stabilization</a></li>
+<li><a href="publications.html#contact-stability-conditions">Contact stability conditions</a></li>
+<li><a href="publications.html#optimization">Optimization</a></li>
+<li><a href="publications.html#walking-trajectory-generation">Walking trajectory generation</a></li>
+<li><a href="publications.html#multi-contact-motion-control">Multi-contact motion control</a></li>
+<li><a href="publications.html#further-topics">Further topics</a></li>
+</ul>
+
+<h2 id="recent-works">
+    Recent works
+    <a class="headerlink" href="publications.html#recent-works" title="Permalink to this publication category">¶</a>
+</h2>
+    <ul class="list-all-articles">
+        <li>
+        <a class="paper" href="../publications/collision-avoidance-2025.html">Collision avoidance from monocular vision trained with novel view synthesis  </a>
+        <div class="article-in-list">
+        <div>Valentin Tordjman--Levavasseur, Stéphane Caron. In submission. April 2025. <a class="pdf" href="https://hal.science/hal-05005146/document">(pdf)</a> <label class="collapse" for="fc6c5af84b2f78d645c31b700a3c7569">(abstract)</label><input id="fc6c5af84b2f78d645c31b700a3c7569" type="checkbox"><p class="abstract">Collision avoidance can be checked in explicit environment models such as elevation maps or occupancy grids, yet integrating such models with a locomotion policy requires accurate state estimation. In this work, we consider the question of collision avoidance from an implicit environment model. We use monocular RGB images as inputs and train a collisionavoidance policy from photorealistic images generated by 2D Gaussian splatting. We evaluate the resulting pipeline in realworld experiments under velocity commands that bring the robot on an intercept course with obstacles. Our results suggest that RGB images can be enough to make collision-avoidance decisions, both in the room where training data was collected and in out-of-distribution environments.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/icra-2025.html">A Data-driven Contact Estimation Method for Wheeled-Biped Robots  </a>
+        <div class="article-in-list">
+        <div>Ü. Bora Gökbakan, Frederike Dümbgen, Stéphane Caron. ICRA 2025, Atlanta, United States of America, May 2025. <a class="pdf" href="https://hal.science/hal-04726386/document">(pdf)</a> <label class="collapse" for="6c9918d079b01b89c65da8cd4b932e38">(abstract)</label><input id="6c9918d079b01b89c65da8cd4b932e38" type="checkbox"><p class="abstract">Contact estimation is a key ability for limbed robots, where making and breaking contacts has a direct impact on state estimation and balance control. Existing approaches typically rely on gate-cycle priors or designated contact sensors. We design a contact estimator that is suitable for the emerging wheeled-biped robot types that do not have these features. To this end, we propose a Bayes filter in which update steps are learned from real-robot torque measurements while prediction steps rely on inertial measurements. We evaluate this approach in extensive real-robot and simulation experiments. Our method achieves better performance while being considerably more sample efficient than a comparable deep-learning baseline.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/rss-2024.html">Linear-time Differential Inverse Kinematics: an Augmented Lagrangian Perspective  </a>
+        <div class="article-in-list">
+        <div>Bruce Wingo, Ajay Sathya, Stéphane Caron, Seth Hutchinson, Justin Carpentier. RSS 2024, Delft, Italy, July 2024. <a class="pdf" href="https://www.roboticsproceedings.org/rss20/p110.pdf">(pdf)</a> <label class="collapse" for="bf0edfd7d133e8addacb1977ebb297e8">(abstract)</label><input id="bf0edfd7d133e8addacb1977ebb297e8" type="checkbox"><p class="abstract">Differential inverse kinematics is a core robotics problem whose
+state-of-the-art solutions are currently based on quadratic programming. In
+this paper, we revisit it from the perspective of augmented Lagrangian methods
+(AL) and the related alternating direction method of multipliers (ADMM). By
+embracing AL techniques in the spirit of the rigid-body dynamics algorithms
+proposed by Featherstone, we introduce a method that solves
+equality-constrained differential IK problems with linear-time complexity.
+Combined with the ADMM strategy popularized by OSQP, we handle the same class
+of problems as QP-based differential IK, but scaling linearly with problem
+dimensions rather than cubically. We implement our approach as C++ open-source
+software and evaluate it on a benchmark of robotic-arm and humanoid-locomotion
+tasks. We measure computation times 2–3× shorter than the QP-based state of the
+art.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/tro-2025.html">ProxQP: an Efficient and Versatile Quadratic Programming Solver for Real-Time Robotics Applications and Beyond  </a>
+        <div class="article-in-list">
+        <div>Antoine Bambade, Fabian Schramm, Sarah El Kazdadi, Stéphane Caron, Adrien Taylor, Justin Carpentier. IEEE Transactions on Robotics. Submitted September 2023, published June 2025. <a class="pdf" href="https://hal.science/hal-04198663/document">(pdf)</a> <label class="collapse" for="46bc4d1c7bc6d8b4fa429edea9444391">(abstract)</label><input id="46bc4d1c7bc6d8b4fa429edea9444391" type="checkbox"><p class="abstract">Convex Quadratic programming (QP) has become a core component in the modern engineering toolkit, particularly in robotics, where QP problems are legions, ranging from real-time whole-body controllers to planning and estimation algorithms. Many of those QPs need to be solved at high frequency. Meeting timing requirements requires taking advantage of as many structural properties as possible for the problem at hand. For instance, it is generally crucial to resort to warm-starting to exploit the resemblance of consecutive control iterations. While a large range of off-the-shelf QP solvers is available, only a few are suited to exploit problem structure and warm-starting capacities adequately. In this work, we propose the ProxQP algorithm, a new and efficient QP solver that exploits QP structures by leveraging primal-dual augmented Lagrangian techniques. For convex QPs, ProxQP features a global convergence guarantee to the closest feasible QP, an essential property for safe closedloop control. We illustrate its practical performance on various standard robotic and control experiments, including a real-world closed-loop model predictive control application. While originally tailored for robotics applications, we show that ProxQP also performs at the level of state of the art on generic QP problems, making ProxQP suitable for use as an off-the-shelf solver for regular applications beyond robotics.</p></div>
+        </div>
+        </li>
+    </ul>
+<h2 id="perception">
+    Perception
+    <a class="headerlink" href="publications.html#perception" title="Permalink to this publication category">¶</a>
+</h2>
+    <ul class="list-all-articles">
+        <li>
+        <a class="paper" href="../publications/collision-avoidance-2025.html">Collision avoidance from monocular vision trained with novel view synthesis  </a>
+        <div class="article-in-list">
+        <div>Valentin Tordjman--Levavasseur, Stéphane Caron. In submission. April 2025. <a class="pdf" href="https://hal.science/hal-05005146/document">(pdf)</a> <label class="collapse" for="fc6c5af84b2f78d645c31b700a3c7569">(abstract)</label><input id="fc6c5af84b2f78d645c31b700a3c7569" type="checkbox"><p class="abstract">Collision avoidance can be checked in explicit environment models such as elevation maps or occupancy grids, yet integrating such models with a locomotion policy requires accurate state estimation. In this work, we consider the question of collision avoidance from an implicit environment model. We use monocular RGB images as inputs and train a collisionavoidance policy from photorealistic images generated by 2D Gaussian splatting. We evaluate the resulting pipeline in realworld experiments under velocity commands that bring the robot on an intercept course with obstacles. Our results suggest that RGB images can be enough to make collision-avoidance decisions, both in the room where training data was collected and in out-of-distribution environments.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/icra-2025.html">A Data-driven Contact Estimation Method for Wheeled-Biped Robots  </a>
+        <div class="article-in-list">
+        <div>Ü. Bora Gökbakan, Frederike Dümbgen, Stéphane Caron. ICRA 2025, Atlanta, United States of America, May 2025. <a class="pdf" href="https://hal.science/hal-04726386/document">(pdf)</a> <label class="collapse" for="6c9918d079b01b89c65da8cd4b932e38">(abstract)</label><input id="6c9918d079b01b89c65da8cd4b932e38" type="checkbox"><p class="abstract">Contact estimation is a key ability for limbed robots, where making and breaking contacts has a direct impact on state estimation and balance control. Existing approaches typically rely on gate-cycle priors or designated contact sensors. We design a contact estimator that is suitable for the emerging wheeled-biped robot types that do not have these features. To this end, we propose a Bayes filter in which update steps are learned from real-robot torque measurements while prediction steps rely on inertial measurements. We evaluate this approach in extensive real-robot and simulation experiments. Our method achieves better performance while being considerably more sample efficient than a comparable deep-learning baseline.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/tii-2017.html">Multi-Contact Interaction Force Sensing from Whole-Body Motion Capture  </a>
+        <div class="article-in-list">
+        <div>Tu-Hoa Pham, Stéphane Caron and Abderrahmane
+Kheddar. IEEE Transactions on Industrial Informatics. Submitted November
+2016. Published October 2017. <a class="pdf" href="https://hal.archives-ouvertes.fr/hal-01610928/document">(pdf)</a> <label class="collapse" for="d5d6a7da986693d27691905509339179">(abstract)</label><input id="d5d6a7da986693d27691905509339179" type="checkbox"><p class="abstract">We present a novel technique that unobtrusively estimates forces exerted by
+human participants in multi-contact interaction with rigid environments. Our
+method uses motion capture only, thus circumventing the need to setup
+cumbersome force transducers at all potential contacts between the human body
+and the environment. This problem is particularly challenging, as the knowledge
+of a given motion only characterizes the resultant force, which can generally
+be caused by an infinity of force distributions over individual contacts. We
+collect and release a large-scale dataset on how humans instinctively regulate
+interaction forces on diverse multi-contact tasks and motions. The force
+estimation framework we propose leverages physics-based optimization and neural
+networks to reconstruct force distributions that are physically realistic and
+compatible with real interaction force patterns. We show the effectiveness of
+our approach on various locomotion and multi-contact scenarios.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/sii-2016.html">Whole-Body Contact Force Sensing From Motion Capture  </a>
+        <div class="article-in-list">
+        <div>Tu-Hoa Pham, Adrien Bufort, Stéphane Caron and
+Abderrahmane Kheddar. SII 2016, Sapporo, Japan, December 2016. Best Paper
+Award. <a class="pdf" href="https://hal.archives-ouvertes.fr/hal-01372531/document">(pdf)</a> <label class="collapse" for="9b4a2ad9b07cdb0fd7c120625c5f5d7f">(abstract)</label><input id="9b4a2ad9b07cdb0fd7c120625c5f5d7f" type="checkbox"><p class="abstract">In this paper, we challenge the estimation of contact forces backed with
+ground-truth sensing in human whole-body interaction with the environment, from
+motion capture only. Our novel method makes it possible to get rid of
+cumbersome force sensors in monitoring multi-contact motion together with force
+data. This problem is very challenging. Indeed, while a given force
+distribution uniquely determines the resulting kinematics, the converse is
+generally not true in multi-contact. In such scenarios, physics-based
+optimization alone may only capture force distributions that are physically
+compatible with a given motion rather than the actual forces being applied. We
+address this indeterminacy by collecting a large-scale dataset on whole-body
+motion and contact forces humans apply in multi-contact scenarios. We then
+train recurrent neural networks on real human force distribution patterns and
+complement them with a second-order cone program ensuring the physical validity
+of the predictions. Extensive validation on challenging dynamic and
+multi-contact scenarios shows that the method we propose can outperform
+physical force sensing both in terms of accuracy and usability.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/ijhr-2016.html">Supervoxel Plane Segmentation and Multi-Contact Motion Generation for Humanoid Stair Climbing  </a>
+        <div class="article-in-list">
+        <div>Tianwei Zhang, Stéphane Caron and Yoshihiko
+Nakamura. International Journal of
+Humanoid Robotics. Submitted August 2016, published March 2017. <a class="pdf" href="../papers/journal/zhang-ijhr-2016.pdf">(pdf)</a> <label class="collapse" for="c4b3bfdef18b7d2088afea76d938bc68">(abstract)</label><input id="c4b3bfdef18b7d2088afea76d938bc68" type="checkbox"><p class="abstract">Stair climbing is still a challenging task for humanoid robots, especially in
+unknown environments. In this paper, we address this problem from perception to
+execution. Our first contribution is a real-time plane segment estimation
+method using unorganized lidar data without prior models of the staircase. We
+then integrate this solution with humanoid motion planning. Our second
+contribution is a stair climbing motion generator where estimated plane
+segments are used to compute footholds and stability polygons. We evaluate our
+method on various staircases. We also demonstrate the feasibility of the
+generated trajectories in a real-life experiment with the humanoid robot HRP-4.</p></div>
+        </div>
+        </li>
+    </ul>
+<h2 id="walking-stabilization">
+    Walking stabilization
+    <a class="headerlink" href="publications.html#walking-stabilization" title="Permalink to this publication category">¶</a>
+</h2>
+    <ul class="list-all-articles">
+        <li>
+        <a class="paper" href="../publications/icra-2020.html">Biped Stabilization by Linear Feedback of the Variable-Height Inverted Pendulum Model  </a>
+        <div class="article-in-list">
+        <div>Stéphane Caron. ICRA 2020, May 2020. <a class="pdf" href="https://hal.archives-ouvertes.fr/hal-02289919/document">(pdf)</a> <label class="collapse" for="072233b5ab73f2765961dea4c86bead1">(abstract)</label><input id="072233b5ab73f2765961dea4c86bead1" type="checkbox"><p class="abstract">The variable-height inverted pendulum (VHIP) model enables a new balancing
+strategy by height variations of the center of mass, in addition to the
+well-known ankle strategy. We propose a biped stabilizer based on linear
+feedback of the VHIP that is simple to implement, coincides with the
+state-of-the-art for small perturbations and is able to recover from larger
+perturbations thanks to this new strategy. This solution is based on
+"best-effort" pole placement of a 4D divergent component of motion for the VHIP
+under input feasibility and state viability constraints. We complement it with
+a suitable whole-body admittance control law and test the resulting stabilizer
+on the HRP-4\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+44 humanoid robot.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/icra-2019.html">Stair Climbing Stabilization of the HRP-4 Humanoid Robot using Whole-body Admittance Control  </a>
+        <div class="article-in-list">
+        <div>Stéphane Caron, Abderrahmane Kheddar and Olivier Tempier. ICRA
+2019, Montreal, Canada, May 2019. <a class="pdf" href="https://hal.archives-ouvertes.fr/hal-01875387/document">(pdf)</a> <label class="collapse" for="586948f47a6c69785b831e5f1406f09f">(abstract)</label><input id="586948f47a6c69785b831e5f1406f09f" type="checkbox"><p class="abstract">We consider dynamic stair climbing with the HRP-4 humanoid robot as part of an
+Airbus manufacturing use-case demonstrator. We share experimental knowledge
+gathered so as to achieve this task, which HRP-4 had never been challenged to
+before. In particular, we extend walking stabilization based on linear
+inverted pendulum tracking by
+quadratic programming-based wrench distribution and a whole-body admittance
+controller that applies both end-effector and CoM strategies. While existing
+stabilizers tend to use either one or the other, our experience suggests that
+the combination of these two approaches improves tracking performance. We
+demonstrate this solution in an on-site experiment where HRP-4 climbs an
+industrial staircase with 18.5 cm high steps, and release our walking
+controller as
+open source software.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/icra-2018.html">Balance control using both ZMP and COM height variations: A convex boundedness approach  </a>
+        <div class="article-in-list">
+        <div>Stéphane Caron and Bastien Mallein. ICRA 2018, Brisbane,
+Australia, May 2018. <a class="pdf" href="https://hal.archives-ouvertes.fr/hal-01590509/document">(pdf)</a> <label class="collapse" for="acceb96d9822218491a752a966839af9">(abstract)</label><input id="acceb96d9822218491a752a966839af9" type="checkbox"><p class="abstract">Developments for 3D\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\textrm{3D}3D control of the center of mass (CoM) of
+biped robots are currently located in two local minima: on the one hand,
+methods that allow CoM height variations but only work in the 2D sagittal
+plane; on the other hand, nonconvex direct transcriptions of centroidal
+dynamics that are delicate to handle. This paper presents an alternative that
+controls the CoM in 3D via an indirect transcription that is both
+low-dimensional and solvable fast enough for real-time control. The key to this
+development is the notion of boundedness condition, which quantifies the
+capturability of 3D CoM trajectories.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/humanoids-2017-pajon.html">Walking on Gravel with Soft Soles using Linear Inverted Pendulum Tracking and Reaction Force Distribution  </a>
+        <div class="article-in-list">
+        <div>Adrien Pajon, Stéphane Caron, Giovanni De Magistris, Sylvain
+Miossec and Abderrahmane Kheddar.
+Humanoids 2017, Birmingham, United Kingdom,
+November 2017. <a class="pdf" href="https://hal.archives-ouvertes.fr/hal-01576516/document">(pdf)</a> <label class="collapse" for="aaef61c6195aeb8436b828ec6a1f3abd">(abstract)</label><input id="aaef61c6195aeb8436b828ec6a1f3abd" type="checkbox"><p class="abstract">Soft soles absorb impacts and cast ground un-evenness during locomotion on
+rough terrains. However, they introduce passive degrees of freedom
+(deformations under the feet) that complexify the tasks of state estimation and
+overall robot stabilization. We address this problem by developing a control
+loop that stabilizes humanoid robots when walking with soft soles on flat and
+uneven terrain. Our closed-loop controller minimizes the errors on the center
+of mass (COM) and the zero moment point (ZMP) with an admittance control of the
+feet based on a simple deformation estimator. We demonstrate its effectiveness
+in real experiments on the HRP-4 humanoid.</p></div>
+        </div>
+        </li>
+    </ul>
+<h2 id="contact-stability-conditions">
+    Contact stability conditions
+    <a class="headerlink" href="publications.html#contact-stability-conditions" title="Permalink to this publication category">¶</a>
+</h2>
+    <ul class="list-all-articles">
+        <li>
+        <a class="paper" href="../publications/tro-2020.html">Feasible Region: an Actuation-Aware Extension of the Support Region  </a>
+        <div class="article-in-list">
+        <div>Romeo Orsolino, Michele Focchi, Stéphane Caron, Gennaro Raiola,
+Victor Barasuol and Claudio Semini. IEEE Transactions on Robotics.
+Submitted March 2019, accepted February 2020, published August 2020. <a class="pdf" href="https://arxiv.org/pdf/1903.07999.pdf">(pdf)</a> <label class="collapse" for="4af781fee6cd744f94279ace01f00c3b">(abstract)</label><input id="4af781fee6cd744f94279ace01f00c3b" type="checkbox"><p class="abstract">In legged locomotion the support region is defined as the 2D horizontal convex
+area where the robot is able to support its own body weight in static
+conditions. Despite this definition, when the joint-torque limits (actuation
+limits) are hit, the robot can be unable to carry its own body weight, even
+when the projection of its Center of Mass (CoM) lies inside the support region.
+In this manuscript we overcome this inconsistency by defining the Feasible
+Region, a revisited support region that guarantees both global static stability
+of the robot and the existence of a set of joint torques that are able to
+sustain the body weight. Thanks to the usage of an Iterative Projection (IP)
+algorithm, we show that the Feasible Region can be efficiently employed for
+online motion planning of loco-manipulation tasks for both humanoids and
+quadrupeds. Unlike the classical support region, the Feasible Region represents
+a local measure of the robots robustness to external disturbances and it must
+be recomputed at every configuration change. For this, we also propose a global
+extension of the Feasible Region that is configuration independent and only
+needs to be recomputed at every stance change.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/tro-2016.html">ZMP Support Areas for Multi-contact Mobility Under Frictional Constraints  </a>
+        <div class="article-in-list">
+        <div>Stéphane Caron, Quang-Cuong Pham and
+Yoshihiko Nakamura. IEEE
+Transactions on Robotics. Submitted October 2015, published December 2016. <a class="pdf" href="https://hal.archives-ouvertes.fr/hal-02108589/document">(pdf)</a> <label class="collapse" for="07990be5e76a58089e45ab17d898cc42">(abstract)</label><input id="07990be5e76a58089e45ab17d898cc42" type="checkbox"><p class="abstract">We propose a method for checking and enforcing multi-contact stability based on
+the Zero-tilting Moment Point (ZMP). The key to our development is the
+generalization of ZMP support areas to take into account (a) frictional
+constraints and (b) multiple non-coplanar contacts. We introduce and
+investigate two kinds of ZMP support areas. First, we characterize and provide
+a fast geometric construction for the support area generated by valid contact
+forces, with no other constraint on the robot motion. We call this set the
+full support area. Next, we consider the control of humanoid robots using the
+Linear Pendulum Mode (LPM). We observe that the constraints stemming from the
+LPM induce a shrinking of the support area, even for walking on horizontal
+floors. We propose an algorithm to compute the new area, which we call
+pendular support area. We show that, in the LPM, having the ZMP in the
+pendular support area is a necessary and sufficient condition for contact
+stability. Based on these developments, we implement a whole-body controller
+and generate feasible multi-contact motions where an HRP-4 humanoid locomotes
+in challenging multi-contact scenarios.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/rss-2015.html">Leveraging Cone Double Description for Multi-contact Stability of Humanoids with Applications to Statics and Dynamics  </a>
+        <div class="article-in-list">
+        <div>Stéphane Caron, Quang-Cuong Pham and
+Yoshihiko Nakamura. RSS 2015,
+Roma, Italy, July 2015. <a class="pdf" href="http://www.roboticsproceedings.org/rss11/p28.pdf">(pdf)</a> <label class="collapse" for="4d7ff8bc6b29ec22b157f96b9853a7fd">(abstract)</label><input id="4d7ff8bc6b29ec22b157f96b9853a7fd" type="checkbox"><p class="abstract">We build on previous works advocating the use of the Gravito-Inertial Wrench
+Cone (GIWC) as a general contact stability criterion (a "ZMP for non-coplanar
+contacts"). We show how to compute this wrench cone from the friction cones of
+contact forces by using an intermediate representation, the surface contact
+wrench cone, which is the minimal representation of contact stability for each
+surface contact. The observation that the GIWC needs to be computed only once
+per stance leads to particularly efficient algorithms, as we illustrate in two
+important problems for humanoids : "testing robust static equilibrium" and
+"time-optimal path parameterization". We show, through theoretical analysis and
+in physical simulations, that our method is more general and/or outperforms
+existing ones.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/icra-2015.html">Stability of Surface Contacts for Humanoid Robots  <small> Closed-Form Formulae of the Contact Wrench Cone for Rectangular Support Areas </small>  </a>
+        <div class="article-in-list">
+        <div>Stéphane Caron,  Quang-Cuong Pham and Yoshihiko Nakamura. ICRA 2015, Seattle, United States of America, May 2015. <a class="pdf" href="https://hal.archives-ouvertes.fr/hal-02108449/document">(pdf)</a> <label class="collapse" for="1d814e01bf0c250005492b0402d511ff">(abstract)</label><input id="1d814e01bf0c250005492b0402d511ff" type="checkbox"><p class="abstract">Humanoids locomote by making and breaking contacts with their environment.
+Thus, a crucial question for them is to anticipate whether a contact will hold
+or break under effort. For rigid surface contacts, existing methods usually
+consider several point-contact forces, which has some drawbacks due to the
+underlying redundancy. We derive a criterion, the Contact Wrench Cone (CWC),
+which is equivalent to any number of applied forces on the contact surface, and
+for which we provide a closed-form formula.</p></div>
+        </div>
+        </li>
+    </ul>
+<h2 id="optimization">
+    Optimization
+    <a class="headerlink" href="publications.html#optimization" title="Permalink to this publication category">¶</a>
+</h2>
+    <ul class="list-all-articles">
+        <li>
+        <a class="paper" href="../publications/rss-2024.html">Linear-time Differential Inverse Kinematics: an Augmented Lagrangian Perspective  </a>
+        <div class="article-in-list">
+        <div>Bruce Wingo, Ajay Sathya, Stéphane Caron, Seth Hutchinson, Justin Carpentier. RSS 2024, Delft, Italy, July 2024. <a class="pdf" href="https://www.roboticsproceedings.org/rss20/p110.pdf">(pdf)</a> <label class="collapse" for="bf0edfd7d133e8addacb1977ebb297e8">(abstract)</label><input id="bf0edfd7d133e8addacb1977ebb297e8" type="checkbox"><p class="abstract">Differential inverse kinematics is a core robotics problem whose
+state-of-the-art solutions are currently based on quadratic programming. In
+this paper, we revisit it from the perspective of augmented Lagrangian methods
+(AL) and the related alternating direction method of multipliers (ADMM). By
+embracing AL techniques in the spirit of the rigid-body dynamics algorithms
+proposed by Featherstone, we introduce a method that solves
+equality-constrained differential IK problems with linear-time complexity.
+Combined with the ADMM strategy popularized by OSQP, we handle the same class
+of problems as QP-based differential IK, but scaling linearly with problem
+dimensions rather than cubically. We implement our approach as C++ open-source
+software and evaluate it on a benchmark of robotic-arm and humanoid-locomotion
+tasks. We measure computation times 2–3× shorter than the QP-based state of the
+art.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/tro-2025.html">ProxQP: an Efficient and Versatile Quadratic Programming Solver for Real-Time Robotics Applications and Beyond  </a>
+        <div class="article-in-list">
+        <div>Antoine Bambade, Fabian Schramm, Sarah El Kazdadi, Stéphane Caron, Adrien Taylor, Justin Carpentier. IEEE Transactions on Robotics. Submitted September 2023, published June 2025. <a class="pdf" href="https://hal.science/hal-04198663/document">(pdf)</a> <label class="collapse" for="46bc4d1c7bc6d8b4fa429edea9444391">(abstract)</label><input id="46bc4d1c7bc6d8b4fa429edea9444391" type="checkbox"><p class="abstract">Convex Quadratic programming (QP) has become a core component in the modern engineering toolkit, particularly in robotics, where QP problems are legions, ranging from real-time whole-body controllers to planning and estimation algorithms. Many of those QPs need to be solved at high frequency. Meeting timing requirements requires taking advantage of as many structural properties as possible for the problem at hand. For instance, it is generally crucial to resort to warm-starting to exploit the resemblance of consecutive control iterations. While a large range of off-the-shelf QP solvers is available, only a few are suited to exploit problem structure and warm-starting capacities adequately. In this work, we propose the ProxQP algorithm, a new and efficient QP solver that exploits QP structures by leveraging primal-dual augmented Lagrangian techniques. For convex QPs, ProxQP features a global convergence guarantee to the closest feasible QP, an essential property for safe closedloop control. We illustrate its practical performance on various standard robotic and control experiments, including a real-world closed-loop model predictive control application. While originally tailored for robotics applications, we show that ProxQP also performs at the level of state of the art on generic QP problems, making ProxQP suitable for use as an off-the-shelf solver for regular applications beyond robotics.</p></div>
+        </div>
+        </li>
+    </ul>
+<h2 id="walking-trajectory-generation">
+    Walking trajectory generation
+    <a class="headerlink" href="publications.html#walking-trajectory-generation" title="Permalink to this publication category">¶</a>
+</h2>
+    <ul class="list-all-articles">
+        <li>
+        <a class="paper" href="../publications/icra-2021.html">3D biped locomotion control including seamless transition between walking and running via 3D ZMP manipulation  </a>
+        <div class="article-in-list">
+        <div>Tomomichi Sugihara, Kenta Imanishi, Takanobu Yamamoto and
+Stéphane Caron. IEEE International Conference on Robotics and Automation,
+May 2021. <label class="collapse" for="2b9006efa66f1cc46faa6fc8a5a5a810">(abstract)</label><input id="2b9006efa66f1cc46faa6fc8a5a5a810" type="checkbox"><p class="abstract">A novel control scheme for biped robots to manipulate the ZMP
+three-dimensionally apart from the actual ground profile is presented. It is
+shown that the linear inverted-pendulum-like dynamics with this scheme can
+represent a wider class of movements including variation of the body height.
+Moreover, this can also represent the motion in aerial phase. Based on this,
+the foot-guided controller proposed by the authors is enhanced to enable the
+robots to locomote on highly uneven terrains and also to seamlessly transition
+between walking and running without pre-planning the overall motion reference.
+The controller guarantees the capturability at landing and defines the motion
+by a time-variant state feedback, which is analytically derived from a model
+predictive optimization. It is verified through some computer simulations.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/rsj-2020.html">ZMPの3次元的操作による可捕性規範凹凸地面上二脚運動制御  </a>
+        <div class="article-in-list">
+        <div>Tomomichi Sugihara and Stéphane Caron. RSJ 2020, Japan, October 2020. <a class="pdf" href="../papers/conf/sugihara-rsj-2020.pdf">(pdf)</a> <label class="collapse" for="a52e1dc418a3758d54090322c228b6ea">(abstract)</label><input id="a52e1dc418a3758d54090322c228b6ea" type="checkbox"><p class="abstract">二脚ロボットを実用する上で，高低差のある地形を移動する機能は必須である．限られた足場で着地点を選び，転倒を避けながら重心を制御する方法が求められる．梶田ら [1] はその先駆的な研究において，凹凸地形に合わせて上下動を伴う重心の運動と支持足の切り替えを適切に連動させる歩行制御法を提案した．その際，重心運動を直線上に拘束することで導かれた線形な倒立振子様の力学系を用いて，議論を簡明にした．</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/vrst-2019.html">Lower body control of a semi-autonomous avatar in Virtual Reality: Balance and Locomotion of a 3D Bipedal Model  </a>
+        <div class="article-in-list">
+        <div>Vincent Thomasset, Stéphane Caron and Vincent Weistroffer. ACM
+Symposium on Virtual Reality Software and Technology, Parramatta, Australia,
+November 2019. <a class="pdf" href="https://hal-cea.archives-ouvertes.fr/cea-02385996/document">(pdf)</a> <label class="collapse" for="444893f41b575afc5a3bc909a666f3bd">(abstract)</label><input id="444893f41b575afc5a3bc909a666f3bd" type="checkbox"><p class="abstract">Animated virtual humans may rely on full-body tracking system to reproduce user
+motions. In this paper, we reduce tracking to the upper-body and reconstruct
+the lower body to follow autonomously its upper counterpart. Doing so reduces
+the number of sensors required, making the application of virtual humans
+simpler and cheaper. It also enable deployment in cluttered scenes where the
+lower body is often hidden. The contribution here is the inversion of the
+well-known capture problem for bipedal walking. It determines footsteps rather
+than center-of-mass motions and yet can be solved with an off-the-shelf capture
+problem solver. The quality of our method is assessed in real-time tracking
+experiments on a wide variety of movements.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/tro-2019.html">Capturability-based Pattern Generation for Walking with Variable Height  </a>
+        <div class="article-in-list">
+        <div>Stéphane Caron, Adrien Escande, Leonardo Lanari and Bastien Mallein. IEEE Transactions on Robotics. Submitted January 2018, accepted May 2019, published April 2020. <a class="pdf" href="https://hal.archives-ouvertes.fr/hal-01689331/document">(pdf)</a> <label class="collapse" for="280ec544af77934fb811797cb889ead9">(abstract)</label><input id="280ec544af77934fb811797cb889ead9" type="checkbox"><p class="abstract">Capturability analysis of the linear inverted pendulum (LIP) model enabled walking with constrained height based on the capture point. We generalize this analysis to the variable-height inverted pendulum (VHIP) and show how it enables 3D walking over uneven terrains based on capture inputs. Thanks to a tailored optimization scheme, we can compute these inputs fast enough for real-time model predictive control. We implement this approach as open-source software and demonstrate it in dynamic simulations.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/humanoids-2017.html">When to make a step? Tackling the timing problem in multi-contact locomotion by TOPP-MPC  </a>
+        <div class="article-in-list">
+        <div>Stéphane Caron and Quang-Cuong Pham. Humanoids 2017, Birmingham, United Kingdom, November 2017. <a class="pdf" href="https://hal.archives-ouvertes.fr/hal-01363757/file/paper.pdf">(pdf)</a> <label class="collapse" for="358ee1f1419368f62dcd376735263c89">(abstract)</label><input id="358ee1f1419368f62dcd376735263c89" type="checkbox"><p class="abstract">We present a model predictive controller (MPC) for multi-contact locomotion
+where predictive optimizations are realized by time-optimal path
+parameterization (TOPP). A key feature of this solution is that, contrary to
+existing planners where step timings are provided as inputs, here the timing
+between contact switches is computed as output of a fast nonlinear
+optimization. This is appealing to multi-contact locomotion, where proper
+timings depend on terrain topology and suitable heuristics are unknown. We show
+how to formulate legged locomotion as a TOPP problem and demonstrate the
+behavior of the resulting TOPP-MPC controller in simulations with a model of
+the HRP-4 humanoid robot.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/iros-2017.html">Dynamic Walking over Rough Terrains by Nonlinear Predictive Control of the Floating-base Inverted Pendulum  </a>
+        <div class="article-in-list">
+        <div>Stéphane Caron and Abderrahmane Kheddar. IROS 2017, Vancouver, Canada,
+September 2017. <a class="pdf" href="https://hal.archives-ouvertes.fr/hal-01481052/document">(pdf)</a> <label class="collapse" for="3f777c39b94aec8c1feebfdf8e496980">(abstract)</label><input id="3f777c39b94aec8c1feebfdf8e496980" type="checkbox"><p class="abstract">We present a real-time rough-terrain dynamic walking pattern generator. Our
+method automatically finds step durations, which is a critical issue over rough
+terrains where they depend on terrain topology. To achieve this level of
+generality, we introduce the Floating-base Inverted Pendulum (FIP) model where
+the center of mass can translate freely and the zero-tilting moment point is
+allowed to leave the contact surface. We show that this model is equivalent to
+the linear-inverted pendulum mode with variable center of mass height, aside
+from the fact that its equations of motion remain linear. Our design then
+follows three steps: (i\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+ii) we characterize the FIP contact-stability
+condition; (ii\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+iiii) we compute feedforward controls by solving a nonlinear
+optimization over receding-horizon FIP trajectories. Despite running at 30 Hz
+in a model-predictive fashion, simulations show that the latter is too slow to
+stabilize dynamic motions. To remedy this, we (iii\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+iiiiii) linearize FIP
+feedback control computations into a quadratic program, resulting in a
+constrained linear-quadratic regulator that runs at 300 Hz. We finally
+demonstrate our solution in simulations with a model of the HRP-4 humanoid
+robot, including noise and delays over both state estimation and foot force
+control.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/humanoids-2016.html">Multi-contact Walking Pattern Generation based on Model Preview Control of 3D COM Accelerations  </a>
+        <div class="article-in-list">
+        <div>Stéphane Caron and Abderrahmane Kheddar. Humanoids 2016, Cancún,
+Mexico, November 2016. <a class="pdf" href="https://hal.archives-ouvertes.fr/hal-01349880/document">(pdf)</a> <label class="collapse" for="08a5fc2dc18d1915741b16a17b30425f">(abstract)</label><input id="08a5fc2dc18d1915741b16a17b30425f" type="checkbox"><p class="abstract">We present a multi-contact walking pattern generator based on preview-control
+of the 3D acceleration of the center of mass (COM). A key point in the design
+of our algorithm is the calculation of contact-stability constraints. Thanks to
+a mathematical observation on the algebraic nature of the frictional wrench
+cone, we show that the 3D volume of feasible COM accelerations is a always an
+upward-pointing cone. We reduce its computation to a convex hull of (dual) 2D
+points, for which optimal O(nlog⁡n)\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\mathcal{O}(n \log n)O(nlogn) algorithms are readily
+available. This reformulation brings a significant speedup compared to previous
+methods, which allows us to compute time-varying contact-stability criteria
+fast enough for the control loop. Next, we propose a conservative
+trajectory-wide contact-stability criterion, which can be derived from
+COM-acceleration volumes at marginal cost and directly applied in a
+model-predictive controller. We finally implement this pipeline and exemplify
+it with the HRP-4 humanoid model in multi-contact dynamically walking
+scenarios.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/rsj-2014.html">Kinodynamic Motion Retiming for Humanoid Robots  </a>
+        <div class="article-in-list">
+        <div>Stéphane Caron, Quang-Cuong Pham and
+Yoshihiko Nakamura. RSJ 2014,
+Fukuoka, Japan, September 2014. <a class="pdf" href="../papers/conf/caron-rsj-2014.pdf">(pdf)</a> <label class="collapse" for="9f27c0ea85a660d14cea49785540ab8c">(abstract)</label><input id="9f27c0ea85a660d14cea49785540ab8c" type="checkbox"><p class="abstract">In this paper, we advocate the use of Time-Optimal Path Parameterization
+(TOPP) to enable planning of dynamic motions for humanoid robots. We extend
+the existing formulation of ZMP constraints to arbitrary polygonal areas and
+provide an original approach to incorporate frictional contact constraints in
+TOPP. We evaluate our algorithm experimentally with the HRP-4 robot performing
+a stepping motion. Given a slow and quasi-static input motion, our method
+automatically produces a 2x-faster dynamic motion successfully executed on the
+real robot (4x faster in simulation).</p></div>
+        </div>
+        </li>
+    </ul>
+<h2 id="multi-contact-motion-control">
+    Multi-contact motion control
+    <a class="headerlink" href="publications.html#multi-contact-motion-control" title="Permalink to this publication category">¶</a>
+</h2>
+    <ul class="list-all-articles">
+        <li>
+        <a class="paper" href="../publications/ral-2021.html">Humanoid Control Under Interchangeable Fixed and Sliding Unilateral Contacts  </a>
+        <div class="article-in-list">
+        <div>Saeid Samadi, Julien Roux, Arnaud Tanguy, Stéphane Caron and
+Abderrahmane Kheddar. Robotics and Automation Letters. April 2021. <a class="pdf" href="https://hal.archives-ouvertes.fr/hal-03158364/document">(pdf)</a> <label class="collapse" for="cf5e518a308f1859564fde0af2abe099">(abstract)</label><input id="cf5e518a308f1859564fde0af2abe099" type="checkbox"><p class="abstract">In this letter, we propose a whole-body control strategy for humanoid robots in
+multi-contact settings that enables switching between fixed and sliding
+contacts under active balance. We compute, in real-time, a safe center-of-mass
+position and wrench distribution of the contact points based on the Chebyshev
+center. Our solution is formulated as a quadratic programming problem without a
+priori computation of balance regions. We assess our approach with experiments
+highlighting switches between fixed and sliding contact modes in multi-contact
+configurations. A humanoid robot demonstrates such contact interchanges from
+fully-fixed to multi-sliding and also shuffling of the foot. The scenarios
+illustrate the performance of our control scheme in achieving the desired
+forces, CoM position attractor, and planned trajectories while actively
+maintaining balance.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/ram-2019.html">Humanoid Robots in Aircraft Manufacturing: The Airbus Use Cases  </a>
+        <div class="article-in-list">
+        <div>Abderrahmane Kheddar, Stéphane Caron, Pierre Gergondet, Andrew
+Comport, Arnaud Tanguy, Christian Ott, Bernd Henze, George
+Mesesan, Johannes Englsberger, Máximo A. Roa, Pierre-Brice
+Wieber, François Chaumette, Fabien Spindler, Giuseppe Oriolo,
+Leonardo Lanari, Adrien Escande, Kevin Chappellet, Fumio
+Kanehiro and Patrice Rabaté. IEEE Robotics and Automation Magazine.
+December 2019. Best Paper Award. <a class="pdf" href="https://hal-lirmm.ccsd.cnrs.fr/lirmm-02303117/document">(pdf)</a> <label class="collapse" for="ac4852fca97978a13a168bc9e41e2377">(abstract)</label><input id="ac4852fca97978a13a168bc9e41e2377" type="checkbox"><p class="abstract">We report results from a collaborative project that investigated the
+deployment of humanoid robotic solutions in aircraft manufacturing
+for some assembly operations where access is not possible for wheeled or
+rail-ported robotic platforms. Recent developments in multi-contact
+planning and control, bipedal walking, embedded SLAM, whole-body
+multi-sensory task space optimization control, and contact detection and
+safety, suggest that humanoids could be a plausible solution for
+automation given the specific requirements in such large-scale
+manufacturing sites. The main challenge is to integrate these scientific
+and technological advances into two existing humanoid platforms: the
+position controlled HRP-4 and the torque controlled TORO. This
+integration effort was demonstrated in a bracket assembly operation
+inside a 1:1 scale A350 mockup of the front part of the fuselage at the
+Airbus Saint-Nazaire site. We present and discuss the main results that
+have been achieved in this project and provide recommendations for
+future work.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/icra-2020-samadi.html">Balance of Humanoid Robots in a Mix of Fixed and Sliding Multi-Contact Scenarios  </a>
+        <div class="article-in-list">
+        <div>Saeid Samadi, Stéphane Caron, Arnaud Tanguy and Abderrahmane
+Kheddar. ICRA 2020, May 2020. <a class="pdf" href="https://hal.archives-ouvertes.fr/hal-02297879/document">(pdf)</a> <label class="collapse" for="9366bfeb356bbf3c22b33883494cb6fe">(abstract)</label><input id="9366bfeb356bbf3c22b33883494cb6fe" type="checkbox"><p class="abstract">This study deals with the balance of humanoid or multi-legged robots in a
+multi-contact setting where a chosen subset of contacts is undergoing desired
+sliding-task motions. One method to keep balance is to hold the center-of-mass
+(CoM) within an admissible convex area. This area is calculated based on the
+contact positions and forces. We introduce a methodology to compute this CoM
+support area (CSA) for multiple fixed and intentionally sliding contacts. To
+select the most appropriate CoM position within CSA, we account for (i)
+constraints of multiple fixed and sliding contacts, (ii) desired wrench
+distribution for contacts, and (iii) desired CoM position (eventually dictated
+by other tasks). These are formulated as a quadratic programming (QP)
+optimization problems. We illustrate our approach with pushing against a wall
+and wiping, and conducted experiments using the HRP-4 humanoid robot.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/humanoids-2017-samy.html">Post-Impact Adaptive Compliance for Humanoid Falls Using Predictive Control of a Reduced Model  </a>
+        <div class="article-in-list">
+        <div>Vincent Samy, Stéphane Caron, Karim
+Bouyarmane and Abderrahmane
+Kheddar. Humanoids 2017, Birmingham,
+United Kingdom, November 2017. <a class="pdf" href="https://hal.archives-ouvertes.fr/hal-01569819/document">(pdf)</a> <label class="collapse" for="7e5ac1675565a6f6a9dd330dc6b7d419">(abstract)</label><input id="7e5ac1675565a6f6a9dd330dc6b7d419" type="checkbox"><p class="abstract">We consider control of a humanoid robot in active compliance just after the
+impact consecutive to a fall. The goal of this post-impact braking is to absorb
+undesired linear momentum accumulated during the fall, using a limited supply
+of time and actuation power. The gist of our method is an optimal distribution
+of undesired momentum between the robot's hand and foot contact points,
+followed by the parallel resolution of Linear Model Predictive Control (LMPC)
+at each contact. This distribution is made possible thanks to
+emph{torque-limited friction polytopes}, an extension of friction cones that
+takes actuation limits into account. Individual LMPC results are finally
+combined back into a feasible CoM trajectory sent to the robot's whole-body
+controller. We validate the solution in full-body dynamics simulation of an
+HRP-4 humanoid falling on a wall.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/mcpc.html">Multi-Contact Motion Planning and Control  </a>
+        <div class="article-in-list">
+        <div>Karim Bouyarmane, Stéphane Caron, Adrien Escande and Abderrahmane Kheddar. Humanoid Robotics: a Reference. Edited by Ambarish Goswami and Prahlad Vadakkepat. Springer. July 2017. <a class="pdf" href="https://members.loria.fr/kbouyarmane/mcpc.pdf">(pdf)</a> <label class="collapse" for="3c4c2003b84b4402814413dece13c2e3">(abstract)</label><input id="3c4c2003b84b4402814413dece13c2e3" type="checkbox"><p class="abstract">The essence of humanoid robots is their ability to reproduce human skills in
+locomotion and manipulation. Early efforts in humanoid research were dedicated
+to bipedal walking, first on flat terrains and recently on uneven ones, while
+the manipulation capabilities inherit from the literature in bimanual and
+dexterous-hand manipulation. In practice, the two problems interact largely.
+Locomotion in cluttered spaces benefits from extra contacts between any part of
+the robot and the environment, such as when grippers grasp a handrail during
+stair climbing, while legs can conversely enhance manipulation capabilities,
+such as when arching the whole-body to augment contact pressure at an
+end-effector. The two problems share the same background: they are governed by
+non-smooth dynamics (friction and impacts at contacts) under viability
+constraints including dynamic stability. Consequently, they are now solved
+jointly. This chapter highlights the state-of-the-art techniques used for this
+purpose in multi-contact planning and control.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/rsj-2015.html">Teleoperation System Design of Valve Turning Motions in Degraded Communication Conditions  </a>
+        <div class="article-in-list">
+        <div>Stéphane Caron and Yoshihiko Nakamura. RSJ 2015, Tokyo, Japan, September
+2015. <a class="pdf" href="../papers/conf/caron-rsj-2015.pdf">(pdf)</a> <label class="collapse" for="272767aa4b00b658e64dc49424ab7934">(abstract)</label><input id="272767aa4b00b658e64dc49424ab7934" type="checkbox"><p class="abstract">During the DARPA Robotics Challenge (DRC), robots were expected to solve a
+number of tasks under teleoperation by a human operator. Limits in execution
+time and teleoperation bandwidth required teams to implement some level of
+autonomy on their robots, yet meaningful input could still be provided by the
+operator on a regular basis via the team’s Operator Control System (OCS). The
+purpose of the present paper is to report on the development of Team Hydra’s
+OCS for the DRC in the context of the valve-turning task. We describe the
+design of the system as well as the technical choices made, meanwhile pointing
+out the underlying research questions and directions for future work.</p></div>
+        </div>
+        </li>
+    </ul>
+
+<h2 id="further-topics">
+    Further topics
+    <a class="headerlink" href="publications.html#further-topics" title="Permalink to these further topics">¶</a>
+</h2>
+
+<p>
+I have also worked on the following topics:
+</p>
+
+<details>
+    <summary id="motion-planning">Motion planning</summary>
+    <ul class="list-all-articles">
+        <li>
+        <a class="paper" href="../publications/ras-2016.html">Completeness of Randomized Kinodynamic Planners with State-based Steering  </a>
+        <div class="article-in-list">
+        <div>Stéphane Caron, Quang-Cuong Pham and
+Yoshihiko Nakamura. Robotics and
+Autonomous Systems. Submitted November 2015, published December 2016. <a class="pdf" href="https://arxiv.org/pdf/1511.05259v2.pdf">(pdf)</a> <label class="collapse" for="9e6d5ce579bb8dc2fe7e254c136ea4d3">(abstract)</label><input id="9e6d5ce579bb8dc2fe7e254c136ea4d3" type="checkbox"><p class="abstract">Probabilistic completeness is an important property in motion planning.
+Although it has been established with clear assumptions for geometric planners,
+the panorama of completeness results for kinodynamic planners is still
+incomplete, as most existing proofs rely on strong assumptions that are
+difficult, if not impossible, to verify on practical systems. In this paper, we
+focus on an important class of kinodynamic planners, namely those that
+interpolate trajectories in the state space.  We provide a proof of
+probabilistic completeness for these planners under assumptions that can be
+readily verified from the system’s equations of motion and the user-defined
+interpolation function. Our proof relies crucially on a property of
+interpolated trajectories, termed second-order continuity (SOC), which we
+show is tightly related to the ability of a planner to benefit from denser
+sampling. We analyze the impact of this property in simulations on a low-torque
+pendulum. Our results show that a simple RRT using a second-order continuous
+interpolation swiftly finds solution, while it is impossible for the same
+planner using standard Bezier curves (which are not SOC) to find any solution</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/ijrr-2016.html">Admissible Velocity Propagation: Beyond Quasi-Static Path Planning for High-Dimensional Robots  </a>
+        <div class="article-in-list">
+        <div>Quang-Cuong Pham, Stéphane Caron,
+Puttichai Lertkultanon and Yoshihiko Nakamura. International Journal of Robotics
+Research. Submitted November 2014, published November 2016. <a class="pdf" href="../papers/journal/pham-ijrr-2016.pdf">(pdf)</a> <label class="collapse" for="53ea5faed9cbf55cbe05639c75eea66c">(abstract)</label><input id="53ea5faed9cbf55cbe05639c75eea66c" type="checkbox"><p class="abstract">Path-velocity decomposition is an intuitive yet powerful approach to address
+the complexity of kinodynamic motion planning. The difficult trajectory
+planning problem is solved in two separate adn simpler steps: first, find a
+path in the configuration space that satisfies the geometric constraints (path
+planning), and second, find a time-parameterization of that path satisfying the
+kinodynamic constraints. A fundamental requirement is that the path found in
+the first step should be time-parameterizable. Most existing works fulfill this
+requirement by enforcing quasi-static constraints in the path planning step,
+resulting in an important loss in completeness. We propose a method that
+enables path-velocity decomposition to discover truly dynamic motions, i.e.
+motions that are not quasi-statically executable. At the heart of the proposed
+method is a new algorithm — Admissible Velocity Propagation — which, given a
+path and an interval of reachable velocities at the beginning of that path,
+computes exactly and efficiently the interval of all the velocities the system
+can reach after traversing the path while respecting the system kinodynamic
+constraints. Combining this algorithm with usual sampling-based planners then
+gives rise to a family of new trajectory planners that can appropriately handle
+kinodynamic constraints while retaining the advantages associated with
+path-velocity decomposition. We demonstrate the efficiency of the proposed
+method on some difficult kinodynamic planning problems, where, in particular,
+quasi-static methods are guaranteed to fail.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/thesis.html">Computational Foundation for Planner-in-the-Loop Multi-Contact Whole-Body Control of Humanoid Robots  <small> 運動計画をフィードバックループに含むヒューマノイドロボットの多点接触全身制御のための計算基盤 </small>  </a>
+        <div class="article-in-list">
+        <div>Stéphane Caron. PhD thesis. Defended on January 25, 2016 at the University
+of Tokyo (東京大学). <a class="pdf" href="https://repository.dl.itc.u-tokyo.ac.jp/?action=repository_uri&item_id=48878&file_id=14&file_no=1">(pdf)</a> <label class="collapse" for="1679f67b216570ae31c02f59bdf52991">(abstract)</label><input id="1679f67b216570ae31c02f59bdf52991" type="checkbox"><p class="abstract">In this thesis, we explore the questions of motion planning and control for
+humanoid robots with the aim to integrate motion planning in a fast control
+loop. Our contributions towards this goal revolve around three axes:
+kinodynamic decoupling, force-space curtailment, and dimensional reduction of
+the control space. In the first one, we decouple the kinematic and dynamic
+components of the planning problem by an original integration with time-optimal
+control methods. This approach allows us to keep planning in a geometric space,
+the benefits of which we demonstrate both empirically and through theoretical
+proofs. In the second axis, we focus on the contact aspects of planning. To
+avoid slippage or other contact losses, planners usually consider a large
+number of contact forces and their associated Coulomb friction cones. We show
+how this redundant representation can be reduced to contact wrenches, unique to
+each contacting articulation, and propose the first analytical derivation of
+the associated frictional wrench cone for rectangular contact surfaces. We then
+connect these developments to the gravito-inertial wrench for whole-body motion
+planning. However, we note that using wrenches for planning leads to
+challenging open questions such as the interpolation of the non-holonomic
+angular momentum. We attack this problem with a paradigm shift: rather than
+controlling wrenches, we generalize the notion of ZMP (point where the
+tangential component of the gravito-inertial moment vanishes) to that of "ZMP
+of a wrench". We then propose efficient algorithms to compute the associated
+support areas, and show how to use these tools to generate locomoting
+trajectories from simplified dynamics model such as the Linear Pendulum, even
+in arbitrary multi-contact scenarios. This reduction of the control space
+rounds the third and last axis of the computational foundations advanced by
+this thesis. We demonstrate the applicability of each by simulations and
+empirical experiments on the HRP-4 humanoid robot.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/iftomm-2015.html">Planning with the Center-of-Mass rather than Stances for Humanoids Walking on Uneven Terrains  </a>
+        <div class="article-in-list">
+        <div>Stéphane Caron and Yoshihiko Nakamura. IFToMM 2015, Taipei, Taiwan,
+October 2015. <a class="pdf" href="../papers/conf/caron-iftomm-2015.pdf">(pdf)</a> <label class="collapse" for="5d1d06fc6f2f52e52b8b8e7fb9868456">(abstract)</label><input id="5d1d06fc6f2f52e52b8b8e7fb9868456" type="checkbox"><p class="abstract">In the current literature for non-gaited humanoid motion planning, stances
+(i.e., contact locations) are usually planned in a first step, after which
+joint-angle trajectories are interpolated or planned themselves. In this paper,
+we propose an alternative where planning is driven by center-of-mass motions
+rather than stances. Our approach uses a randomized motion planner as its first
+layer to explore the space of horizontal CoM coordinates. At a lower level, we
+propose a custom method to extend stances based on a desired CoM position. We
+evaluate the ability of the resulting planner in a rubble-field 3D environment
+with a model of the HYDRA humanoid robot.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/icra-2014.html">Completeness of Randomized Kinodynamic Planners with State-based Steering  </a>
+        <div class="article-in-list">
+        <div>Stéphane Caron, Quang-Cuong Pham and
+Yoshihiko Nakamura.  ICRA 2014,
+Hong-Kong, China, June 2014. <a class="pdf" href="../papers/conf/caron-icra-2014.pdf">(pdf)</a> <label class="collapse" for="16d503725ce861866d4884cf76230c35">(abstract)</label><input id="16d503725ce861866d4884cf76230c35" type="checkbox"><p class="abstract">The panorama of probabilistic completeness results for kinodynamic planners is
+still confusing. Most existing completeness proofs require strong assumptions
+that are difficult, if not impossible, to verify in practice. To make
+completeness results more useful, it is thus sensible to estabish
+a classification of the various types of constraints and planning methods, and
+then attack each class with specific proofs and hypotheses that can be verified
+in practice. We propose such a classification, and provide a proof of
+probabilistic completeness for an important class of planners, namely those
+whose steering method is based on the interpolation of system trajectories in
+the state space. We also provide design guidelines for the interpolation
+function and discuss two criteria arising from our analysis: local boundedness
+and acceleration compliance.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/rsj-2013.html">Kinodynamic Motion Planners based on Velocity Interval Propagation  </a>
+        <div class="article-in-list">
+        <div>Stéphane Caron, Yoshihiko Nakamura and Quang-Cuong Pham. RSJ 2013, Tokyo, Japan, September 2013. <a class="pdf" href="../papers/conf/caron-rsj-2013.pdf">(pdf)</a> <label class="collapse" for="f4c9bfae88f823cc086114e2f76ea064">(abstract)</label><input id="f4c9bfae88f823cc086114e2f76ea064" type="checkbox"><p class="abstract">Humanoid robotics has spawned several fields of active research. When it comes
+to dynamic motion control, three lines of work stand out: reduced models
+(combined with inverse kinematics), local controllers and global planning. In
+the present paper, we present and further develop a motion planning approach
+recently proposed in [10], which allows
+planning with dynamics constraints while staying in the configuration space;
+thus avoiding the complexity explosion mentioned above. We briefly discuss how
+this approach can be extended to handle ZMP constraints, which may give rise to
+a new family of efficient motion planners for humanoid robots.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/rss-2013.html">Kinodynamic planning in the configuration space via Admissible Velocity Propagation  </a>
+        <div class="article-in-list">
+        <div>Quang-Cuong Pham, Stéphane Caron and
+Yoshihiko Nakamura. RSS 2013,
+Berlin, Germany, June 2013. <a class="pdf" href="http://www.roboticsproceedings.org/rss09/p52.pdf">(pdf)</a> <label class="collapse" for="989f7554bf74824fbc60b2be55abdf5e">(abstract)</label><input id="989f7554bf74824fbc60b2be55abdf5e" type="checkbox"><p class="abstract">We propose a method that enables kinodynamic planning in the configuration
+space (of dimension n) instead of the state space (of dimension 2n), thereby
+potentially cutting down the complexity of usual kinodynamic planning
+algorithms by an exponential factor. At the heart of this method is a new
+technique – called Velocity Interval Propagation – which, given a path in the
+configuration space and an interval of reachable velocities at the beginning of
+that path, computes exactly and efficiently the interval of all the velocities
+the system can reach after traversing the path while respecting the system
+kinodynamic constraints. Combining this technique with usual sampling-based
+methods gives rise to a family of new motion planners that can appropriately
+handle kinodynamic constraints while avoiding the complexity explosion and, to
+some extent, the conceptual difficulties associated with a move to the state
+space</p></div>
+        </div>
+        </li>
+    </ul>
+</details>
+<details>
+    <summary id="multi-armed-bandits">Multi-armed bandits</summary>
+    <ul class="list-all-articles">
+        <li>
+        <a class="paper" href="../publications/snakdd-2013.html">Mixing bandits  <small> A recipe for improved cold-start recommendations in a social network </small>  </a>
+        <div class="article-in-list">
+        <div>Stéphane Caron and Smriti Bhagat. SNAKDD
+2013. <a class="pdf" href="../papers/conf/caron-snakdd-2013.pdf">(pdf)</a> <label class="collapse" for="e82b0c54d5a39c4af4dd9489f01c9931">(abstract)</label><input id="e82b0c54d5a39c4af4dd9489f01c9931" type="checkbox"><p class="abstract">Recommending items to new or “cold-start” users is a challenging problem for
+recommender systems. Collaborative filtering approaches fail when the
+preference history of users is not available. A promising direction that has
+been explored recently [12] is to utilize the information in the social
+networks of users to improve the quality of cold-start recommendations. That
+is, given that users are part of a social network, a new user shows up in the
+network with no preference history and limited social links, the recommender
+system tries to learn the user’s tastes as fast as possible. In this work, we
+model the learning of preferences of cold-start users using multi-armed bandits
+[5] embedded in a social network. We propose two novel strategies leveraging
+neighborhood estimates to improve the learning rate of bandits for cold-start
+users. Our first strategy, MixPair, combines estimates from pairs of
+neighboring bandits. It extends the well-known UCB1 algorithm [5] and inherits
+its asymptotically optimal guarantees. Although our second strategy, MixNeigh,
+is a heuristic based on consensus in the neighborhood of a user, it performed
+the best among the evaluated strategies. Our experiments on a dataset from
+Last.fm show that our strategies yield significant improvements, learning 2 to
+5 times faster than our baseline, UCB1.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/uai-2012.html">Leveraging Side Observations in Stochastic Bandits  </a>
+        <div class="article-in-list">
+        <div>Stéphane Caron, Branislav Kveton, Marc
+Lelarge and Smriti Bhagat. UAI 2012. <a class="pdf" href="http://www.auai.org/uai2012/papers/236.pdf">(pdf)</a> <label class="collapse" for="8de02455a1034b525d2eff8aca51117f">(abstract)</label><input id="8de02455a1034b525d2eff8aca51117f" type="checkbox"><p class="abstract">This paper considers stochastic bandits with side observations, a model that
+accounts for both the exploration/exploitation dilemma and relationships
+between arms. In this setting, after pulling an arm i, the decision maker also
+observes the rewards for some other actions related to i. We will see that this
+model is suited to content recommendation in social networks, where users'
+reactions may be endorsed or not by their friends. We provide efficient
+algorithms based on upper confidence bounds (UCBs) to leverage this additional
+information and derive new bounds improving on standard regret guarantees. We
+also evaluate these policies in the context of movie recommendation in social
+networks: experiments on real datasets show substantial learning rate speedups
+ranging from 2.2x to 14x on dense networks.</p></div>
+        </div>
+        </li>
+    </ul>
+</details>
+<details>
+    <summary id="p2p-storage-systems">P2P storage systems</summary>
+    <ul class="list-all-articles">
+        <li>
+        <a class="paper" href="../publications/p2pna-2013.html">P2P Storage Systems: Study of Different Placement Policies  </a>
+        <div class="article-in-list">
+        <div>Stéphane Caron, Frédéric Giroire, Dorian Mazauric, Julian
+Monteiro and Stéphane Pérennes. Peer-to-Peer Networking and Applications,
+Springer, March 2013. <a class="pdf" href="https://hal.inria.fr/hal-00880902/document">(pdf)</a> <label class="collapse" for="2fbf539d4d973f78ebe2971c8d18c9e3">(abstract)</label><input id="2fbf539d4d973f78ebe2971c8d18c9e3" type="checkbox"><p class="abstract">In a P2P storage system using erasure codes, a data block is encoded in many
+redundancy fragments. These fragments are then sent to distinct peers of the
+network. In this work, we study the impact of different placement policies of
+these fragments on the performance of storage systems. Several practical
+factors (easier control, software reuse, latency) tend to favor data placement
+strategies that preserve some degree of locality. We compare three policies:
+two of them are local, in which the data are stored in logical neighbors, and
+the other one, global, in which the data are spread randomly in the whole
+system. We focus on the study of the probability to lose a data block and the
+bandwidth consumption to maintain such redundancy. We use simulations to show
+that, without resource constraints, the average values are the same no matter
+which placement policy is used. However, the variations in the use of bandwidth
+are much more bursty under the local policies. When the bandwidth is limited,
+these bursty variations induce longer maintenance time and henceforth a higher
+risk of data loss. We then show that a suitable degree of locality could be
+introduced in order to combine the efficiency of the global policy with the
+practical advantages of a local placement. Additionally, we propose a new
+external reconstruction strategy that greatly improves the performance of local
+placement strategies. Finally, we give analytical methods to estimate the mean
+time to the occurrence of data loss for the three policies.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/globe-2010.html">Data Life Time for Different Placement Policies in P2P Storage Systems  </a>
+        <div class="article-in-list">
+        <div>Stéphane Caron, Frédéric Giroire, Dorian Mazauric, Julian
+Monteiro and Stéphane Pérennes. Globe 2010. <a class="pdf" href="http://hal.inria.fr/inria-00496222/fr">(pdf)</a> <label class="collapse" for="4a369187465cf050bf9e88a8b2b285ae">(abstract)</label><input id="4a369187465cf050bf9e88a8b2b285ae" type="checkbox"><p class="abstract">Peer-to-peer systems are foreseen as an efficient solution to achieve reliable
+data storage at low cost. To deal with common P2P problems such as peer
+failures or churn, such systems encode the user data into redundant fragments
+and distribute them among peers. The way they distribute it, known as placement
+policy, has a significant impact on their behavior and reliability. In this
+paper, we study the impact of different placement policies on the data life
+time. More precisely, we describe methods to compute and approximate the mean
+time before the system loses data (Mean Time to Data Loss). We compare this
+metric for three placement policies: two of them local, in which the data is
+stored in logical peer neighborhoods, and one of them global in which fragments
+are parted uniformly at random among the different peers.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../publications/algotel-2010.html">P2P Storage Systems  <small> Data Life Time for Different Placement Policies </small>  </a>
+        <div class="article-in-list">
+        <div>Stéphane Caron, Frédéric Giroire, Dorian Mazauric, Julian
+Monteiro and Stéphane Pérennes. AlgoTel 2010. <a class="pdf" href="http://hal.inria.fr/inria-00479537/fr">(pdf)</a> <label class="collapse" for="48d6fdbb8449d5c8e89bbc4bfc6a4172">(abstract)</label><input id="48d6fdbb8449d5c8e89bbc4bfc6a4172" type="checkbox"><p class="abstract">Peer-to-peer systems are foreseen as an efficient solution to achieve reliable
+data storage at low cost. To deal with common P2P problems such as peer
+failures or churn, such systems encode the user data into redundant fragments
+and distribute them among peers. The way they distribute it, known as placement
+policy, has a significant impact on their behavior and reliability. In this
+report, after a brief state-of-the-art of the technology used in P2P storage
+systems, we compare three different placement policies: two of them local, in
+which the data is stored in logical peer neighborhoods, and on of them global
+in which fragments are parted at random among the different peers. For each
+policy, we give either Markov Chain Models to efficiently compute the Mean Time
+To Data Loss (which is closely related to the probability to lose data) or
+approximations of this quantity under certain assumptions. We also attempt to
+give lower bounds on P2P storage systems introducing the BIG system, in which
+we consider information globally. We propose various ways to compute a bound on
+the probability to lose data, in relation with parameters such as the peer
+failure rate of the peer bandwidth.</p></div>
+        </div>
+        </li>
+    </ul>
+</details>
+<details>
+    <summary id="signal-processing">Signal processing</summary>
+    <ul class="list-all-articles">
+        <li>
+        <a class="paper" href="../publications/patcog-2020.html">Parametric recurrence quantification analysis of autoregressive processes for pattern recognition in multichannel electroencephalographic data  </a>
+        <div class="article-in-list">
+        <div>Sofiane Ramdani, Anthony Boyer, Stéphane Caron, François Bonnetblanc, Frédéric Bouchara, HuguesDuffau and Annick Lesne. Pattern Recognition. Submitted July 2019, accepted August 2020, published January 2021. <label class="collapse" for="8ee2a0bffa8d2522c04cf724932e3577">(abstract)</label><input id="8ee2a0bffa8d2522c04cf724932e3577" type="checkbox"><p class="abstract">Recurrence quantification analysis (RQA) is an acknowledged method for the
+characterization of experimental time series. We propose a parametric version
+of RQA, pRQA, allowing a fast processing of spatial arrays of time series, once
+each is modeled by an autoregressive stochastic process. This method relies on
+the analytical derivation of asymptotic expressions for five current RQA
+measures as a function of the model parameters. By avoiding the construction of
+the recurrence plot of the time series, pRQA is computationally efficient. As a
+proof of principle, we apply pRQA to pattern recognition in multichannel
+electroencephalographic (EEG) data from a patient with a brain tumor.</p></div>
+        </div>
+        </li>
+    </ul>
+</details>
+<details>
+    <summary id="smart-grid-energy-management">Smart grid energy management</summary>
+    <ul class="list-all-articles">
+        <li>
+        <a class="paper" href="../publications/smartgridcomm-2010.html">Incentive-based Energy Consumption Scheduling Algorithms for the Smart Grid  </a>
+        <div class="article-in-list">
+        <div>Stéphane Caron and George Kesidis.
+IEEE SmartGridComm 2010. <a class="pdf" href="https://hal.archives-ouvertes.fr/hal-02108638/document">(pdf)</a> <label class="collapse" for="9658ae6e2df1d2a38f5508ae43fa517c">(abstract)</label><input id="9658ae6e2df1d2a38f5508ae43fa517c" type="checkbox"><p class="abstract">In this paper, we study Demand Response (DR) problematics for different levels
+of information sharing in a smart grid. We propose a dynamic pricing scheme
+incentivizing consumers to achieve an aggregate load profile suitable for
+utilities, and study how close they can get to an ideal flat profile depending
+on how much information they share. When customers can share all their load
+profiles, we provide a distributed algorithm, set up as a cooperative game
+between consumers, which significantly reduces the total cost and
+peak-to-average ratio (PAR) of the system. In the absence of full information
+sharing (for reasons of privacy), when users have only access to the
+instantaneous total load on the grid, we provide distributed stochastic
+strategies that successfully exploit this information to improve the overall
+load profile. Simulation results confirm that these solutions efficiently
+benefit from information sharing within the grid and reduce both the total cost
+and PAR.</p></div>
+        </div>
+        </li>
+    </ul>
+</details>
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

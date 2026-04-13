@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Debian 9 Mail Server, Part II: SPF and DKIM</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="TL;DR: check mail-tester.com or Spam Checker. If you don't get 10/10, read this post. In a previous post, we saw how to configure a Debian mail server with Postfix and Dovecot, but we did not address an important issue: spam. Major e-mail providers are defending their users …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Blog">
+        <meta name="keywords" content="Linux">
+
+        <meta property="og:title" content="Debian 9 Mail Server, Part II: SPF and DKIM">
+        <meta property="og:description" content="TL;DR: check mail-tester.com or Spam Checker. If you don't get 10/10, read this post. In a previous post, we saw how to configure a Debian mail server with Postfix and Dovecot, but we did not address an important issue: spam. Major e-mail providers are defending their users …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/blog/debian-mail-spf-dkim.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/blog.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/blog.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <h1>Debian 9 Mail Server, Part II: SPF and DKIM</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p><strong>TL;DR</strong>: check <a class="reference external" href="https://www.mail-tester.com/">mail-tester.com</a> or <a class="reference external" href="https://www.experte.com/spam-checker">Spam
+Checker</a>. If you don't get 10/10, read
+this post.</p>
+<p>In a previous post, we saw how to <a class="reference external" href="debian-mail-postfix-dovecot.html">configure a Debian mail server with Postfix
+and Dovecot</a>, but we did not address
+an important issue: spam. Major e-mail providers are defending their users
+against spam by requiring two extra credentials: Sender Policy Framework (SPF)
+and DomainKey Identified Mail (DKIM). We will see how to configure these two
+services. We will also configure a local defense against incoming spam with
+SpamAssassin.</p>
+<div class="section" id="configuring-spf">
+<h2>Configuring SPF<a class="headerlink" href="debian-mail-spf-dkim.html#configuring-spf" title="Permalink to this headline">¶</a></h2>
+<p>Sender Policy Framework (SPF) provides <em>e-mail envelope authenticity</em>, that is,
+it helps verify that the sender address written in an e-mail's headers
+originates from a valid IP for its domain. It is one of the two services you
+should configure in order not to be considered as a spammer by major e-mail
+service providers. Its installation starts with:</p>
+<div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>postfix-policyd-spf-python
+</pre></div>
+<p>To enable the policy service in Postfix, append the following to
+<code>/etc/postfix/master.cf</code>:</p>
+<div class="highlight"><pre><span></span>policy-spf<span class="w">  </span>unix<span class="w">  </span>-<span class="w">       </span>n<span class="w">       </span>n<span class="w">       </span>-<span class="w">       </span>-<span class="w">       </span>spawn
+<span class="w">     </span><span class="nv">user</span><span class="o">=</span>nobody<span class="w"> </span><span class="nv">argv</span><span class="o">=</span>/usr/bin/policyd-spf
+</pre></div>
+<p>Then, add the instruction <code>check_policy_service unix:private/policy-spf</code>
+to your <code>smtpd_recipient_restrictions</code> in <code>/etc/postfix/main.cf</code>. A
+complete list of recipient restrictions, including SPF, looks like:</p>
+<div class="highlight"><pre><span></span><span class="nv">smtpd_recipient_restrictions</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span>permit_sasl_authenticated,
+<span class="w">    </span>reject_invalid_hostname,
+<span class="w">    </span>reject_unknown_recipient_domain,
+<span class="w">    </span>reject_unauth_destination,
+<span class="w">    </span>reject_rbl_client<span class="w"> </span>zen.spamhaus.org<span class="o">=</span><span class="m">127</span>.0.0.<span class="o">[</span><span class="m">2</span>..11<span class="o">]</span>
+<span class="w">    </span>reject_rhsbl_sender<span class="w"> </span>dbl.spamhaus.org<span class="o">=</span><span class="m">127</span>.0.1.<span class="o">[</span><span class="m">2</span>..99<span class="o">]</span>
+<span class="w">    </span>reject_rhsbl_helo<span class="w"> </span>dbl.spamhaus.org<span class="o">=</span><span class="m">127</span>.0.1.<span class="o">[</span><span class="m">2</span>..99<span class="o">]</span>
+<span class="w">    </span>reject_rhsbl_reverse_client<span class="w"> </span>dbl.spamhaus.org<span class="o">=</span><span class="m">127</span>.0.1.<span class="o">[</span><span class="m">2</span>..99<span class="o">]</span>
+<span class="w">    </span>warn_if_reject<span class="w"> </span>reject_rbl_client<span class="w"> </span>zen.spamhaus.org<span class="o">=</span><span class="m">127</span>.255.255.<span class="o">[</span><span class="m">1</span>..255<span class="o">]</span>
+<span class="w">    </span>check_policy_service<span class="w"> </span>unix:private/policy-spf,
+<span class="w">    </span>check_sender_access<span class="w"> </span>hash:/etc/postfix/sender_access,
+<span class="w">    </span>check_recipient_access<span class="w"> </span>hash:/etc/postfix/recipient_access,
+<span class="w">    </span>permit
+</pre></div>
+<p>Make sure the following files all exist:</p>
+<ul class="simple">
+<li><code>/etc/postfix/recipient_access</code></li>
+<li><code>/etc/postfix/recipient_access.db</code></li>
+<li><code>/etc/postfix/sender_access</code></li>
+<li><code>/etc/postfix/sender_access.db</code></li>
+</ul>
+<p>If not, you can create them by:</p>
+<div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;address.to.reject@spam.com REJECT Sorry, you cannot write to this address.&quot;</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;mydomain.com OK&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>/etc/postfix/sender_access
+postmap<span class="w"> </span>/etc/postfix/recipient_access
+postmap<span class="w"> </span>/etc/postfix/sender_access
+</pre></div>
+<p>A few rules apply: the policy service should always be <em>after</em>
+<code>reject_unauth_destination</code>, otherwise early responses from SPF can turn
+your system into an open relay. Also, put the policy service after you permit
+local senders (<code>permit_sasl_authenticated</code>), as SPF should be applied to
+inbound e-mail from the Internet, not outbound e-mail from your users.</p>
+<p>You should also add the following line to <code>main.cf</code> in order to avoid
+timeouts:</p>
+<div class="highlight"><pre><span></span>policy-spf_time_limit<span class="w"> </span><span class="o">=</span><span class="w"> </span>3600s
+</pre></div>
+<p>Finally, you will need to setup an SPF record in your DNS. It is basically
+a TXT record that looks as follows:</p>
+<div class="highlight"><pre><span></span><span class="m">600</span><span class="w"> </span>IN<span class="w"> </span>TXT<span class="w"> </span><span class="s2">&quot;v=spf1 a mx ip4:YOUR_IPv4_ADDRESS ip6:YOUR_IPv6_ADDRESS ~all&quot;</span>
+</pre></div>
+<p>Adding your IP addresses is not mandatory but, as we will see later on, GMail
+will give you a <code>softfail</code> score if it cannot find these.</p>
+</div>
+<div class="section" id="configuring-dkim">
+<h2>Configuring DKIM<a class="headerlink" href="debian-mail-spf-dkim.html#configuring-dkim" title="Permalink to this headline">¶</a></h2>
+<p>DomainKeys Identified Mail (DKIM) is the other service you need to configure in
+order not to be considered as a spammer by big e-mail providers. It ties your
+e-mail server to your domain name, and allows receivers to verify the
+authenticity of the <em>body</em> of e-mails originating from your domain (SPF checks
+headers, DKIM checks bodies). Start the installation with:</p>
+<div class="highlight"><pre><span></span>apt-get<span class="w"> </span>install<span class="w"> </span>opendkim<span class="w"> </span>opendkim-tools
+</pre></div>
+<p>DKIM is based on asymmetric cryptography. Basically, we will generate a pair of
+public/private keys on your server, and publish the public key on your DNS
+records. First, edit <code>/etc/opendkim.conf</code> and make sure it contains the
+following:</p>
+<div class="highlight"><pre><span></span>KeyTable<span class="w">           </span>/etc/opendkim/KeyTable
+SigningTable<span class="w">       </span>/etc/opendkim/SigningTable
+ExternalIgnoreList<span class="w"> </span>/etc/opendkim/TrustedHosts
+InternalHosts<span class="w">      </span>/etc/opendkim/TrustedHosts
+LogWhy<span class="w"> </span>yes
+</pre></div>
+<p>Create the directory <code>/etc/opendkim</code> if it does not exist. Then, enter
+all your domains, hostnames or IP addresses in
+<code>/etc/opendkim/TrustedHosts</code>:</p>
+<div class="highlight"><pre><span></span><span class="m">127</span>.0.0.1
+localhost
+mydomain.com
+</pre></div>
+<p>Now, edit <code>/etc/default/opendkim</code> and uncomment the following line:</p>
+<div class="highlight"><pre><span></span><span class="nv">SOCKET</span><span class="o">=</span><span class="s2">&quot;inet:12345@localhost&quot;</span><span class="w"> </span><span class="c1"># listen on loopback on port 12345</span>
+</pre></div>
+<p>Make sure to comment all other lines that define the variable <code>SOCKET</code>.
+Alternatively, you can edit this field in <code>/etc/opendkim.conf</code> (but then
+make sure to comment out all <code>SOCKET</code> lines in
+<code>/etc/default/opendkim</code> as they have higher priority):</p>
+<div class="highlight"><pre><span></span>Socket    inet:12345@localhost
+</pre></div>
+<p>Connect this to Postfix by appending the following block to
+<code>/etc/postfix/main.cf</code>:</p>
+<div class="highlight"><pre><span></span><span class="c1"># DKIM</span>
+<span class="nv">milter_default_action</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>accept
+<span class="nv">milter_protocol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">6</span>
+<span class="nv">smtpd_milters</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>inet:localhost:12345
+<span class="nv">non_smtpd_milters</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>inet:localhost:12345
+</pre></div>
+<p>Now, we need to generate the pair of public/private keys for your server. It
+goes as follows:</p>
+<div class="highlight"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span>/etc/opendkim/keys/mydomain.com
+<span class="nb">cd</span><span class="w"> </span>/etc/opendkim/keys/mydomain.com
+opendkim-genkey<span class="w"> </span>-s<span class="w"> </span>default<span class="w"> </span>-d<span class="w"> </span>mydomain.com
+chown<span class="w"> </span>opendkim:opendkim<span class="w"> </span>default.private
+</pre></div>
+<p>Next, add the key to <code>/etc/opendkim/KeyTable</code>:</p>
+<div class="highlight"><pre><span></span>default._domainkey.mydomain.com<span class="w"> </span>mydomain.com:default:/etc/opendkim/keys/mydomain.com/default.private
+</pre></div>
+<p>And to <code>/etc/opendkim/SigningTable</code>:</p>
+<div class="highlight"><pre><span></span>mydomain.com<span class="w"> </span>default._domainkey.mydomain.com
+</pre></div>
+<p>Note: in some tutorials, you will see a regular expression
+<code>*&#64;mydomain.com</code> instead of just <code>mydomain.com</code> at the beginning of
+this line. If you want to enable the parsing of regular expressions, add the
+prefix &quot;refile&quot; (stands for &quot;regular expression file&quot;) to the signing-table
+line in <code>/etc/opendkim.conf</code> (thanks to <em>Tadashi</em> for pointing this out):</p>
+<div class="highlight"><pre><span></span>SigningTable<span class="w">       </span>refile:/etc/opendkim/SigningTable
+</pre></div>
+<p>Finally, display your DNS key with:</p>
+<div class="highlight"><pre><span></span>$<span class="w"> </span>cat<span class="w"> </span>/etc/opendkim/keys/mydomain.com/default.txt
+default._domainkey<span class="w"> </span>IN<span class="w"> </span>TXT<span class="w"> </span><span class="s2">&quot;v=DKIM1; k=rsa; p=MIGfM...long hash...DAQAB&quot;</span>
+</pre></div>
+<p>You need to enter the full line as a free text (TXT) record of your domain's
+DNS (how to do so depends on your provider). If you cannot edit your DNS record
+directly but instead need to go through a GUI, just remember that the field
+name starts with &quot;default._domainkey&quot;. Once you have configured your DNS, you
+can check it with:</p>
+<div class="highlight"><pre><span></span>dig<span class="w"> </span>default._domainkey.mydomain.com<span class="w"> </span>TXT
+</pre></div>
+<p>The output should contain an &quot;ANSWER&quot; section with the same content as your
+<code>default.txt</code> file.</p>
+</div>
+<div class="section" id="testing-your-credentials">
+<h2>Testing your credentials<a class="headerlink" href="debian-mail-spf-dkim.html#testing-your-credentials" title="Permalink to this headline">¶</a></h2>
+<p>There are a few testing services available (as of writing this note in 2015)
+to check the spammyness of your e-mails. A simple one is provided by Port 25:
+send an empty e-mail to <code>check-auth&#64;verifier.port25.com</code> and you will
+get an SPF/DKIM report by return mail that looks like:</p>
+<div class="highlight"><pre><span></span>SPF<span class="w"> </span>check:<span class="w">          </span>pass
+DomainKeys<span class="w"> </span>check:<span class="w">   </span>neutral
+DKIM<span class="w"> </span>check:<span class="w">         </span>pass
+DKIM<span class="w"> </span>check:<span class="w">         </span>pass
+Sender-ID<span class="w"> </span>check:<span class="w">    </span>pass
+SpamAssassin<span class="w"> </span>check:<span class="w"> </span>ham
+</pre></div>
+<p>(Don't worry about the DomainKeys check, which is for a version of the protocol
+anterior to DKIM.) The second, and in my opinion more useful services, are
+<a class="reference external" href="https://www.mail-tester.com/">mail-tester.com</a> and <a class="reference external" href="https://www.experte.com/spam-checker">Spam Checker</a>. They perform similar checks, and also
+give you hints on how to improve your configuration. Thanks to the former, I
+could identify and fix the DKIM mis-configuration mentioned above, and learned
+about the following two improvements. The latter does not check for black
+lists, but instead verifies that your e-mails make it to Gmail inboxes.</p>
+<div class="section" id="configuring-dmarc">
+<h3>Configuring DMARC<a class="headerlink" href="debian-mail-spf-dkim.html#configuring-dmarc" title="Permalink to this headline">¶</a></h3>
+<p>Once both SPF and DKIM are configured, it is easy, yet appreciated by other
+e-mail providers, to add a DMARC record to your DNS. Just create a new TXT
+field with the default values:</p>
+<div class="highlight"><pre><span></span>_dmarc<span class="w"> </span>IN<span class="w"> </span>TXT<span class="w"> </span><span class="s2">&quot;v=DMARC1; p=none&quot;</span>
+</pre></div>
+<p>While SPF and DKIM are authentication schemes, used to verify e-mail headers
+and bodies respectively, DMARC is a <em>scheme management scheme</em> that tells
+e-mail clients what to do when e-mails don't pass authentication. Here we are
+setting enforcement to <code>p=none</code>, meaning nothing happens to e-mails that
+don't pass authentication.</p>
+<p>Once DKIM and SPF are working properly on your server, you can reject
+unauthenticated messages by setting <code>p=reject</code>. This is not mandatory but
+it helps fight spoofing and phishing. To go further, check out for instance the
+<a class="reference external" href="https://support.google.com/a/answer/10032473">Recommended DMARC rollout</a>
+tutorial from the Google Workspace Admin Help.</p>
+</div>
+<div class="section" id="reverse-dns">
+<h3>Reverse DNS<a class="headerlink" href="debian-mail-spf-dkim.html#reverse-dns" title="Permalink to this headline">¶</a></h3>
+<p>Some major e-mail providers check the domain name in your e-mails by a reverse
+DNS lookup. Consequently, you should make sure that your reverse DNS
+(<code>dig +short -x &lt;your_IP_address&gt;</code>) returns the domain name used in your
+e-mails. If it is not the case, you will need to configure a pointer (PTR)
+record in your DNS. This option was available in the web interface of my
+registrar at the time of writing this note, but some registrars may require you
+to contact customer support to do this.</p>
+</div>
+<div class="section" id="the-gmail-test">
+<h3>The GMail test<a class="headerlink" href="debian-mail-spf-dkim.html#the-gmail-test" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="https://www.gmail.com">GMail</a> is probably the most thorough spam fighter
+among public e-mail providers in 2015. If you have a GMail account (you can
+just create an empty one for the task), you can send it a mail and look for
+the <code>Authentication-Results</code> field in the source code of the received
+message. On my first trial, it looked like:</p>
+<div class="highlight"><pre><span></span>Authentication-Results:<span class="w"> </span>mx.google.com<span class="p">;</span>
+<span class="w">       </span><span class="nv">spf</span><span class="o">=</span>softfail<span class="w"> </span><span class="o">(</span>google.com:<span class="w"> </span>domain<span class="w"> </span>of<span class="w"> </span>transitioning<span class="w"> </span>user@mydomain.com
+<span class="w">           </span>does<span class="w"> </span>not<span class="w"> </span>designate<span class="w"> </span>IP_ADDRESS_OF_THE_SERVER<span class="w"> </span>as<span class="w"> </span>permitted<span class="w"> </span>sender<span class="o">)</span>
+<span class="w">           </span>smtp.mailfrom<span class="o">=</span>user@mydomain.com<span class="p">;</span>
+<span class="w">       </span><span class="nv">dkim</span><span class="o">=</span>pass<span class="w"> </span>header.i<span class="o">=</span>@mydomain.com<span class="p">;</span>
+<span class="w">       </span><span class="nv">dkim</span><span class="o">=</span>pass<span class="w"> </span>header.i<span class="o">=</span>@mydomain.com<span class="p">;</span>
+<span class="w">       </span><span class="nv">dmarc</span><span class="o">=</span>pass<span class="w"> </span><span class="o">(</span><span class="nv">p</span><span class="o">=</span>NONE<span class="w"> </span><span class="nv">dis</span><span class="o">=</span>NONE<span class="o">)</span><span class="w"> </span>header.from<span class="o">=</span>mydomain.com
+</pre></div>
+<p>We see that GMail indeed checks for SPF, DKIM and DMARC. Here, it noticed
+something that both previous tests had missed: my SPF record did not include my
+server's IP address, which it considered suspicious (&quot;domain of transitioning
+<em>email_address</em> does not designate <em>ip_address</em> as permitted sender&quot;). After
+adding my IP to the SPF record, the <code>softfail</code> became a <code>pass</code>.</p>
+</div>
+</div>
+<div class="section" id="configuring-spamassassin">
+<h2>Configuring SpamAssassin<a class="headerlink" href="debian-mail-spf-dkim.html#configuring-spamassassin" title="Permalink to this headline">¶</a></h2>
+<p>Sooner rather than later, your e-mail server will receive spam. Good e-mail
+clients have junk filters, but the fight against it starts at the server level.
+SpamAssassin is a renowned e-mail filter that does this job; plus, it is easy
+to install and configure. Start the setup with:</p>
+<div class="highlight"><pre><span></span>apt-get<span class="w"> </span>install<span class="w"> </span>spamassassin<span class="w"> </span>spamc
+</pre></div>
+<p>Let us first configure Postfix's <code>master.cf</code>: we need to add the filter
+<code>-o content_filter=spamassassin</code> to the <code>smtp</code>, <code>smtps</code> and
+<code>submission</code> services:</p>
+<div class="highlight"><pre><span></span>smtp<span class="w">      </span>inet<span class="w">  </span>n<span class="w">       </span>-<span class="w">       </span>-<span class="w">       </span>-<span class="w">       </span>-<span class="w">       </span>smtpd
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">content_filter</span><span class="o">=</span>spamassassin
+submission<span class="w"> </span>inet<span class="w"> </span>n<span class="w">       </span>-<span class="w">       </span>y<span class="w">       </span>-<span class="w">       </span>-<span class="w">       </span>smtpd
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">syslog_name</span><span class="o">=</span>postfix/submission
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">smtpd_tls_security_level</span><span class="o">=</span>encrypt
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">smtpd_sasl_auth_enable</span><span class="o">=</span>yes
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">smtpd_reject_unlisted_recipient</span><span class="o">=</span>no
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">smtpd_client_restrictions</span><span class="o">=</span><span class="nv">$mua_client_restrictions</span>
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">smtpd_helo_restrictions</span><span class="o">=</span><span class="nv">$mua_helo_restrictions</span>
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">smtpd_sender_restrictions</span><span class="o">=</span><span class="nv">$mua_sender_restrictions</span>
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">smtpd_recipient_restrictions</span><span class="o">=</span>
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">smtpd_relay_restrictions</span><span class="o">=</span>permit_sasl_authenticated,reject
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">milter_macro_daemon_name</span><span class="o">=</span>ORIGINATING
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">content_filter</span><span class="o">=</span>spamassassin
+smtps<span class="w">     </span>inet<span class="w">  </span>n<span class="w">       </span>-<span class="w">       </span>y<span class="w">       </span>-<span class="w">       </span>-<span class="w">       </span>smtpd
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">syslog_name</span><span class="o">=</span>postfix/smtps
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">smtpd_tls_wrappermode</span><span class="o">=</span>yes
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">smtpd_sasl_auth_enable</span><span class="o">=</span>yes
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">smtpd_reject_unlisted_recipient</span><span class="o">=</span>no
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">smtpd_client_restrictions</span><span class="o">=</span><span class="nv">$mua_client_restrictions</span>
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">smtpd_helo_restrictions</span><span class="o">=</span><span class="nv">$mua_helo_restrictions</span>
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">smtpd_sender_restrictions</span><span class="o">=</span><span class="nv">$mua_sender_restrictions</span>
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">smtpd_recipient_restrictions</span><span class="o">=</span>
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">smtpd_relay_restrictions</span><span class="o">=</span>permit_sasl_authenticated,reject
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">milter_macro_daemon_name</span><span class="o">=</span>ORIGINATING
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">content_filter</span><span class="o">=</span>spamassassin
+</pre></div>
+<p>Then, add the following at the end of the file:</p>
+<div class="highlight"><pre><span></span>spamassassin<span class="w"> </span>unix<span class="w"> </span>-<span class="w">     </span>n<span class="w">       </span>n<span class="w">       </span>-<span class="w">       </span>-<span class="w">       </span>pipe
+<span class="w">  </span><span class="nv">user</span><span class="o">=</span>debian-spamd<span class="w"> </span><span class="nv">argv</span><span class="o">=</span>/usr/bin/spamc<span class="w"> </span>-f<span class="w"> </span>-e<span class="w"> </span>/usr/sbin/sendmail<span class="w"> </span>-oi<span class="w"> </span>-f<span class="w"> </span><span class="si">${</span><span class="nv">sender</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">recipient</span><span class="si">}</span>
+</pre></div>
+<p>Finally, you can uncomment the following line in
+<code>/etc/spamassassin/local.cf</code> to label spam mails:</p>
+<div class="highlight"><pre><span></span>rewrite_header<span class="w"> </span>Subject<span class="w"> </span>*****SPAM*****
+</pre></div>
+</div>
+<div class="section" id="webography">
+<h2>Webography<a class="headerlink" href="debian-mail-spf-dkim.html#webography" title="Permalink to this headline">¶</a></h2>
+<p>At the time of writing this post, I learned from articles of the <a class="reference external" href="https://wiki.debian.org/DebianSpamAssassin">Debian Wiki</a> and the <a class="reference external" href="https://help.ubuntu.com/community/Postfix/SPF">Ubuntu Community Wiki</a>, as well as from the
+following tutorials:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-dkim-with-postfix-on-debian-wheezy">How To Install and Configure DKIM with Postfix on Debian Wheezy</a></li>
+<li><a class="reference external" href="http://tipstricks.itmatrix.eu/?p=1494">Installing OpenDKIM in Debian Squeeze/Wheezy</a></li>
+<li><a class="reference external" href="https://blog.codinghorror.com/so-youd-like-to-send-some-email-through-code/">So You'd Like to Send Some Email (Through Code)</a></li>
+</ul>
+<p>The random thought <a class="reference external" href="https://blog.yossarian.net/2022/08/20/Why-dont-we-do-email-verification-in-reverse">Why don't we do email verification in reverse?</a>
+gives a great overview of the way e-mail works, including how DKIM, SPF and
+DMARC implement a verification process.</p>
+</div>
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="debian-mail-spf-dkim.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="debian-mail-spf-dkim.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="debian-mail-spf-dkim.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("debian-mail-spf-dkim"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="debian-mail-spf-dkim.html">Page</a> published on <time class="dt-published" datetime="2015-11-01T00:00:00+0100">2015-11-01</time>.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

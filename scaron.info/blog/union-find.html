@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Union-find</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="Le problème est le suivant : on dispose de plusieurs ensembles d'éléments disjoints que l'on souhaite unir un certain nombre de fois, et ce de façon efficace. Indexons les éléments par des entiers i∈{1,…,n}\def\bfA{\boldsymbol{A}} \def\bfB{\boldsymbol{B}} \def\bfC{\boldsymbol{C}} \def\bfD{\boldsymbol …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Blog">
+        <meta name="keywords" content="Math">
+
+        <meta property="og:title" content="Union-find">
+        <meta property="og:description" content="Le problème est le suivant : on dispose de plusieurs ensembles d'éléments disjoints que l'on souhaite unir un certain nombre de fois, et ce de façon efficace. Indexons les éléments par des entiers i∈{1,…,n}\def\bfA{\boldsymbol{A}} \def\bfB{\boldsymbol{B}} \def\bfC{\boldsymbol{C}} \def\bfD{\boldsymbol …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/blog/union-find.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/blog.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/blog.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <h1>Union-find</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p>Le problème est le suivant : on dispose de plusieurs ensembles d'éléments
+disjoints que l'on souhaite <em>unir</em> un certain nombre de fois, et ce de façon
+efficace. Indexons les éléments par des entiers <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mo>∈</mo><mo stretchy="false">{</mo><mn>1</mn><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><mi>n</mi><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+i \in \{ 1, \ldots, n
+\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6986em;vertical-align:-0.0391em;"></span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">n</span><span class="mclose">}</span></span></span></span>, et notons <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+S(i)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mclose">)</span></span></span></span> l'ensemble auquel l'élément <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span> appartient.
+L'approche naïve consiste à maintenir un tableau <code>parent[i]</code> en mémoire, et à
+réunir deux ensembles en mettant à jour tous les éléments qui leur
+appartiennent :</p>
+<pre class="code literal-block">
+Union(S1, S2) :
+    Pour chaque élément i de S2 :
+        parent[i] = S1
+</pre>
+<p>Dans le pire des cas, les ensembles initiaux sont les singletons <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">{</mo><mi>i</mi><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\{ i
+\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord mathnormal">i</span><span class="mclose">}</span></span></span></span> pour chaque élément, et nous les réunissons un par un en choisissant des
+singletons pour <code>S1</code> : la complexité est alors <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>N</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+O(N^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>. Mais il est
+possible de faire mieux : l'algorithme union-find fait de même en <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>N</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+O(N)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span>&nbsp;!</p>
+<div class="section" id="principe">
+<h2>Principe<a class="headerlink" href="union-find.html#principe" title="Permalink to this headline">¶</a></h2>
+<p>Il n'est pas toujours évident de comprendre cet algorithme dans son étonnante
+concision si l'on a pas étudié au préalable la notion d'<a class="reference external" href="https://fr.wikipedia.org/wiki/Arbre_enracin%C3%A9">arbre</a>. L'idée est de maintenir
+pour chaque élément-noeud l'index de son parent direct dans un arbre
+représentant l'ensemble : chaque ensemble est alors identifié par l'indice de
+la racine de son arbre. Unir deux ensembles est alors direct : il suffit de
+définir la racine de l'un comme parente de la racine de l'autre. Mais, tel
+quel, la complexité est toujours en <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>N</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+O(N^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>.</p>
+<div class="section" id="pseudo-code">
+<h3>Pseudo-code<a class="headerlink" href="union-find.html#pseudo-code" title="Permalink to this headline">¶</a></h3>
+<p>Voici le pseudo-code de la fonction <code>Find</code> :</p>
+<pre class="code literal-block">
+Find(i) :
+    si vide(parent[i]) :
+        retourner i
+    parent[i] = Find(parent[i])
+    retourner parent[i]
+</pre>
+<p>Réunir deux ensembles se fait alors en une seule instruction :</p>
+<pre class="code literal-block">
+Union(i, j) :
+    parent[Find(i)] = Find(j)
+</pre>
+<p>Notez comme désormais nous identifions implicitement les ensembles par
+l'identifiant <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span> d'un de leurs éléments, la racine, pour lequel
+<code>parent[i] == i</code>. À l'initialisation, tous les ensembles sont des singletons
+<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">{</mo><mi>i</mi><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\{ i \}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord mathnormal">i</span><span class="mclose">}</span></span></span></span>, et donc le tableau <code>parent</code> est initialisé par :</p>
+<pre class="code literal-block">
+pour chaque i de 1 à n :
+    parent[i] = i
+</pre>
+<p>La puissance de l'union-find vient de la compression de chemin : lorsque l'on
+demande à un noeud à quel ensemble il appartient, on ne se contente pas de
+remonter dans l'arbre depuis le noeud jusqu'à la racine pour retrouver le
+résultat : on «&nbsp;compresse&nbsp;» le chemin en définissant la racine
+comme parent direct de chaque noeud rencontré. Toute requête ultérieure sur les
+mêmes éléments s'exécutera alors en temps constant, du moins jusqu'à la
+prochaine union.</p>
+</div>
+</div>
+<div class="section" id="complexite">
+<h2>Complexité<a class="headerlink" href="union-find.html#complexite" title="Permalink to this headline">¶</a></h2>
+<p>L'union-find présente un complexité «&nbsp;amortie&nbsp;» en <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>N</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+O(N)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span>.
+L'opération <code>Find(i)</code> retournant l'ensemble <code>S[i]</code> de l'élément
+<code>i</code> s'effectue en <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>N</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+O(N)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span> car on examinera en pire cas chacun des
+éléments de l'ensemble. De même, l'opération <code>Union(i, j)</code> effectue deux
+appels à <code>Find(i)</code>, un sur chaque élément : sa complexité en pire cas est
+donc également en <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>N</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+O(N)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span>.</p>
+<p>Il ne faut cependant pas oublier que le pire cas est assez rare : en pratique,
+il est peu probable de rencontrer un arbre de <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span> éléments sans compression
+de chemin aucune, et même lorsque c'est le cas, la moindre opération <code>Find(i)</code>
+ferait tendre sa configuration vers le cas moyen, voire vers le meilleur cas
+qui est <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Ω</mi><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\Omega(1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">Ω</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span>. Cet algorithme est efficace et de nombreux problèmes
+plus généraux peuvent être résolus en l'utilisant : détection des composantes
+connexes et fortement connexes, modélisation de jeux de réflexion, etc.</p>
+</div>
+<div class="section" id="unions-plus-judicieuses">
+<h2>Unions plus judicieuses<a class="headerlink" href="union-find.html#unions-plus-judicieuses" title="Permalink to this headline">¶</a></h2>
+<p>Lors de l'union de deux ensembles de tailles différentes, définir celui qui
+comporte le plus d'éléments comme descendant de celui qui en comporte le moins
+engendrera des chemins plus longs à compresser. Une optimisation simple
+consiste alors à maintenir, pour chaque ensemble <code>i</code>, le nombre d'éléments
+qu'il contient et de reprendre la fonction union de telle sorte qu'elle
+choisisse toujours l'arbre le plus petit comme descendant du plus gros. Ce
+procédé est illustré par le code C++ suivant :</p>
+<pre class="code cpp literal-block">
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdio&gt;</span><span class="cp">
+</span><span class="w">
+</span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">MAX_NODES</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span><span class="w">
+
+</span><span class="kt">int</span><span class="w"> </span><span class="n">parent</span><span class="p">[</span><span class="n">MAX_NODES</span><span class="p">];</span><span class="w">
+</span><span class="kt">int</span><span class="w"> </span><span class="n">size</span><span class="p">[</span><span class="n">MAX_NODES</span><span class="p">];</span><span class="w">
+
+</span><span class="kt">int</span><span class="w"> </span><span class="nf">uf_find</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">node</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">parent</span><span class="p">[</span><span class="n">node</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="k">return</span><span class="w"> </span><span class="n">node</span><span class="p">;</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+    </span><span class="n">parent</span><span class="p">[</span><span class="n">node</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">uf_find</span><span class="p">(</span><span class="n">parent</span><span class="p">[</span><span class="n">node</span><span class="p">]);</span><span class="w">
+    </span><span class="k">return</span><span class="w"> </span><span class="n">parent</span><span class="p">[</span><span class="n">node</span><span class="p">];</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span><span class="kt">void</span><span class="w"> </span><span class="nf">uf_union</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">node1</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">node2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="kt">int</span><span class="w"> </span><span class="n">set1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">uf_find</span><span class="p">(</span><span class="n">node1</span><span class="p">);</span><span class="w">
+    </span><span class="kt">int</span><span class="w"> </span><span class="n">set2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">uf_find</span><span class="p">(</span><span class="n">node2</span><span class="p">);</span><span class="w">
+    </span><span class="kt">int</span><span class="w"> </span><span class="n">parent_set</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">size</span><span class="p">[</span><span class="n">set1</span><span class="p">]</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">size</span><span class="p">[</span><span class="n">set2</span><span class="p">])</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">set1</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">set2</span><span class="p">;</span><span class="w">
+    </span><span class="kt">int</span><span class="w"> </span><span class="n">child_set</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">size</span><span class="p">[</span><span class="n">set1</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">size</span><span class="p">[</span><span class="n">set2</span><span class="p">])</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">set1</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">set2</span><span class="p">;</span><span class="w">
+    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">set1</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">set2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="n">parent</span><span class="p">[</span><span class="n">child_set</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parent_set</span><span class="p">;</span><span class="w">
+        </span><span class="n">size</span><span class="p">[</span><span class="n">parent_set</span><span class="p">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">size</span><span class="p">[</span><span class="n">child_set</span><span class="p">];</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="kt">int</span><span class="w"> </span><span class="n">cmd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span><span class="w">
+    </span><span class="kt">int</span><span class="w"> </span><span class="n">node</span><span class="p">;</span><span class="w">
+    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">MAX_NODES</span><span class="p">;</span><span class="w"> </span><span class="n">node</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="n">size</span><span class="p">[</span><span class="n">node</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;0. Quitter</span><span class="se">\n</span><span class="s">1. Unir</span><span class="se">\n</span><span class="s">2. Index</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w">
+        </span><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">cmd</span><span class="p">);</span><span class="w">
+        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">cmd</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="kt">int</span><span class="w"> </span><span class="n">node1</span><span class="p">,</span><span class="w"> </span><span class="n">node2</span><span class="p">;</span><span class="w">
+            </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Entrez deux noeuds a unir :</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w">
+            </span><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d%d&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">node1</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">node2</span><span class="p">);</span><span class="w">
+            </span><span class="n">uf_union</span><span class="p">(</span><span class="n">node1</span><span class="p">,</span><span class="w"> </span><span class="n">node2</span><span class="p">);</span><span class="w">
+        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">cmd</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Entrez le noeud a examiner :</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w">
+            </span><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">node</span><span class="p">);</span><span class="w">
+            </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d appartient a %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">uf_find</span><span class="p">(</span><span class="n">node</span><span class="p">));</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">
+</span><span class="p">}</span>
+</pre>
+<p>Dans ce code nous comptons sur le fait que le tableau global <code>parent</code> est
+initialisé à zéro. Si ce n'est pas le cas, il faudra également initialiser ce
+tableau dans la fonction principale.</p>
+</div>
+<div class="section" id="pour-aller-plus-loin">
+<h2>Pour aller plus loin<a class="headerlink" href="union-find.html#pour-aller-plus-loin" title="Permalink to this headline">¶</a></h2>
+<p>L'article <a class="reference external" href="https://fr.wikipedia.org/wiki/Union-find">Union-find</a> sur
+Wikipédia complète ce billet avec illustrations et références. Union-find fait
+également parti des <a class="reference external" href="http://www.france-ioi.org/algo/chapters.php">cours d'algorithmique de France-IOI</a>.</p>
+</div>
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="union-find.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="union-find.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="union-find.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("union-find"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="union-find.html">Page</a> published on <time class="dt-published" datetime="2007-11-14T00:00:00+0100">2007-11-14</time>, last edited on 2022-01-31.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

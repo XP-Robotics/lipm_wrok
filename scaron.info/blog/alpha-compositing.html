@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Superposing video frames in a single picture</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="Paper (dead trees) is not the best format to publish video content, but one doesn't always choose her medium. In this post, I will explain how I used FFmpeg and ImageMagick to convert a small video sequence into a superposition of pictures with varying hue and opacity. Apart from figuring …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Blog">
+        <meta name="keywords" content="Python">
+
+        <meta property="og:title" content="Superposing video frames in a single picture">
+        <meta property="og:description" content="Paper (dead trees) is not the best format to publish video content, but one doesn't always choose her medium. In this post, I will explain how I used FFmpeg and ImageMagick to convert a small video sequence into a superposition of pictures with varying hue and opacity. Apart from figuring …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/blog/alpha-compositing.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/blog.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/blog.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <h1>Superposing video frames in a single picture</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p>Paper (dead trees) is not the best format to publish video content, but one
+doesn't always choose her medium. In this post, I will explain how I used
+<a class="reference external" href="http://ffmpeg.org/">FFmpeg</a> and <a class="reference external" href="http://www.imagemagick.org/script/index.php">ImageMagick</a> to convert a small video sequence into
+a superposition of pictures with varying hue and opacity. Apart from figuring
+out the appropriate command lines, what I found interesting here is the
+progression from command line to shell script, Makefile, and then some Python
+scripts. The result is a quick-and-dirty pipeline: a one-shot solution that
+I can save and reconsider later, if needed.</p>
+<div class="section" id="swinging-a-pendulum">
+<h2>Swinging a pendulum<a class="headerlink" href="alpha-compositing.html#swinging-a-pendulum" title="Permalink to this headline">¶</a></h2>
+<p>So I had this one-second video showing a pendulum swing up in four successive
+swings. I chose to convert it to a single picture in the following way:</p>
+<ul class="simple">
+<li>the center of the pendulum is fixed (at the center of the picture);</li>
+<li>opacity (alpha channel) goes from 30% to 100% at time goes by;</li>
+<li>the hue of the pendulum changes during each of the successive swings.</li>
+</ul>
+<p>You can see the result below: the pendulum first goes right (green), then left
+(blue), then further right (magenta) and finally all the way up (red).</p>
+<img alt="Output image" src="../images/rss-2013.png" style="width: 400px;" />
+</div>
+<div class="section" id="extracting-video-frames">
+<h2>Extracting video frames<a class="headerlink" href="alpha-compositing.html#extracting-video-frames" title="Permalink to this headline">¶</a></h2>
+<p>A single call to <a class="reference external" href="http://ffmpeg.org/">FFmpeg</a> does the trick:</p>
+<div class="highlight"><pre><span></span>$<span class="w"> </span>ffmpeg<span class="w"> </span>-i<span class="w"> </span>video.mpg<span class="w"> </span>-ss<span class="w"> </span><span class="m">00</span>:00:00.500<span class="w"> </span>-r<span class="w"> </span><span class="m">24</span><span class="w"> </span>tmp/image-%3d.jpg
+</pre></div>
+<p>The <code>-r</code> argument indicates the frame rate, here 24 fps, while <code>-ss</code>
+specifies when to start in the sequence using the format <code>hh:mm:ss[.xxx]</code>
+(here, I skipped the first half second).  All pictures will be saved using the
+pattern format supplied in the last argument, which is a <a class="reference external" href="https://en.wikipedia.org/wiki/Printf_format_string#Format_placeholders">printf format
+string</a> (&quot;%3d&quot; means three-digit integer, so the output images will be saved
+as <code>tmp/image-001.jpg</code>, <code>tmp/image-002.jpg</code>, and so on).</p>
+</div>
+<div class="section" id="transparency">
+<h2>Transparency<a class="headerlink" href="alpha-compositing.html#transparency" title="Permalink to this headline">¶</a></h2>
+<p>All my frames had a white background. I needed to make it transparent so
+I could layer frames on top of each other, which can be done using the
+<code>convert</code> tool from <a class="reference external" href="http://www.imagemagick.org/script/index.php">ImageMagick</a> and a simple sheel loop:</p>
+<div class="highlight"><pre><span></span><span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span>tmp/image-*.jpg<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span>convert<span class="w"> </span><span class="nv">$i</span><span class="w"> </span>-fuzz<span class="w"> </span><span class="m">5</span>%<span class="w"> </span>-transparent<span class="w"> </span>white<span class="w"> </span><span class="si">${</span><span class="nv">i</span><span class="p">/jpg/png</span><span class="si">}</span>
+<span class="k">done</span>
+</pre></div>
+<p>The MPEG format uses JPEG for image compression, but JPEG does not support
+transparency, so the pictures here are converted to PNG (using the shell
+construct <code>${variable/pattern/replacement}</code>, see the <a class="reference external" href="http://tldp.org/LDP/abs/html/string-manipulation.html">Advanced Bash-Scripting
+Guide</a>). The <code>-transparent</code> argument is used to set the transparency color,
+white here.  Since my frames were dirty, the background wasn't exactly white
+(RGB 255, 255, 255), so I added the <code>-fuzz</code> argument to specify a 5%
+tolerance.</p>
+</div>
+<div class="section" id="makefile">
+<h2>Makefile<a class="headerlink" href="alpha-compositing.html#makefile" title="Permalink to this headline">¶</a></h2>
+<p>It took me some time to figure out the right calls to <code>convert</code>. After
+several devastations of my pictures folder, I figured out I ought to automate
+the process of starting again from the beginning, so I put everything in
+a Makefile:</p>
+<div class="highlight"><pre><span></span><span class="nv">SHELL</span><span class="o">=</span>/bin/bash<span class="w">  </span><span class="c1"># otherwise Make uses /bin/sh</span>
+<span class="nv">WORKDIR</span><span class="o">=</span>./tmp
+<span class="nv">VIDEO</span><span class="o">=</span>output.mpg
+<span class="nv">FRATE</span><span class="o">=</span><span class="m">24</span>
+
+<span class="nf">all</span><span class="o">:</span><span class="w"> </span><span class="n">clean</span> <span class="n">ffmpeg</span> <span class="n">transparency</span>
+
+<span class="nf">$(WORKDIR)</span><span class="o">:</span>
+<span class="w">    </span>mkdir<span class="w"> </span><span class="k">$(</span>WORKDIR<span class="k">)</span>
+
+<span class="nf">clean</span><span class="o">:</span><span class="w"> </span><span class="k">$(</span><span class="nv">WORKDIR</span><span class="k">)</span>
+<span class="w">    </span>find<span class="w"> </span><span class="k">$(</span>WORKDIR<span class="k">)</span><span class="w"> </span>-mindepth<span class="w"> </span><span class="m">1</span><span class="w"> </span>-delete
+
+<span class="nf">ffmpeg</span><span class="o">:</span><span class="w"> </span><span class="n">clean</span>
+<span class="w">    </span>ffmpeg<span class="w"> </span>-i<span class="w"> </span><span class="k">$(</span>VIDEO<span class="k">)</span><span class="w"> </span>-r<span class="w"> </span><span class="k">$(</span>FRATE<span class="k">)</span><span class="w"> </span>-ss<span class="w"> </span><span class="m">00</span>:00:00.550<span class="w"> </span><span class="k">$(</span>WORKDIR<span class="k">)</span>/image-%3d.jpg
+
+<span class="nf">transparency</span><span class="o">:</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>WORKDIR<span class="k">)</span>/*.jpg<span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>convert<span class="w"> </span><span class="nv">$$</span>i<span class="w"> </span>-fuzz<span class="w"> </span><span class="m">5</span>%<span class="w"> </span>-transparent<span class="w"> </span>white<span class="w"> </span><span class="nv">$$</span><span class="o">{</span>i/jpg/png<span class="o">}</span><span class="p">;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="k">done</span>
+<span class="w">    </span>rm<span class="w"> </span>-f<span class="w"> </span><span class="k">$(</span>WORKDIR<span class="k">)</span>/*.jpg
+</pre></div>
+</div>
+<div class="section" id="crossing-the-alpha-channel">
+<h2>Crossing the alpha channel<a class="headerlink" href="alpha-compositing.html#crossing-the-alpha-channel" title="Permalink to this headline">¶</a></h2>
+<p>The next step was to set the opacity of pictures in the working folder from 30%
+for image-001.png to 100% for the last one. Since it involves computing
+a fraction for each file, I thought a small Python script would be a good way
+to go:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="n">src_dir</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">all_files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">src_dir</span><span class="p">)</span>
+<span class="n">nb_files</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_files</span><span class="p">)</span>
+<span class="n">min_alpha</span> <span class="o">=</span> <span class="mf">30.</span>  <span class="c1"># %</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fname</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">all_files</span><span class="p">)):</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="n">min_alpha</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="p">(</span><span class="mf">100.</span> <span class="o">-</span> <span class="n">min_alpha</span><span class="p">)</span> <span class="o">/</span> <span class="n">nb_files</span>
+    <span class="n">fpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">src_dir</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;mogrify -alpha on -channel a -evaluate and &quot;</span>
+    <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%02d%%</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">fpath</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="n">cmd</span>
+</pre></div>
+<p>I guess one can perform the same operation within the command line, but I don't
+have sufficient shell proficiency to do it ;) Here, I called <code>mogrify</code>,
+which is the same as <code>convert</code> but stores the result in place instead of
+saving it to a seperate output file. The call for each file is</p>
+<div class="highlight"><pre><span></span>mogrify<span class="w"> </span>-alpha<span class="w"> </span>on<span class="w"> </span>-channel<span class="w"> </span>a<span class="w"> </span>-evaluate<span class="w"> </span>and<span class="w"> </span>XX<span class="w"> </span>image.png
+</pre></div>
+<p>Where XX goes from 0% to 100%. <code>-alpha on</code> turns on the alpha channel,
+while <code>-channel a</code> selects it. <code>-evaluate</code> specifies a pixel-wise
+operator: for instance, <code>-evaluate set 50%</code> means you set all pixels'
+alpha values to 50%. However, we previously set a transparent background here:
+using <code>set</code> would override it and put a semi-transparent white instead.
+With <code>and</code>, 0% (transparent) stays 0%, and 100% (opaque) becomes the new
+value.</p>
+</div>
+<div class="section" id="hue-make-me-feel">
+<h2>Hue make me feel<a class="headerlink" href="alpha-compositing.html#hue-make-me-feel" title="Permalink to this headline">¶</a></h2>
+<p>For this operation, I needed to set the hue of the picture based on its
+position in the sequence: after identifying (manually) the key frames at which
+I wanted the hue to change, I resorted to a small Python script again:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="n">key_frames</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">37</span><span class="p">]</span>
+
+<span class="n">src_dir</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">all_files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">src_dir</span><span class="p">)</span>
+<span class="n">nb_files</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_files</span><span class="p">)</span>
+
+<span class="n">key_files</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;image-</span><span class="si">%03d</span><span class="s2">.png&quot;</span> <span class="o">%</span> <span class="n">fid</span> <span class="k">for</span> <span class="n">fid</span> <span class="ow">in</span> <span class="n">key_frames</span><span class="p">]</span>
+<span class="nb">print</span> <span class="n">key_files</span>
+<span class="n">hue_step</span> <span class="o">=</span> <span class="mi">120</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">key_files</span><span class="p">)</span>
+<span class="n">hue</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fname</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">all_files</span><span class="p">)):</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="mf">100.</span> <span class="o">/</span> <span class="n">nb_files</span>
+    <span class="n">fpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">src_dir</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+    <span class="n">outpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">src_dir</span><span class="p">,</span> <span class="n">fname</span> <span class="o">+</span> <span class="s1">&#39;.hued&#39;</span><span class="p">)</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;convert -modulate 100,100,</span><span class="si">%d</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">hue</span><span class="p">,</span> <span class="n">fpath</span><span class="p">,</span> <span class="n">outpath</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="n">cmd</span>
+    <span class="k">if</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">key_files</span><span class="p">:</span>
+        <span class="n">hue</span> <span class="o">+=</span> <span class="n">hue_step</span>
+</pre></div>
+<p>Again, shell power users, feel free to let me know how to do it in Bash/Zsh :)</p>
+</div>
+<div class="section" id="merging-all-frames">
+<h2>Merging all frames<a class="headerlink" href="alpha-compositing.html#merging-all-frames" title="Permalink to this headline">¶</a></h2>
+<p>The command line to merge all layers into one is the following:</p>
+<div class="highlight"><pre><span></span>convert<span class="w"> </span>tmp/image-*<span class="w"> </span>-background<span class="w"> </span>none<span class="w"> </span>-compose<span class="w"> </span>dst_over<span class="w"> </span>-flatten<span class="w"> </span>output.png
+</pre></div>
+<p>The two important parts are the compose method, <code>-compose dst_over</code>,
+which merges files atop each other in the order of the list (first ones going
+under), and <code>-flatten</code>, which merges all layers into one.</p>
+</div>
+<div class="section" id="it-s-the-final-makefile">
+<h2>It's the final Makefile<a class="headerlink" href="alpha-compositing.html#it-s-the-final-makefile" title="Permalink to this headline">¶</a></h2>
+<p>My final Makefile looks like this:</p>
+<div class="highlight"><pre><span></span><span class="nv">SHELL</span><span class="o">=</span>/bin/bash<span class="w">  </span><span class="c1"># otherwise Make uses /bin/sh</span>
+<span class="nv">VIDEO</span><span class="o">=</span>output.mpg
+<span class="nv">FRATE</span><span class="o">=</span><span class="m">24</span>
+<span class="nv">WORKDIR</span><span class="o">=</span>./tmp
+<span class="nv">OUTPUT</span><span class="o">=</span>pendulum_traj.png
+
+<span class="nf">clean</span><span class="o">:</span>
+<span class="w">    </span>rm<span class="w"> </span>-rf<span class="w"> </span><span class="k">$(</span>WORKDIR<span class="k">)</span>/
+
+<span class="nf">ffmpeg</span><span class="o">:</span><span class="w"> </span><span class="n">clean</span>
+<span class="w">    </span>mkdir<span class="w"> </span><span class="k">$(</span>WORKDIR<span class="k">)</span>
+<span class="w">    </span>ffmpeg<span class="w"> </span>-i<span class="w"> </span><span class="k">$(</span>VIDEO<span class="k">)</span><span class="w"> </span>-r<span class="w"> </span><span class="k">$(</span>FRATE<span class="k">)</span><span class="w"> </span>-ss<span class="w"> </span><span class="m">00</span>:00:00.550<span class="w"> </span><span class="k">$(</span>WORKDIR<span class="k">)</span>/image-%3d.jpg
+
+<span class="nf">transparency</span><span class="o">:</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>WORKDIR<span class="k">)</span>/*.jpg<span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>convert<span class="w"> </span><span class="nv">$$</span>i<span class="w"> </span>-fuzz<span class="w"> </span><span class="m">30</span>%<span class="w"> </span>-transparent<span class="w"> </span>white<span class="w"> </span><span class="nv">$$</span><span class="o">{</span>i/jpg/png<span class="o">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="k">done</span>
+<span class="w">    </span>rm<span class="w"> </span><span class="k">$(</span>WORKDIR<span class="k">)</span>/*.jpg
+
+<span class="nf">alpha</span><span class="o">:</span>
+<span class="w">    </span>python<span class="w"> </span>alpha.py<span class="w"> </span><span class="k">$(</span>WORKDIR<span class="k">)</span>
+
+<span class="nf">all</span><span class="o">:</span><span class="w"> </span><span class="n">clean</span> <span class="n">ffmpeg</span> <span class="n">transparency</span> <span class="n">alpha</span>
+<span class="w">    </span>python<span class="w"> </span>hue.py<span class="w"> </span><span class="k">$(</span>WORKDIR<span class="k">)</span>
+<span class="w">    </span>convert<span class="w"> </span><span class="k">$(</span>WORKDIR<span class="k">)</span>/image-*.hued<span class="w"> </span>-background<span class="w"> </span>none<span class="w"> </span>-compose<span class="w"> </span>dst_over<span class="w"> </span>-flatten<span class="w"> </span><span class="k">$(</span>OUTPUT<span class="k">)</span>
+<span class="w">    </span>rm<span class="w"> </span>-f<span class="w"> </span><span class="k">$(</span>WORKDIR<span class="k">)</span>/*.hued
+</pre></div>
+<p>Now that I look back on it, I find this whole pipeline follows the
+quick-and-dirty principle: build incrementally, only go to the higher level of
+complexity when needed. It also follows from my laziness: don't plan ahead,
+crawl the Internet for the answer (command line) when needed, don't think,
+drink coffee, crawl the Internet even more frantically, and so on.</p>
+</div>
+<div class="section" id="ps-unnecessary-loops">
+<h2>PS: Unnecessary loops<a class="headerlink" href="alpha-compositing.html#ps-unnecessary-loops" title="Permalink to this headline">¶</a></h2>
+<p>An acute reader pointed out that the for loops that I have used here are
+unnecessarily complicated: both <code>convert</code> and <code>mogrify</code> have a
+<code>-format</code> argument that can be used to treat all files in a single call.
+For instance,</p>
+<div class="highlight"><pre><span></span><span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span>tmp/image-*.jpg<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span>convert<span class="w"> </span><span class="nv">$i</span><span class="w"> </span>-fuzz<span class="w"> </span><span class="m">5</span>%<span class="w"> </span>-transparent<span class="w"> </span>white<span class="w"> </span><span class="si">${</span><span class="nv">i</span><span class="p">/jpg/png</span><span class="si">}</span>
+<span class="k">done</span>
+</pre></div>
+<p>Becomes:</p>
+<div class="highlight"><pre><span></span>convert<span class="w"> </span>-format<span class="w"> </span>png<span class="w"> </span>-fuzz<span class="w"> </span><span class="m">5</span>%<span class="w"> </span>-transparent<span class="w"> </span>white<span class="w"> </span>tmp/image-*.jpg
+</pre></div>
+</div>
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="alpha-compositing.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="alpha-compositing.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="alpha-compositing.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("alpha-compositing"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="alpha-compositing.html">Page</a> published on <time class="dt-published" datetime="2013-07-17T00:00:00+0200">2013-07-17</time>.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

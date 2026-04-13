@@ -1,0 +1,2492 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Capture point</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="Humanoid robot walking, LIP model and capture point. With a next step at the capture point, the robot would come asymptotically to a stop. The capture point is a characteristic quantity of the linear inverted pendulum model used in legged robot locomotion. It was originally coined by Pratt et al …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Robotics">
+        <meta name="keywords" content="Locomotion, Robotics">
+
+        <meta property="og:title" content="Capture point">
+        <meta property="og:description" content="Humanoid robot walking, LIP model and capture point. With a next step at the capture point, the robot would come asymptotically to a stop. The capture point is a characteristic quantity of the linear inverted pendulum model used in legged robot locomotion. It was originally coined by Pratt et al …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/robotics/capture-point.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/robotics.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/robotics.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <h1>Capture point</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<div class="right-figure docutils container">
+<img alt="Humanoid robot walking, LIP model and capture point" class="center max-height-450px" src="../figures/lip-with-dcm.png" />
+<p>Humanoid robot walking, LIP model and capture point. With a next step at
+the capture point, the robot would come asymptotically to a stop.</p>
+</div>
+<p>The <em>capture point</em> is a characteristic quantity of the <a class="reference external" href="linear-inverted-pendulum-model.html">linear inverted
+pendulum model</a> used in legged
+robot locomotion. It was originally coined by <a class="reference external" href="https://doi.org/10.1109/ICHR.2006.321385">Pratt et al. (2006)</a> to address a question of push
+recovery: where should the robot step <em>right now</em> to eliminate linear momentum
+and come <em>asymptotically</em> to a stop?</p>
+<div class="section" id="derivation">
+<h2>Derivation<a class="headerlink" href="capture-point.html#derivation" title="Permalink to this headline">¶</a></h2>
+<p>Let us start from the equation of motion of the linear inverted pendulum, where
+all the mass is concentrated at the center of mass <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">p</mi><mi>G</mi></msub></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\bfp_G</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6886em;vertical-align:-0.2441em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">G</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span></span></span></span>:</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mover accent="true"><mi mathvariant="bold-italic">p</mi><mo>¨</mo></mover><mi>G</mi></msub><mo>=</mo><msup><mi>ω</mi><mn>2</mn></msup><mo stretchy="false">(</mo><msub><mi mathvariant="bold-italic">p</mi><mi>G</mi></msub><mo>−</mo><msub><mi mathvariant="bold-italic">p</mi><mi>Z</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\bfpdd_G = \omega^2 (\bfp_G - \bfp_Z)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9254em;vertical-align:-0.2441em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6813em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span></span><span style="top:-3.0134em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mord">¨</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">G</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.1141em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">ω</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">G</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">Z</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span><p>We assume that the robot steps instantly at time <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+t=0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6151em;"></span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span> and maintains its
+<a class="reference external" href="zero-tilting-moment-point.html">ZMP</a> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">p</mi><mi>Z</mi></msub></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\bfp_Z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6886em;vertical-align:-0.2441em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">Z</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span></span></span></span> at a constant
+location in its new foothold, so that <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">p</mi><mi>Z</mi></msub></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\bfp_Z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6886em;vertical-align:-0.2441em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">Z</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span></span></span></span> is stationary. Since the
+natural frequency <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ω</mi></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\omega</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">ω</span></span></span></span> of the pendulum is also a model constant, we
+can solve this second-order linear differential equation as:</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi mathvariant="bold-italic">p</mi><mi>G</mi></msub><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo>=</mo><mstyle scriptlevel="0" displaystyle="true"><msub><mi mathvariant="bold-italic">p</mi><mi>Z</mi></msub><mo>+</mo><mfrac><msup><mi>e</mi><mrow><mi>ω</mi><mi>t</mi></mrow></msup><mn>2</mn></mfrac><mrow><mo fence="true">[</mo><msub><mi mathvariant="bold-italic">p</mi><mi>G</mi></msub><mo stretchy="false">(</mo><mn>0</mn><mo stretchy="false">)</mo><mo>+</mo><mfrac><mrow><msub><mover accent="true"><mi mathvariant="bold-italic">p</mi><mo>˙</mo></mover><mi>G</mi></msub><mo stretchy="false">(</mo><mn>0</mn><mo stretchy="false">)</mo></mrow><mi>ω</mi></mfrac><mo>−</mo><msub><mi mathvariant="bold-italic">p</mi><mi>Z</mi></msub><mo fence="true">]</mo></mrow><mo>+</mo><mfrac><msup><mi>e</mi><mrow><mo>−</mo><mi>ω</mi><mi>t</mi></mrow></msup><mn>2</mn></mfrac><mrow><mo fence="true">[</mo><msub><mi mathvariant="bold-italic">p</mi><mi>G</mi></msub><mo stretchy="false">(</mo><mn>0</mn><mo stretchy="false">)</mo><mo>−</mo><mfrac><mrow><msub><mover accent="true"><mi mathvariant="bold-italic">p</mi><mo>˙</mo></mover><mi>G</mi></msub><mo stretchy="false">(</mo><mn>0</mn><mo stretchy="false">)</mo></mrow><mi>ω</mi></mfrac><mo>−</mo><msub><mi mathvariant="bold-italic">p</mi><mi>Z</mi></msub><mo fence="true">]</mo></mrow></mstyle></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\bfp_G(t) = \displaystyle \bfp_Z + \frac{e^{\omega t}}{2} \left[\bfp_G(0) +
+\frac{\bfpd_G(0)}{\omega} - \bfp_Z\right] + \frac{e^{-\omega t}}{2}
+\left[\bfp_G(0) - \frac{\bfpd_G(0)}{\omega} - \bfp_Z\right]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">G</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8275em;vertical-align:-0.2441em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">Z</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.4206em;vertical-align:-0.95em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.4706em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">2</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7936em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">ω</span><span class="mord mathnormal mtight">t</span></span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">[</span></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">G</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord">0</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.427em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">ω</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6813em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span></span><span style="top:-3.0134em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1389em;"><span class="mord">˙</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">G</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord">0</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">Z</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">]</span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.4206em;vertical-align:-0.95em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.4706em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">2</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7936em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">ω</span><span class="mord mathnormal mtight">t</span></span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">[</span></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">G</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord">0</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.427em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">ω</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6813em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span></span><span style="top:-3.0134em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1389em;"><span class="mord">˙</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">G</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord">0</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">Z</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">]</span></span></span></span></span></span></span><p>This function is the sum of a stationary term <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">p</mi><mi>Z</mi></msub></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\bfp_Z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6886em;vertical-align:-0.2441em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">Z</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span></span></span></span>, a convergent term
+factored by <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>e</mi><mrow><mo>−</mo><mi>ω</mi><mi>t</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+e^{-\omega t}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7936em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7936em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">ω</span><span class="mord mathnormal mtight">t</span></span></span></span></span></span></span></span></span></span></span></span> that vanishes as <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>→</mo><mi mathvariant="normal">∞</mi></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+t \to \infty</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6151em;"></span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord">∞</span></span></span></span>, and a
+term factored by <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>e</mi><mrow><mi>ω</mi><mi>t</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+e^{\omega t}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7936em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7936em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">ω</span><span class="mord mathnormal mtight">t</span></span></span></span></span></span></span></span></span></span></span></span> that diverges as <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>→</mo><mi mathvariant="normal">∞</mi></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+t \to \infty</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6151em;"></span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord">∞</span></span></span></span>.
+Let us define the <em>capture point</em> as:</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi mathvariant="bold-italic">p</mi><mi>C</mi></msub><mo><mover><mo><mo>=</mo></mo><mrow><mi mathvariant="normal">d</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">f</mi></mrow></mover></mo><msub><mi mathvariant="bold-italic">p</mi><mi>G</mi></msub><mo>+</mo><mfrac><msub><mover accent="true"><mi mathvariant="bold-italic">p</mi><mo>˙</mo></mover><mi>G</mi></msub><mi>ω</mi></mfrac></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\bfp_C \defeq \bfp_G + \frac{\bfpd_G}{\omega}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.3971em;vertical-align:-0.2441em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel"><span class="mop op-limits"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:1.153em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span><span class="mop">=</span></span></span><span style="top:-3.5669em;margin-left:0em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathrm mtight" style="margin-right:0.07778em;">def</span></span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8275em;vertical-align:-0.2441em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">G</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.0443em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3583em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">ω</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6813em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span></span><span style="top:-3.0134em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1389em;"><span class="mord">˙</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">G</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span><p>The divergent term in <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">p</mi><mi>G</mi></msub><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\bfp_G(t)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">G</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span></span></span></span> is then <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>e</mi><mrow><mi>ω</mi><mi>t</mi></mrow></msup><mi mathvariant="normal">/</mi><mn>2</mn><mo stretchy="false">(</mo><msub><mi mathvariant="bold-italic">p</mi><mi>C</mi></msub><mo stretchy="false">(</mo><mn>0</mn><mo stretchy="false">)</mo><mo>−</mo><msub><mi mathvariant="bold-italic">p</mi><mi>Z</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+e^{\omega t}/2
+(\bfp_C(0) - \bfp_Z)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0436em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7936em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">ω</span><span class="mord mathnormal mtight">t</span></span></span></span></span></span></span></span></span><span class="mord">/2</span><span class="mopen">(</span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord">0</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">Z</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>. In particular, the <em>only</em> way for the center of mass
+trajectory to be bounded is for the stationary ZMP to be equal to the
+instantaneous capture point:</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi mathvariant="bold-italic">p</mi><mi>Z</mi></msub><mo>=</mo><msub><mi mathvariant="bold-italic">p</mi><mi>C</mi></msub><mo stretchy="false">(</mo><mn>0</mn><mo stretchy="false">)</mo><mtext> </mtext><mo>⟹</mo><mtext> </mtext><msub><mi mathvariant="bold-italic">p</mi><mi>G</mi></msub><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo><munder><mo><mo>⟶</mo></mo><mrow><mi>t</mi><mo>→</mo><mi mathvariant="normal">∞</mi></mrow></munder></mo><msub><mi mathvariant="bold-italic">p</mi><mi>C</mi></msub><mo stretchy="false">(</mo><mn>0</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\bfp_Z = \bfp_C(0) \ \Longrightarrow \ \bfp_G(t) \underset{t \to
+\infty}{\longrightarrow} \bfp_C(0)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6886em;vertical-align:-0.2441em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">Z</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord">0</span><span class="mclose">)</span><span class="mspace"> </span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">⟹</span><span class="mspace"> </span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.461em;vertical-align:-0.711em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">G</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel"><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.511em;"><span style="top:-2.389em;margin-left:0em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mrel mtight">→</span><span class="mord mtight">∞</span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span><span class="mop">⟶</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.711em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord">0</span><span class="mclose">)</span></span></span></span></span><p>We can thus interpret the capture point as a point where the robot should step
+(shift its ZMP) in order to come (asymptotically) to a stop.</p>
+</div>
+<div class="section" id="connection-to-balance">
+<h2>Connection to balance<a class="headerlink" href="capture-point.html#connection-to-balance" title="Permalink to this headline">¶</a></h2>
+<p>The capture point is a <a class="reference external" href="../talks/jrl-2019.html">divergent component of motion</a> of the linear inverted pendulum. Shifting the
+ZMP to the capture point prevents divergence from the unstable dynamics of the
+model, but does not control the other (stable) component. In effect, the system
+comes to a stop following its <em>natural</em> dynamics:</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mover accent="true"><mi mathvariant="bold-italic">p</mi><mo>˙</mo></mover><mi>G</mi></msub><mo>=</mo><mi>ω</mi><mo stretchy="false">(</mo><msub><mi mathvariant="bold-italic">p</mi><mi>C</mi></msub><mo>−</mo><msub><mi mathvariant="bold-italic">p</mi><mi>G</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\bfpd_G = \omega (\bfp_C - \bfp_G)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9254em;vertical-align:-0.2441em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6813em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span></span><span style="top:-3.0134em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1389em;"><span class="mord">˙</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">G</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">ω</span><span class="mopen">(</span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">G</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span><p>This phenomenon is noticable in <a class="reference external" href="how-do-biped-robots-walk.html#walking-stabilization">balance controllers</a> based on
+capture point feedback such as <a class="reference external" href="https://doi.org/10.1109/IROS.2011.6094435">Englsberger et al. (2011)</a> and <a class="reference external" href="https://doi.org/10.1109/HUMANOIDS.2012.6651601">Morisawa et al. (2012)</a>. Take the robot standing,
+push it in a given direction and sustain your push, then suddenly release it:
+the robot will come back to its reference standing position following its
+natural dynamics (which only depend on <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ω</mi></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\omega</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">ω</span></span></span></span>, <em>i.e.</em> gravity and the
+height of the center of mass), regardless of the values of the various feedback
+gains used in the balance controller. You can for instance test this behavior
+in dynamic simulations with the <a class="reference external" href="https://github.com/stephane-caron/lipm_walking_controller/">lipm_walking_controller</a>.</p>
+<p>This behavior highlights how balance controllers based on capture-point
+feedback are not trying to come to a stop as fast as possible. Rather, they
+focus on preventing divergence, and leverage passive dynamics to absorb
+undesired linear momentum. When using linear feedback, <a class="reference external" href="https://doi.org/10.1109/ROBOT.2009.5152284">Sugihara (2009)</a> showed that this approach
+maximizes the basin of attraction of the resulting controller.</p>
+</div>
+<div class="section" id="boundedness-condition">
+<h2>Boundedness condition<a class="headerlink" href="capture-point.html#boundedness-condition" title="Permalink to this headline">¶</a></h2>
+<p>The derivation above can be generalized to the case where <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">p</mi><mi>Z</mi></msub><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\bfp_Z(t)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">Z</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span></span></span></span> is
+time-varying rather than time-invariant. Consider the equation of motion split
+as follows into divergent and convergent components:</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable rowspacing="0.25em" columnalign="right left" columnspacing="0em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><msub><mover accent="true"><mi mathvariant="bold-italic">p</mi><mo>˙</mo></mover><mi>C</mi></msub></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mi>ω</mi><mo stretchy="false">(</mo><msub><mi mathvariant="bold-italic">p</mi><mi>C</mi></msub><mo>−</mo><msub><mi mathvariant="bold-italic">p</mi><mi>Z</mi></msub><mo stretchy="false">)</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><msub><mover accent="true"><mi mathvariant="bold-italic">p</mi><mo>˙</mo></mover><mi>G</mi></msub></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mi>ω</mi><mo stretchy="false">(</mo><msub><mi mathvariant="bold-italic">p</mi><mi>C</mi></msub><mo>−</mo><msub><mi mathvariant="bold-italic">p</mi><mi>G</mi></msub><mo stretchy="false">)</mo></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\begin{align*}
+\bfpd_C &amp; = \omega (\bfp_C - \bfp_Z) \\
+\bfpd_G &amp; = \omega (\bfp_C - \bfp_G)
+\end{align*}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:3em;vertical-align:-1.25em;"></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.75em;"><span style="top:-3.91em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6813em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span></span><span style="top:-3.0134em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1389em;"><span class="mord">˙</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span></span></span><span style="top:-2.41em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6813em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span></span><span style="top:-3.0134em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1389em;"><span class="mord">˙</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">G</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.25em;"><span></span></span></span></span></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.75em;"><span style="top:-3.91em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">ω</span><span class="mopen">(</span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">Z</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span><span style="top:-2.41em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">ω</span><span class="mopen">(</span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">G</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.25em;"><span></span></span></span></span></span></span></span></span></span></span></span><p>The capture point diverges away from the ZMP while the center of mass is
+attracted to the capture point:</p>
+<img alt="Decoupled dynamics between the ZMP, capture point and center of mass" class="center max-height-200px max-width-90pct" src="../figures/zmp-cp-com.png" />
+<p>As the center-of-mass dynamics are convergent, the system diverges <em>if and only
+if</em> its capture point diverges. We can therefore focus on the
+capture point dynamics alone.</p>
+<p>The solution to a first-order linear time-varying differential equation is:</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mover accent="true"><mi mathvariant="bold-italic">y</mi><mo>˙</mo></mover><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo>−</mo><mi>a</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mi mathvariant="bold-italic">y</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo>=</mo><mi mathvariant="bold-italic">b</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mtext> </mtext><mo>⟹</mo><mtext> </mtext><mi mathvariant="bold-italic">y</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo>=</mo><msup><mi>e</mi><mrow><mi>A</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo></mrow></msup><mrow><mo fence="true">(</mo><mi mathvariant="bold-italic">y</mi><mo stretchy="false">(</mo><mn>0</mn><mo stretchy="false">)</mo><mo>+</mo><msubsup><mo>∫</mo><mrow><mi>τ</mi><mo>=</mo><mn>0</mn></mrow><mi>t</mi></msubsup><mi mathvariant="bold-italic">b</mi><mo stretchy="false">(</mo><mi>τ</mi><mo stretchy="false">)</mo><msup><mi>e</mi><mrow><mo>−</mo><mi>A</mi><mo stretchy="false">(</mo><mi>τ</mi><mo stretchy="false">)</mo></mrow></msup><mi mathvariant="normal">d</mi><mi>τ</mi><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\dot{\bfy}(t) - a(t) \bfy(t) = \bfb(t) \ \Longrightarrow
+\ \bfy(t) = e^{A(t)} \left(\bfy(0) + \int_{\tau=0}^t \bfb(\tau) e^{-A(\tau)}
+{\rm d} \tau \right)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6813em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.03704em;">y</span></span></span></span><span style="top:-3.0134em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1389em;"><span class="mord">˙</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">a</span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.03704em;">y</span></span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol">b</span></span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mspace"> </span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">⟹</span><span class="mspace"> </span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.03704em;">y</span></span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.4935em;vertical-align:-0.95em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.938em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">A</span><span class="mopen mtight">(</span><span class="mord mathnormal mtight">t</span><span class="mclose mtight">)</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">(</span></span><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.03704em;">y</span></span></span><span class="mopen">(</span><span class="mord">0</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mop"><span class="mop op-symbol large-op" style="margin-right:0.44445em;position:relative;top:-0.0011em;">∫</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.5435em;"><span style="top:-1.7881em;margin-left:-0.4445em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.1132em;">τ</span><span class="mrel mtight">=</span><span class="mord mtight">0</span></span></span></span><span style="top:-3.8129em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9119em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol">b</span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.1132em;">τ</span><span class="mclose">)</span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.938em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mathnormal mtight">A</span><span class="mopen mtight">(</span><span class="mord mathnormal mtight" style="margin-right:0.1132em;">τ</span><span class="mclose mtight">)</span></span></span></span></span></span></span></span></span><span class="mord"><span class="mord"><span class="mord mathrm">d</span></span></span><span class="mord mathnormal" style="margin-right:0.1132em;">τ</span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">)</span></span></span></span></span></span></span><p>where <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+A</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span></span></span></span> is the antiderivative of <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+a</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">a</span></span></span></span> such that <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo stretchy="false">(</mo><mn>0</mn><mo stretchy="false">)</mo><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+A(0)=0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">A</span><span class="mopen">(</span><span class="mord">0</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span>.
+Applied to capture point dynamics, this formula becomes:</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi mathvariant="bold-italic">p</mi><mi>C</mi></msub><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo>=</mo><msup><mi>e</mi><mrow><mi>ω</mi><mi>t</mi></mrow></msup><mrow><mo fence="true">(</mo><msub><mi mathvariant="bold-italic">p</mi><mi>C</mi></msub><mo stretchy="false">(</mo><mn>0</mn><mo stretchy="false">)</mo><mo>−</mo><mi>ω</mi><msubsup><mo>∫</mo><mrow><mi>τ</mi><mo>=</mo><mn>0</mn></mrow><mi>t</mi></msubsup><msub><mi mathvariant="bold-italic">p</mi><mi>Z</mi></msub><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><msup><mi>e</mi><mrow><mo>−</mo><mi>ω</mi><mi>τ</mi></mrow></msup><mi mathvariant="normal">d</mi><mi>τ</mi><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\bfp_C(t) = e^{\omega t} \left(\bfp_C(0) - \omega \int_{\tau=0}^t \bfp_Z(t)
+e^{-\omega \tau} {\rm d}\tau\right)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.4935em;vertical-align:-0.95em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8436em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">ω</span><span class="mord mathnormal mtight">t</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">(</span></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord">0</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">ω</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop"><span class="mop op-symbol large-op" style="margin-right:0.44445em;position:relative;top:-0.0011em;">∫</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.5435em;"><span style="top:-1.7881em;margin-left:-0.4445em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.1132em;">τ</span><span class="mrel mtight">=</span><span class="mord mtight">0</span></span></span></span><span style="top:-3.8129em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9119em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">Z</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8213em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">ω</span><span class="mord mathnormal mtight" style="margin-right:0.1132em;">τ</span></span></span></span></span></span></span></span></span><span class="mord"><span class="mord"><span class="mord mathrm">d</span></span></span><span class="mord mathnormal" style="margin-right:0.1132em;">τ</span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">)</span></span></span></span></span></span></span><p>We can check how, in the previous case where <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">p</mi><mi>Z</mi></msub></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\bfp_Z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6886em;vertical-align:-0.2441em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">Z</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span></span></span></span> is stationary, this
+formula becomes:</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi mathvariant="bold-italic">p</mi><mi>C</mi></msub><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mi mathvariant="bold-italic">p</mi><mi>Z</mi></msub><mo>+</mo><msup><mi>e</mi><mrow><mi>ω</mi><mi>t</mi></mrow></msup><mo stretchy="false">(</mo><msub><mi mathvariant="bold-italic">p</mi><mi>C</mi></msub><mo stretchy="false">(</mo><mn>0</mn><mo stretchy="false">)</mo><mo>−</mo><msub><mi mathvariant="bold-italic">p</mi><mi>Z</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\bfp_C(t) = \bfp_Z + e^{\omega t} (\bfp_C(0) - \bfp_Z)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8275em;vertical-align:-0.2441em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">Z</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.0936em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8436em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">ω</span><span class="mord mathnormal mtight">t</span></span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord">0</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">Z</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span><p>The capture point trajectory is then bounded if and only if <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">p</mi><mi>Z</mi></msub><mo>=</mo><msub><mi mathvariant="bold-italic">p</mi><mi>C</mi></msub><mo stretchy="false">(</mo><mn>0</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\bfp_Z =
+\bfp_C(0)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6886em;vertical-align:-0.2441em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">Z</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord">0</span><span class="mclose">)</span></span></span></span>, which is indeed the result we obtained above. In the general case,
+the capture point stays bounded if and only if:</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi mathvariant="bold-italic">p</mi><mi>C</mi></msub><mo stretchy="false">(</mo><mn>0</mn><mo stretchy="false">)</mo><mo>=</mo><mi>ω</mi><msubsup><mo>∫</mo><mrow><mi>τ</mi><mo>=</mo><mn>0</mn></mrow><mi>t</mi></msubsup><msub><mi mathvariant="bold-italic">p</mi><mi>Z</mi></msub><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><msup><mi>e</mi><mrow><mo>−</mo><mi>ω</mi><mi>τ</mi></mrow></msup><mi mathvariant="normal">d</mi><mi>τ</mi></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\bfp_C(0) = \omega \int_{\tau=0}^t \bfp_Z(t) e^{-\omega \tau} {\rm d}\tau</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord">0</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.4554em;vertical-align:-0.9119em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">ω</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop"><span class="mop op-symbol large-op" style="margin-right:0.44445em;position:relative;top:-0.0011em;">∫</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.5435em;"><span style="top:-1.7881em;margin-left:-0.4445em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.1132em;">τ</span><span class="mrel mtight">=</span><span class="mord mtight">0</span></span></span></span><span style="top:-3.8129em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9119em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">Z</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8213em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">ω</span><span class="mord mathnormal mtight" style="margin-right:0.1132em;">τ</span></span></span></span></span></span></span></span></span><span class="mord"><span class="mord"><span class="mord mathrm">d</span></span></span><span class="mord mathnormal" style="margin-right:0.1132em;">τ</span></span></span></span></span><p>This condition was coined <em>boundedness condition</em> by <a class="reference external" href="https://doi.org/10.1109/HUMANOIDS.2014.7041478">Lanari et al. (2014)</a>. It relates <em>future</em> system
+inputs to the present state, and characterizes the subset of these inputs that
+will actually stabilize the system in the long run. The boundedness condition
+is, for instance, a core component of the walking trajectory generator from
+<a class="reference external" href="https://arxiv.org/abs/1901.08505">Scianca et al. (2019)</a>.</p>
+</div>
+<div class="section" id="to-go-further">
+<h2>To go further<a class="headerlink" href="capture-point.html#to-go-further" title="Permalink to this headline">¶</a></h2>
+<p>The notion of <a class="reference external" href="../talks/jrl-2019.html">divergent component of motion</a>
+behind the capture point reaches beyond the linear inverted pendulum model. For
+instance, there exists a generalization of the capture point to the more
+general <a class="reference external" href="variable-height-inverted-pendulum-model.html">variable height inverted pendulum model</a>, from which
+the <em>tiptoe</em> balancing strategy emerges in addition to the stepping strategy.</p>
+</div>
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="capture-point.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="capture-point.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="capture-point.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("capture-point"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="capture-point.html">Page</a> published on <time class="dt-published" datetime="2019-10-14T00:00:00+0200">2019-10-14</time>.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

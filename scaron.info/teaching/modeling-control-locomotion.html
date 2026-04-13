@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Modeling and control of legged locomotion</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="Stéphane Caron. Fall class at École normale supérieure, Paris. Abstract¶ The objective of this lecture is to understand the physics of balancing and how we can leverage them to design locomotion controllers. Content¶ Slides Simulation¶ On Linux, formerly we could run the humanoid walking controller in a simulator with the …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Teaching">
+        <meta name="keywords" content="Teaching, Lectures, Robotics">
+
+        <meta property="og:title" content="Modeling and control of legged locomotion">
+        <meta property="og:description" content="Stéphane Caron. Fall class at École normale supérieure, Paris. Abstract¶ The objective of this lecture is to understand the physics of balancing and how we can leverage them to design locomotion controllers. Content¶ Slides Simulation¶ On Linux, formerly we could run the humanoid walking controller in a simulator with the …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/teaching/modeling-control-locomotion.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/teaching.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/teaching.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <h1>Modeling and control of legged locomotion</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p class="authors"><strong>Stéphane Caron</strong>. Fall class at <a class="reference external" href="https://www.ens.psl.eu/">École normale supérieure</a>, Paris.</p>
+<div class="section" id="abstract">
+<h2>Abstract<a class="headerlink" href="modeling-control-locomotion.html#abstract" title="Permalink to this headline">¶</a></h2>
+<p>The objective of this lecture is to understand the physics of balancing and how we can leverage them to design locomotion controllers.</p>
+</div>
+<div class="section" id="content">
+<h2>Content<a class="headerlink" href="modeling-control-locomotion.html#content" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="files docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><img alt="pdf" class="icon" src="../images/icons/pdf.png" /></td>
+<td><a class="reference external" href="../slides/modeling-control-locomotion.pdf">Slides</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="simulation">
+<h2>Simulation<a class="headerlink" href="modeling-control-locomotion.html#simulation" title="Permalink to this headline">¶</a></h2>
+<img alt="Visualization of the LIPM walking controller on the HRP-4 humanoid robot" class="noborder float-right margin-top-1em" src="../images/lipm-walking-sim-stairs.png" style="width: 300px;" />
+<p>On Linux, formerly we could run the humanoid <a class="reference external" href="https://github.com/stephane-caron/lipm_walking_controller">walking controller</a> in a simulator with the following command. It is the software that run in the real-robot experiments at the Airbus Saint-Nazaire factory in February 2019.</p>
+<pre class="code bash literal-block">
+$<span class="w"> </span>xhost<span class="w"> </span>+<span class="w"> </span><span class="c1"># for X11 forwarding
+</span>$<span class="w"> </span>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>--user<span class="w"> </span>ayumi<span class="w"> </span>-e<span class="w"> </span><span class="nv">DISPLAY</span><span class="o">=</span><span class="si">${</span><span class="nv">DISPLAY</span><span class="si">}</span><span class="w"> </span><span class="se">\
+</span><span class="w">    </span>-v<span class="w"> </span>/tmp/.X11-unix:/tmp/.X11-unix:rw<span class="w"> </span><span class="se">\
+</span><span class="w">    </span>stephanecaron/lipm_walking_controller<span class="w"> </span><span class="se">\
+</span><span class="w">    </span>lipm_walking<span class="w"> </span>--staircase
+</pre>
+<p><strong>Update:</strong> Unfortunately the Docker Hub took down the image some time in 2025. Feel free to reach out if you are interested in running the image locally on your machine.</p>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="modeling-control-locomotion.html#references" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="modeling">
+<h3>Modeling<a class="headerlink" href="modeling-control-locomotion.html#modeling" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="files docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><img alt="pdf" class="icon" src="../images/icons/pdf.png" /></td>
+<td><a class="reference external" href="https://www.cs.cmu.edu/~cga/legs/sardain-bessonnet.pdf">Forces Acting on a Biped Robot. Center of Pressure—Zero Moment Point</a></td>
+</tr>
+<tr><td><img alt="pdf" class="icon" src="../images/icons/pdf.png" /></td>
+<td><a class="reference external" href="https://arxiv.org/pdf/1501.04719.pdf">Stability of Surface Contacts for Humanoid Robots: Closed-Form Formulae of the Contact Wrench Cone for Rectangular Support Areas</a></td>
+</tr>
+<tr><td><img alt="pdf" class="icon" src="../images/icons/pdf.png" /></td>
+<td><a class="reference external" href="https://www.cs.cmu.edu/~hgeyer/Teaching/R16-899B/Papers/KajiitaEA01IEEE_ICIRS.pdf">The 3D Linear Inverted Pendulum Mode: A simple modeling for a biped walking pattern generation</a></td>
+</tr>
+<tr><td><img alt="pdf" class="icon" src="../images/icons/pdf.png" /></td>
+<td><a class="reference external" href="https://arxiv.org/pdf/1510.03232.pdf">ZMP support areas for multi-contact mobility under frictional constraints</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="model-predictive-control">
+<h3>Model predictive control<a class="headerlink" href="modeling-control-locomotion.html#model-predictive-control" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="files docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><img alt="pdf" class="icon" src="../images/icons/pdf.png" /></td>
+<td><a class="reference external" href="https://hdl.handle.net/1721.1/138000">Dynamic Locomotion in the MIT Cheetah 3 Through Convex Model-Predictive Control</a></td>
+</tr>
+<tr><td><img alt="pdf" class="icon" src="../images/icons/pdf.png" /></td>
+<td><a class="reference external" href="https://hal-lirmm.ccsd.cnrs.fr/lirmm-01256511/file/icra.pdf">Model preview control in multi-contact motion-application to a humanoid robot</a></td>
+</tr>
+<tr><td><img alt="pdf" class="icon" src="../images/icons/pdf.png" /></td>
+<td><a class="reference external" href="https://inria.hal.science/inria-00390462/document">Trajectory Free Linear Model Predictive Control for Stable Walking in the Presence of Strong Perturbations</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="balance-control">
+<h3>Balance control<a class="headerlink" href="modeling-control-locomotion.html#balance-control" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="files docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><img alt="pdf" class="icon" src="../images/icons/pdf.png" /></td>
+<td><a class="reference external" href="https://users.dimi.uniud.it/~antonio.dangelo/Robotica/2019/helper/bipedWalking_StabilizationLIP.pdf">Biped Walking Stabilization Based on Linear Inverted Pendulum Tracking</a></td>
+</tr>
+<tr><td><img alt="pdf" class="icon" src="../images/icons/pdf.png" /></td>
+<td><a class="reference external" href="https://arxiv.org/pdf/1809.07073.pdf">Stair Climbing Stabilization of the HRP-4 Humanoid Robot using Whole-body Admittance Control</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="lectures">
+<h2>Lectures<a class="headerlink" href="modeling-control-locomotion.html#lectures" title="Permalink to this headline">¶</a></h2>
+<p>This lecture was given in the following courses:</p>
+<ul class="simple">
+<li>Fall 2025 class at <a class="reference external" href="https://www.ens.psl.eu/">École normale supérieure</a>, Paris.</li>
+<li>Fall 2024 class at <a class="reference external" href="https://www.ens.psl.eu/">École normale supérieure</a>, Paris.</li>
+<li>Fall 2024 class (snapshot) at <a class="reference external" href="https://www.master-mva.com/cours/robotics/">Master MVA</a>, Paris.</li>
+<li>Fall 2023 class at <a class="reference external" href="https://www.ens.psl.eu/">École normale supérieure</a>, Paris.</li>
+</ul>
+</div>
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="modeling-control-locomotion.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="modeling-control-locomotion.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="modeling-control-locomotion.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("modeling-control-locomotion"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="modeling-control-locomotion.html">Page</a> published on <time class="dt-published" datetime="2024-12-04T00:00:00+0100">2024-12-04</time>.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

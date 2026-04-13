@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Backing up data with rsync</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="I recently discovered a tool which turned out to be useful for backing up my local folders, namely: rsync. It’s a straightforward command-line utility that makes it really easy to maintain a mirror of local data on any distant support. Basic usage for this purpose is: $ rsync -auvz --delete …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Blog">
+        <meta name="keywords" content="Linux">
+
+        <meta property="og:title" content="Backing up data with rsync">
+        <meta property="og:description" content="I recently discovered a tool which turned out to be useful for backing up my local folders, namely: rsync. It’s a straightforward command-line utility that makes it really easy to maintain a mirror of local data on any distant support. Basic usage for this purpose is: $ rsync -auvz --delete …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/blog/backing-up-data-with-rsync.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/blog.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/blog.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <h1>Backing up data with rsync</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p>I recently discovered a tool which turned out to be useful for backing up my local folders, namely: <a class="reference external" href="https://rsync.samba.org/">rsync</a>. It’s a straightforward command-line utility that makes it really easy to maintain a mirror of local data on any distant support. Basic usage for this purpose is:</p>
+<pre class="code console literal-block">
+<span class="gp">$ </span>rsync<span class="w"> </span>-auvz<span class="w"> </span>--delete<span class="w"> </span>./local-folder/<span class="w"> </span>/mnt/remote-folder/
+</pre>
+<p>Where:</p>
+<ul class="simple">
+<li><code>-a</code> stands for &quot;archive&quot; mode (preserve permissions, dates, etc.),</li>
+<li><code>-u</code> stands for &quot;update&quot; only, <em>i.e.</em> don’t re-send or overwrite newer files,</li>
+<li><code>-v</code> stands for &quot;verbose&quot;, so we can see a list of files being processed,</li>
+<li><code>-z</code> enables file compression for faster transfers,</li>
+<li><code>--delete</code> means we delete files that don’t exist any more in the local folder.</li>
+</ul>
+<p>The verbose mode enabled by <code>-v</code> is not necessary depending on your use case. These other parameters can also come in handy:</p>
+<ul class="simple">
+<li><code>--exclude</code> can be used to specify files or filename patterns to ignore,</li>
+<li><code>--progress</code> displays a progression bar, <em>e.g.</em> to check that a big file transfer is not hanging.</li>
+</ul>
+<p>Check out <code>man rsync</code> for more details and options.</p>
+<div class="section" id="trailing-slashes">
+<h2>Trailing slashes<a class="headerlink" href="backing-up-data-with-rsync.html#trailing-slashes" title="Permalink to this headline">¶</a></h2>
+<p>The only thing to be careful about with <code>rsync</code> is the addition, or not, of a trailing slash. If there is no trailing slash, the corresponding object is treated as a target, while if there is a trailing slash, the corresponding object is treated as a directory containing the target files. It's clearer with an example: suppose we have a directory <code>foo</code> containing the file <code>README</code>, and we want to sync it to a directory <code>bar</code>. If we do:</p>
+<pre class="code console literal-block">
+<span class="gp">$ </span>rsync<span class="w"> </span>-auvz<span class="w"> </span>./foo<span class="w"> </span>./bar/
+</pre>
+<p>Then <code>foo</code> will be copied to the target location <code>bar/</code>, and we will end up with the following file tree:</p>
+<pre class="code literal-block">
+./foo
+./foo/README
+./bar/
+./bar/foo
+./bar/foo/README
+</pre>
+<p>On the contrary, if we do:</p>
+<pre class="code console literal-block">
+<span class="gp">$ </span>rsync<span class="w"> </span>-auvz<span class="w"> </span>./foo/<span class="w"> </span>./bar/
+</pre>
+<p>Then the <em>content</em> of <code>foo</code> is synced with the content of <code>bar</code>, and we get:</p>
+<pre class="code literal-block">
+./foo
+./foo/README
+./bar/
+./bar/README
+</pre>
+<p>So, make sure that the source and destination folders are consistent trailing-slash-wise.</p>
+</div>
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="backing-up-data-with-rsync.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="backing-up-data-with-rsync.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="backing-up-data-with-rsync.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("backing-up-data-with-rsync"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="backing-up-data-with-rsync.html">Page</a> published on <time class="dt-published" datetime="2009-08-17T00:00:00+0200">2009-08-17</time>, last edited on 2021-10-08.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

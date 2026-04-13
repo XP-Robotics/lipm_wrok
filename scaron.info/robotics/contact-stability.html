@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Contact stability</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="Contact stability is a condition used to check the feasibility of robot motions. It should not be confused with the notion of (Lyapunov) stability, a notion from control theory used to formalize the performance of a controller. Feasibility of a contact wrench¶ Contact is maintained as long as its wrench …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Robotics">
+        <meta name="keywords" content="Contact dynamics, Robotics">
+
+        <meta property="og:title" content="Contact stability">
+        <meta property="og:description" content="Contact stability is a condition used to check the feasibility of robot motions. It should not be confused with the notion of (Lyapunov) stability, a notion from control theory used to formalize the performance of a controller. Feasibility of a contact wrench¶ Contact is maintained as long as its wrench …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/robotics/contact-stability.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/robotics.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/robotics.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <h1>Contact stability</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p>Contact stability is a condition used to check the <em>feasibility</em> of robot
+motions. It should not be confused with the notion of (Lyapunov) stability, a
+notion from control theory used to formalize the performance of a controller.</p>
+<div class="section" id="feasibility-of-a-contact-wrench">
+<h2>Feasibility of a contact wrench<a class="headerlink" href="contact-stability.html#feasibility-of-a-contact-wrench" title="Permalink to this headline">¶</a></h2>
+<div class="right-figure docutils container">
+<img alt="Contact is maintained as long as its wrench stays inside the 6D friction cone." src="../figures/coulomb-foot-wrench.png" />
+<p>Contact is maintained as long as its wrench stays inside the 6D friction cone.</p>
+</div>
+<p>Everything starts with a mobile robot, <em>i.e.</em>, a robot that is able to
+establish and break temporary contacts with its environment. Think for instance
+of a humanoid that alternatively plants its feet on the ground to walk. At each
+contact, the sum of forces exerted by the environment on the robot is
+represented by a <em>contact wrench</em>. As long as the contact is maintained, this
+wrench will lie inside its <a class="reference external" href="../publications/icra-2015.html">6D friction cones</a>. The contact breaks are switches to
+a different <a class="reference external" href="contact-modes.html">contact mode</a> as soon as its
+wrench hits the boundaries of this friction cone.</p>
+</div>
+<div class="section" id="contact-stability-modes-and-switches">
+<h2>Contact stability, modes and switches<a class="headerlink" href="contact-stability.html#contact-stability-modes-and-switches" title="Permalink to this headline">¶</a></h2>
+<p>As the robot moves, its <a class="reference external" href="newton-euler-equations.html">Newton-Euler equations of motion</a> induce a coupling between the
+motion’s whole-body momentum (linear and angular) and all contact wrenches. If
+there exists no set of wrenches that simulatenously lie in their friction cones
+and sum up to the whole-body momentum, the motion is <em>infeasible</em>. When such
+wrenches exist, the motion <em>may be</em> feasible. This latter condition is known as
+weak contact stability:</p>
+<blockquote>
+<strong>Definition (</strong><a class="reference external" href="https://doi.org/10.1002/1521-4001(200010)80:10%3C643::AID-ZAMM643%3E3.0.CO;2-E">Pang and Trinkle</a><strong>):</strong> a motion of the robot is <em>weakly contact-stable</em> if and only if
+there exists contact wrenches summing up to its whole-body momentum.</blockquote>
+<p>Weak contact stability is the underlying criterion used in a variety of
+humanoid motion planners and pattern generators. Note that, despite its use of
+the term “stability”, this notion is only a <em>feasibility</em> condition. The
+“weakness” of its definition is relative to the more general definition of
+contact stability in the context of <a class="reference external" href="contact-modes.html">contact modes</a>:</p>
+<ul class="simple">
+<li>A motion is <em>contact-stable</em> when all its contacts stay in the same contact
+mode, <em>i.e.</em>, there is no <em>contact switch</em>.</li>
+<li>A motion is <em>weakly</em> contact-stable if it <em>may</em> keep all its contacts in the
+same contact mode, <em>i.e.</em>, there exists contact wrenches that support the
+motion without changing contact mode.</li>
+<li>A motion is <em>strongly</em> contact-stable if it <em>must</em> keep all its contacts in
+the same contact mode, that is, all contact wrenches that support the motion
+can only be realized without changing contact mode. (This condition is hard
+to achieve and rarely used in practice.)</li>
+</ul>
+<p>The bottom line of these definitions is to avoid contact switches as best as
+possible. For a concrete example, think of these switches as follows:</p>
+<img alt="Difference between contact stability and contact switching" class="center max-width-80pct max-height-450px" src="../figures/contact-switching.png" />
+<p>In practice, only a few contact modes are exploited by current humanoid
+controllers. Roughly, only two contact modes: fixed (full) contacts, and no
+contact. Detecting contact switches on real robot, or providing a controller
+that would be general enough to deal with multiple contact modes, is still a
+widely open question, as of 2016.</p>
+</div>
+<div class="section" id="checking-contact-stability">
+<h2>Checking contact stability<a class="headerlink" href="contact-stability.html#checking-contact-stability" title="Permalink to this headline">¶</a></h2>
+<p>In practice, checking contact stability for a given robot motion amounts to
+solving a Quadratic Program (QP). Let <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><msub><mover accent="true"><mi mathvariant="bold-italic">p</mi><mo>¨</mo></mover><mi>G</mi></msub><mo separator="true">,</mo><msub><mover accent="true"><mi mathvariant="bold-italic">L</mi><mo>˙</mo></mover><mi>G</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+(\bfpdd_G, \dot{\bfL}_G)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.173em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6813em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span></span><span style="top:-3.0134em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mord">¨</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">G</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.923em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol">L</span></span></span></span><span style="top:-3.2551em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1389em;"><span class="mord">˙</span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">G</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span> denote
+the centroidal momentum of the motion, which is the whole-body momentum taken
+at the center of mass <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+G</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">G</span></span></span></span>. Then, feasible contact wrenches exist if and
+only if a solution to the following QP can be found:</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable rowspacing="0.25em" columnalign="right left" columnspacing="0em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mi><munder><mo><mtext>minimize </mtext></mo><mrow><msub><mi mathvariant="bold-italic">w</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi mathvariant="bold-italic">w</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>…</mo></mrow></munder></mi></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><munder><mo>∑</mo><mi>i</mi></munder><mi mathvariant="normal">∥</mi><msub><mi mathvariant="bold-italic">w</mi><msub><mi>C</mi><mi>i</mi></msub></msub><msup><mi mathvariant="normal">∥</mi><mn>2</mn></msup></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mtext>subject to </mtext></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><munder><mo>∑</mo><mi>i</mi></munder><msub><mi mathvariant="bold-italic">f</mi><mi>i</mi></msub><mo>=</mo><mi>m</mi><msub><mover accent="true"><mi mathvariant="bold-italic">p</mi><mo>¨</mo></mover><mi>G</mi></msub></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><munder><mo>∑</mo><mi>i</mi></munder><mo stretchy="false">(</mo><msub><mi mathvariant="bold-italic">p</mi><msub><mi>C</mi><mi>i</mi></msub></msub><mo>−</mo><msub><mi mathvariant="bold-italic">p</mi><mi>G</mi></msub><mo stretchy="false">)</mo><mo>×</mo><msub><mi mathvariant="bold-italic">f</mi><mi>i</mi></msub><mo>+</mo><msub><mi mathvariant="bold-italic">τ</mi><msub><mi>C</mi><mi>i</mi></msub></msub><mo>=</mo><msub><mover accent="true"><mi mathvariant="bold-italic">L</mi><mo>˙</mo></mover><mi>G</mi></msub></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mi mathvariant="normal">∀</mi><mi>i</mi><mo separator="true">,</mo><mi mathvariant="bold-italic">F</mi><msubsup><mi mathvariant="bold-italic">R</mi><mi>i</mi><mi>T</mi></msubsup><msub><mi mathvariant="bold-italic">w</mi><msub><mi>C</mi><mi>i</mi></msub></msub><mo>≤</mo><mn>0</mn></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\begin{align*}
+\underset{\bfw_1, \bfw_2, \ldots}{\textrm{minimize }} &amp; \sum_i \|\bfw_{C_i}\|^2 \\
+\textrm{subject to } &amp; \sum_i \bff_i = m \bfpdd_G \\
+&amp; \sum_i (\bfp_{C_i} - \bfp_G) \times \bff_i + \bftau_{C_i} = \dot{\bfL}_G \\
+&amp; \forall i, \bfF \bfR_i^T \bfw_{C_i} \leq 0
+\end{align*}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:9.4604em;vertical-align:-4.4802em;"></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:4.9802em;"><span style="top:-6.9802em;"><span class="pstrut" style="height:3.05em;"></span><span class="mord"><span class="mord"><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6679em;"><span style="top:-2.4em;margin-left:0em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord boldsymbol mtight" style="margin-right:0.02778em;">w</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3173em;"><span style="top:-2.357em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="mord mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord boldsymbol mtight" style="margin-right:0.02778em;">w</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3173em;"><span style="top:-2.357em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="minner mtight">…</span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span><span class="mop"><span class="mord text"><span class="mord textrm">minimize </span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.8361em;"><span></span></span></span></span></span></span></span></span><span style="top:-4.3525em;"><span class="pstrut" style="height:3.05em;"></span><span class="mord"><span class="mord text"><span class="mord textrm">subject to </span></span></span></span><span style="top:-1.7248em;"><span class="pstrut" style="height:3.05em;"></span><span class="mord"></span></span><span style="top:0.7702em;"><span class="pstrut" style="height:3.05em;"></span><span class="mord"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:4.4802em;"><span></span></span></span></span></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:4.9802em;"><span style="top:-6.9802em;"><span class="pstrut" style="height:3.05em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.05em;"><span style="top:-1.8723em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span><span style="top:-3.05em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2777em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">∥</span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.02778em;">w</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3281em;"><span style="top:-2.357em;margin-left:-0.0715em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2501em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord">∥</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span><span style="top:-4.3525em;"><span class="pstrut" style="height:3.05em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.05em;"><span style="top:-1.8723em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span><span style="top:-3.05em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2777em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.11042em;">f</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2175em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord mathnormal">m</span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6813em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span></span><span style="top:-3.0134em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mord">¨</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">G</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span></span></span><span style="top:-1.7248em;"><span class="pstrut" style="height:3.05em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.05em;"><span style="top:-1.8723em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span><span style="top:-3.05em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2777em;"><span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3281em;"><span style="top:-2.357em;margin-left:-0.0715em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3442em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">G</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.11042em;">f</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2175em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.13472em;">τ</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3281em;"><span style="top:-2.357em;margin-left:-0.0715em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2501em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.923em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol">L</span></span></span></span><span style="top:-3.2551em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1389em;"><span class="mord">˙</span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">G</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:0.7702em;"><span class="pstrut" style="height:3.05em;"></span><span class="mord"><span class="mord"></span><span class="mord">∀</span><span class="mord mathnormal">i</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.15972em;">F</span></span></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.00421em;">R</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9173em;"><span style="top:-2.453em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span><span style="top:-3.139em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.02778em;">w</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3281em;"><span style="top:-2.357em;margin-left:-0.0715em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2501em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:4.4802em;"><span></span></span></span></span></span></span></span></span></span></span></span><p>where <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">w</mi><msub><mi>C</mi><mi>i</mi></msub></msub><mo>=</mo><mo stretchy="false">(</mo><msub><mi mathvariant="bold-italic">f</mi><mi>i</mi></msub><mo separator="true">,</mo><msub><mi mathvariant="bold-italic">τ</mi><msub><mi>C</mi><mi>i</mi></msub></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\bfw_{C_i} = (\bff_i, \bftau_{C_i})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6945em;vertical-align:-0.2501em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.02778em;">w</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3281em;"><span style="top:-2.357em;margin-left:-0.0715em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2501em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0001em;vertical-align:-0.2501em;"></span><span class="mopen">(</span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.11042em;">f</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2175em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.13472em;">τ</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3281em;"><span style="top:-2.357em;margin-left:-0.0715em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2501em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span> is the vector of coordinates
+for the <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>i</mi><mrow><mi mathvariant="normal">t</mi><mi mathvariant="normal">h</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+i^\mathrm{th}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8491em;"></span><span class="mord"><span class="mord mathnormal">i</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8491em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathrm mtight">th</span></span></span></span></span></span></span></span></span></span></span></span> contact wrench taken at a contact point
+<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+C_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> and in the world frame. The matrix <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">F</mi></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\bfF</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6861em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.15972em;">F</span></span></span></span></span></span> describes a
+linearized <a class="reference external" href="friction-cones.html">friction cone model</a> in the local
+frame, and is thus applied after a rotation <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi mathvariant="bold-italic">R</mi><mi>i</mi><mi>T</mi></msubsup></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\bfR_i^T</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1643em;vertical-align:-0.247em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.00421em;">R</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9173em;"><span style="top:-2.453em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span><span style="top:-3.139em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span></span></span></span> of wrench
+coordinates from the world to the local contact frame.</p>
+<p>When contact stability needs to be checked more than once, it becomes more
+profitable to compute <a class="reference external" href="wrench-friction-cones.html">frictional wrench cones</a> rather than solving quadratic
+programs.</p>
+</div>
+<div class="section" id="to-go-further">
+<h2>To go further<a class="headerlink" href="contact-stability.html#to-go-further" title="Permalink to this headline">¶</a></h2>
+<p>The notions of contact modes is pervasive in the works of Jeffrey Trinkle, and
+was I think coined by him. My favorite paper in this line <a class="reference external" href="http://journals.sagepub.com/doi/abs/10.1177/0278364902021012003">computes wrench
+cones for planar rigid-body contacts</a>, and was a
+fruitful basis to <a class="reference external" href="../publications/rss-2015.html">apply contact wrench cones to humanoid locomotion</a>. Before wrench cones provided a
+faster way to test contact stability, Boyd and Wegbreit <a class="reference external" href="https://doi.org/10.1109/TRO.2007.910774">computed optimal
+contact forces</a> by solving convex
+optimization problems (that become quadratic programs when using linearized
+friction cones).</p>
+</div>
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="contact-stability.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="contact-stability.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="contact-stability.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("contact-stability"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="contact-stability.html">Page</a> published on <time class="dt-published" datetime="2017-03-24T00:00:00+0100">2017-03-24</time>.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

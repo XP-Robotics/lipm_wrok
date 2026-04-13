@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>The ZMP is an axis, not a point</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="Also, the moment is not always zero at the "zero" moment point 😉 Zero-tilting moment axis¶ ZMP axis with angular momentum variations Until the 2010's, many works had followed each other into the tunnel of considering that the "zero" moment point (ZMP) was a point on the ground. A liberating step …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Blog">
+        <meta name="keywords" content="Dynamics, Robotics">
+
+        <meta property="og:title" content="The ZMP is an axis, not a point">
+        <meta property="og:description" content="Also, the moment is not always zero at the "zero" moment point 😉 Zero-tilting moment axis¶ ZMP axis with angular momentum variations Until the 2010's, many works had followed each other into the tunnel of considering that the "zero" moment point (ZMP) was a point on the ground. A liberating step …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/blog/the-zmp-is-an-axis-not-a-point.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/blog.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/blog.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <h1>The ZMP is an axis, not a point</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p>Also, the moment is not always zero at the &quot;zero&quot; moment point 😉</p>
+<div class="section" id="zero-tilting-moment-axis">
+<h2>Zero-tilting moment axis<a class="headerlink" href="the-zmp-is-an-axis-not-a-point.html#zero-tilting-moment-axis" title="Permalink to this headline">¶</a></h2>
+<div class="right-figure docutils container">
+<img alt="ZMP axis with angular momentum variations" src="../figures/zmp-axis-ssp.png" />
+<p>ZMP axis with angular momentum variations</p>
+</div>
+<p>Until the 2010's, many works had followed each other into the tunnel of considering that the &quot;zero&quot; moment point (ZMP) was a point on the ground. A liberating step came when <a class="reference external" href="https://doi.org/10.1109/TSMCA.2004.832811">Sardain and Bessonnet (2004)</a> pointed out that, according to <a class="reference external" href="../robotics/screw-theory.html">screw theory</a>, the ZMP is actually an <em>axis</em>. They further observed that the moment at the ZMP is not necessarily zero on all three coordinates. Rather, the moment at the ZMP is zero along the two dimensions orthogonal to a tilting axis, which prompted Sardain and Bessonnet to suggest a renaming to <strong>zero-tilting moment point</strong>, conveniently still abbreviated &quot;ZMP&quot;.</p>
+<p>This correction was not needed for robots walking in the <a class="reference external" href="../robotics/linear-inverted-pendulum-model.html">linear inverted pendulum</a> mode on horizontal floors. It became significant when, spurred by the <a class="reference external" href="https://en.wikipedia.org/wiki/DARPA_Robotics_Challenge">DARPA Robotics Challenge</a>, the robotics community moved to walking over more general terrains: what if the &quot;ground&quot; is not well-defined at all? Luckily, since the ZMP is an axis rather than a point, we don't need to take it on the ground at all! This is how, for instance, <a class="reference external" href="https://doi.org/10.1109/TRO.2015.2405592">Englsberger et al. (2015)</a> replaced the ZMP by an equivalent free-floating &quot;eCMP&quot;, or how <a class="reference external" href="../publications/tro-2016.html">Caron et al. (2016)</a> computed ZMP support areas for general terrains.</p>
+</div>
+<div class="section" id="centroidal-moment-pivot">
+<h2>Centroidal moment pivot<a class="headerlink" href="the-zmp-is-an-axis-not-a-point.html#centroidal-moment-pivot" title="Permalink to this headline">¶</a></h2>
+<div class="right-figure docutils container">
+<img alt="CMP and ZMP, figure from Popovic et al. (2005)" src="../images/cmp-zmp-popovic-herr.png" />
+<p>CMP and ZMP, figure from Popovic et al. (2005)</p>
+</div>
+<p>Angular momentum variations <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover accent="true"><mi mathvariant="bold-italic">L</mi><mo>˙</mo></mover><mi>G</mi></msub><mo mathvariant="normal">≠</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\dot{\bfL}_G \neq 0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1174em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.923em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol">L</span></span></span></span><span style="top:-3.2551em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1389em;"><span class="mord">˙</span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">G</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel"><span class="mrel"><span class="mord vbox"><span class="thinbox"><span class="rlap"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="inner"><span class="mord"><span class="mrel"></span></span></span><span class="fix"></span></span></span></span></span><span class="mrel">=</span></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span> at the center of mass cause the moment of contact forces to be non-zero at the ZMP (to be precise: on any ZMP of the zero-tilting-moment axis). Pivotal to understanding this was the work of <a class="reference external" href="https://citeseerx.ist.psu.edu/document?repid=rep1&amp;type=pdf&amp;doi=d4464ffb5cd33d6b3918ddb7fdf8374e43b93ce1">Popovic et al. (2005)</a> that introduced the <em>Centroidal Moment Pivot</em> (CMP), obtained by following the central axis of the net wrench of contact forces rather than the non-central ZMP axis. The two axes coincide when <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover accent="true"><mi mathvariant="bold-italic">L</mi><mo>˙</mo></mover><mi>G</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\dot{\bfL}_G = 0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.073em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.923em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol">L</span></span></span></span><span style="top:-3.2551em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1389em;"><span class="mord">˙</span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">G</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span>, and the difference between the two can be calculated as:</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi mathvariant="bold-italic">p</mi><mrow><mi>C</mi><mi>M</mi><mi>P</mi></mrow></msub><mo>−</mo><msub><mi mathvariant="bold-italic">p</mi><mrow><mi>Z</mi><mi>M</mi><mi>P</mi></mrow></msub><mo>=</mo><mfrac><mrow><mo>−</mo><mi mathvariant="bold-italic">n</mi><mo>×</mo><msub><mover accent="true"><mi mathvariant="bold-italic">L</mi><mo>˙</mo></mover><mi>G</mi></msub></mrow><mrow><msup><mi mathvariant="bold-italic">F</mi><mrow><mi>g</mi><mi>i</mi></mrow></msup><mo>⋅</mo><mi mathvariant="bold-italic">n</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\bfp_{CMP} - \bfp_{ZMP} = \frac{- \bfn \times \dot{\bfL}_G}{\bfF^{gi} \cdot \bfn}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8275em;vertical-align:-0.2441em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">CMP</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6886em;vertical-align:-0.2441em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">p</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2342em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">ZMP</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.3906em;vertical-align:-0.7907em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6em;"><span style="top:-2.2093em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.15972em;">F</span></span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9007em;"><span style="top:-3.139em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">g</span><span class="mord mathnormal mtight">i</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol">n</span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">−</span><span class="mord"><span class="mord"><span class="mord boldsymbol">n</span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.923em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol">L</span></span></span></span><span style="top:-3.2551em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1389em;"><span class="mord">˙</span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">G</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.7907em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span><div class="right-figure docutils container">
+<img alt="Atlas walking over a line contact, figure from Wiedebach et al. (2016)" src="../images/atlas-line-contact.jpg" />
+<p>Atlas walking over a line contact, figure from Wiedebach et al. (2016)</p>
+</div>
+<p>The ZMP is constrained to lie in a <a class="reference external" href="../robotics/zmp-support-area.html">support area</a> constrained by contact locations, but the CMP can (temporarily) exit this area thanks to angular momentum: this means &quot;windmilling&quot; the robot's arms to keep balance! <a class="reference external" href="https://arxiv.org/abs/1607.08089">Wiedebach et al. (2016)</a> implemented this approach to make an Atlas humanoid walk over the edge of cinder blocks: the ZMP being constrained to a line when the robot is in single support, using its upper body is the only way for the big humanoid to keep advancing during this perilous phase.</p>
+<p>The CMP was initially defined as a point on the ground, but similarly to the ZMP it is essentially defined as a screw axis. It was thus generalized as the <em>extended CMP</em> or &quot;eCMP&quot; by removing the ground-plane assumption. Some works based on the eCMP further assume that <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover accent="true"><mi mathvariant="bold-italic">L</mi><mo>˙</mo></mover><mi>G</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\dot{\bfL}_G = 0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.073em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.923em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol">L</span></span></span></span><span style="top:-3.2551em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1389em;"><span class="mord">˙</span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">G</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span>, in which case eCMP and ZMP coincide and the choice of acronym was up to the authors.</p>
+</div>
+<div class="section" id="to-go-further">
+<h2>To go further<a class="headerlink" href="the-zmp-is-an-axis-not-a-point.html#to-go-further" title="Permalink to this headline">¶</a></h2>
+<p>The CMP and its extension the eCMP have marked a local frontier in the level of complexity roboticists have been willing to both model and implement. One interesting direction to include angular-momentum modeling in control has been proposed by <a class="reference external" href="https://crlab.cs.columbia.edu/humanoids_2018_proceedings/media/files/0026.pdf">Nenchev (2018)</a> and followed in later works by the same group. If you know others feel free to share them in the Discussion below.</p>
+</div>
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="the-zmp-is-an-axis-not-a-point.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="the-zmp-is-an-axis-not-a-point.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="the-zmp-is-an-axis-not-a-point.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("the-zmp-is-an-axis-not-a-point"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="the-zmp-is-an-axis-not-a-point.html">Page</a> published on <time class="dt-published" datetime="2023-12-16T00:00:00+0100">2023-12-16</time>.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

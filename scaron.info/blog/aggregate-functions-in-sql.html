@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Aggregate functions in SQL, ALTER clauses in SQLite</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="Today I decided to give SQLite a try. I’m working on a nice directed graph (with 80,000+ nodes and 500,000+ edges) given by its edge(origin, dest) adjacency relation, and I needed to compute a degrees(node, indeg, outdeg) relation aggregating each node’s in- and out-degree …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Blog">
+        <meta name="keywords" content="Others">
+
+        <meta property="og:title" content="Aggregate functions in SQL, ALTER clauses in SQLite">
+        <meta property="og:description" content="Today I decided to give SQLite a try. I’m working on a nice directed graph (with 80,000+ nodes and 500,000+ edges) given by its edge(origin, dest) adjacency relation, and I needed to compute a degrees(node, indeg, outdeg) relation aggregating each node’s in- and out-degree …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/blog/aggregate-functions-in-sql.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/blog.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/blog.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <h1>Aggregate functions in SQL, ALTER clauses in SQLite</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p>Today I decided to give SQLite a try. I’m working on a nice directed graph
+(with 80,000+ nodes and 500,000+ edges) given by its edge(origin, dest)
+adjacency relation, and I needed to compute a degrees(node, indeg, outdeg)
+relation aggregating each node’s in- and out-degree. This is the kind of things
+than can be done easily within the database: here is how.</p>
+<div class="section" id="how-select-works">
+<h2>How SELECT works<a class="headerlink" href="aggregate-functions-in-sql.html#how-select-works" title="Permalink to this headline">¶</a></h2>
+<p>Here are general considerations on SELECT clauses (i.e. valid with any language
+of the SQL family). The basic structure of a SELECT statement is as follows:</p>
+<div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="p">[</span><span class="k">result</span><span class="o">-</span><span class="k">set</span><span class="p">]</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="p">[</span><span class="k">input</span><span class="w"> </span><span class="k">data</span><span class="p">]</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="p">[</span><span class="n">conditions</span><span class="p">]</span>
+</pre></div>
+<p>The result-set is a list of expressions that will be evaluated on the rows of
+the input data.  Expressions can be attribute names or aggregate functions such
+as MIN, MAX, SUM or COUNT. These aggregate functions work together with the
+GROUP BY clause.  Here is how the output of a SELECT statement is computed:</p>
+<p>If no aggregate function is used, then each expression in the result-set is
+evaluated on each row of the input data (FROM part of the query), filtered by
+the WHERE clause.</p>
+<p>If aggregate functions are used but there is no GROUP BY clause, then each
+aggregate expression in the result-set is evaluated across the entire dataset,
+while non-aggregate expressions are evaluated on an arbitrary row. Such
+a SELECT statement always returns a single row (if there are no rows in the
+input data, non-aggregate expressions are set to NULL and aggregate expressions
+are set to their default value).</p>
+<p>If aggregate functions are used together with a GROUP BY clause, then GROUP BY
+expressions are evaluated on each row of the dataset, and rows with the same
+values are grouped together. Each expression in the result-set is then
+evaluated once for each group of rows. (As before, aggregate expressions are
+evaluated on the whole group while non-aggregate expressions are evaluated on
+an arbitrary row.)</p>
+</div>
+<div class="section" id="computing-the-degrees-table">
+<h2>Computing the degrees table<a class="headerlink" href="aggregate-functions-in-sql.html#computing-the-degrees-table" title="Permalink to this headline">¶</a></h2>
+<p>Now let us focus on SQLite and our directed graph. Using the COUNT function,
+one can then compute in- and out- degrees from the edge relation as follows:</p>
+<div class="highlight"><pre><span></span><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">outrel</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span>
+<span class="w">    </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">outdeg</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">edges</span>
+<span class="w">    </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">origin</span><span class="p">;</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">inrel</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">dest</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span>
+<span class="w">    </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">indeg</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">edges</span>
+<span class="w">    </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">dest</span><span class="p">;</span>
+</pre></div>
+<p>Then, suffices to join them into a single table, e.g. as follows:</p>
+<div class="highlight"><pre><span></span><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">nodes</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">edges</span>
+<span class="w">    </span><span class="k">UNION</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">dest</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">edges</span><span class="p">;</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">degrees</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">nodes</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span>
+<span class="w">    </span><span class="n">inrel</span><span class="p">.</span><span class="n">indeg</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">indeg</span><span class="p">,</span>
+<span class="w">    </span><span class="n">outrel</span><span class="p">.</span><span class="n">outdeg</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">outdeg</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">nodes</span><span class="p">,</span>
+<span class="w">    </span><span class="n">outrel</span><span class="p">,</span>
+<span class="w">    </span><span class="n">inrel</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">nodes</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">outrel</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">outrel</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">inrel</span><span class="p">.</span><span class="n">id</span><span class="p">;</span>
+</pre></div>
+<p>Yet, if one tries this directly, computation time is likely to be excessively
+long. The reason for this is that our tables created from SELECT statements
+have no index (nor primary keys), so SQLite will use loop joins (i.e.  joins
+with nested loops) and computation time is going to be O(N^3). One way to avoid
+this would be ALTER the tables so that the attribute id becomes a primary key.
+Yet, (what I think of as) a major limitation of SQLite arises here:</p>
+<p>SQLite has limited ALTER TABLE support that you can use to add a column to the
+end of a table or to change the name of a table. If you want to make more
+complex changes in the structure of a table, you will have to recreate the
+table.  You can save existing data to a temporary table, drop the old table,
+create the new table, then copy the data back in from the temporary table.</p>
+<p>(From the SQLite FAQ.) So you can’t ALTER your table to set node identifiers as
+primary keys.  An SQLite way to do this is to create indexes:</p>
+<div class="highlight"><pre><span></span><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">nodes_id</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">nodes</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">outrel_id</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">outrel</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">inrel_id</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">inrel</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+</pre></div>
+<p>Another option is to create initially empty auxiliary tables (so you can
+specify where you want your primary key in the attributes list) and then fill
+them with an INSERT on the same SELECT statement, e.g.:</p>
+<div class="highlight"><pre><span></span><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">inrel</span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span><span class="w"> </span><span class="n">indeg</span><span class="w"> </span><span class="nb">INT</span><span class="p">);</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">inrel</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">dest</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">indeg</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">edges</span>
+<span class="w">    </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">dest</span><span class="p">;</span>
+</pre></div>
+<p>Both ways reduce to a decent level the computation time for the CREATE
+instruction of the degrees table. As for me, though I instantly bumped into
+this limitation about the ALTER clause, I’ll spend some more time trying
+SQLite, to see how it can help me dissecting this nice little graph.</p>
+</div>
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="aggregate-functions-in-sql.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="aggregate-functions-in-sql.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="aggregate-functions-in-sql.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("aggregate-functions-in-sql"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="aggregate-functions-in-sql.html">Page</a> published on <time class="dt-published" datetime="2011-04-21T00:00:00+0200">2011-04-21</time>.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Ideas and software for the locomotion of homemade robots</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="Talk given at the R4 robotics working group on 20 June 2022. Abstract¶ Moving away from big expensive robots to light homemade things (that can bump, fall on or be lifted by us with no harm) is a great way to revisit past design decisions and explore alternatives. Being incented …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Talks">
+        <meta name="keywords" content="Talks, Walking stabilization, Robotics">
+
+        <meta property="og:title" content="Ideas and software for the locomotion of homemade robots">
+        <meta property="og:description" content="Talk given at the R4 robotics working group on 20 June 2022. Abstract¶ Moving away from big expensive robots to light homemade things (that can bump, fall on or be lifted by us with no harm) is a great way to revisit past design decisions and explore alternatives. Being incented …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/talks/r4-2022.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/talks.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/talks.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <h1>Ideas and software for the locomotion of homemade robots</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p class="authors">Talk given at the <a class="reference external" href="https://www.r4-robotique.fr/">R4 robotics</a> working group on 20 June 2022.</p>
+<div class="section" id="abstract">
+<h2>Abstract<a class="headerlink" href="r4-2022.html#abstract" title="Permalink to this headline">¶</a></h2>
+<p>Moving away from big expensive robots to light homemade things (that can bump, fall on or be lifted by us with no harm) is a great way to revisit past design decisions and explore alternatives. Being incented to make robots cheaper, reduce their number of actuators and complexity, we end up with new morphologies that don't fit exactly the bill of previous ideas. Interesting things lie in this <em>not exactly</em>! In this presentation, we take a look at two existing ideas that are important in legged locomotion, <a class="reference external" href="../robotics/contact-stability.html">contact stability</a> and whole-body control, and see how they fit <a class="reference external" href="https://hackaday.io/project/185729-upkie-homemade-wheeled-biped-robot">Upkie</a>, a wheeled biped with a low-cost onboard computer. Another idea comes to the rescue: the theoretical and empirical evidence that <a class="reference external" href="https://arxiv.org/abs/1907.01805">balance control is a low-frequency task</a>. We build open source software upon it that allows us to prototype most of our robot's brain in Python, while achieving its goals of balancing, crouching and going places.</p>
+</div>
+<div class="section" id="content">
+<h2>Content<a class="headerlink" href="r4-2022.html#content" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="files docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><img alt="pdf" class="icon" src="../images/icons/pdf.png" /></td>
+<td><a class="reference external" href="../slides/r4-2022.pdf">Slides</a></td>
+</tr>
+<tr><td><img alt="github" class="icon" src="../images/icons/github.png" /></td>
+<td><a class="reference external" href="https://github.com/upkie">Software</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="r4-2022.html#references" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="files docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><img alt="pdf" class="icon" src="../images/icons/pdf.png" /></td>
+<td><a class="reference external" href="https://hal.archives-ouvertes.fr/hal-02108449/document">Wrench cone inequalities for fixed surface contacts</a></td>
+</tr>
+<tr><td><img alt="pdf" class="icon" src="../images/icons/pdf.png" /></td>
+<td><a class="reference external" href="https://arxiv.org/pdf/1607.08089.pdf">Whole-body impedance control on IHMC's Atlas</a></td>
+</tr>
+<tr><td><img alt="pdf" class="icon" src="../images/icons/pdf.png" /></td>
+<td><a class="reference external" href="https://doi.org/10.1109/IROS40897.2019.8968059">Whole-body admittance control with internal forces</a></td>
+</tr>
+<tr><td><img alt="pdf" class="icon" src="../images/icons/pdf.png" /></td>
+<td><a class="reference external" href="https://arxiv.org/pdf/1809.07073.pdf">Walking controller with whole-body admittance control</a></td>
+</tr>
+<tr><td><img alt="pdf" class="icon" src="../images/icons/pdf.png" /></td>
+<td><a class="reference external" href="https://arxiv.org/pdf/2005.11431.pdf">Whole-body control of Ascento</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="r4-2022.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+        <p>
+        You can subscribe to this <i class="rss-icon"></i>&nbsp;<a href="https://scaron.info/feeds/comment.r4-2022.atom.xml">Discussion's atom feed</a> to stay tuned.
+        </p>
+<ul>
+            <li class="with-border-top" id="comment-question-yaw-slippage">
+                <div class="comment-left">
+                    <img src="../images/identicon/e32ff903a0e87efe5d3854e53f016a72.png"
+                         alt="Avatar"
+                         height="72"
+                         width="72">
+                </div>
+                <div class="comment-body">
+                    <div class="pull-right">
+                        <a class="btn" role="button" href="r4-2022.html#comment-question-yaw-slippage" rel="bookmark" title="Permalink to this comment">
+                            <i class="permalink-icon"></i>
+                            Permalink
+                        </a>
+                        <button onclick="CommentSystem.setReply('question-yaw-slippage', 'St%C3%A9phane');">
+                            <i class="reply-icon"></i>
+                            Reply
+                        </button>
+                    </div>
+                    <h4 class="author">
+                            Stéphane
+                    </h4>
+                    <p class="posted-on">
+                        Posted on
+                        <time datetime="2022-06-20T13:24:00+02:00" title="2022-06-20T13:24:00+02:00">Mon 20 June 2022</time>
+                    </p>
+                    <div class="comment-content" >
+                        <p>The yaw slippage condition is rarely a problem for robots with rubber soles (like HRP-4) walking on regular floors, where the coefficient of friction between the two surfaces is usually <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi><mo>≥</mo><mn>0.7</mn></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\mu \geq 0.7</annotation></semantics></math></span><span aria-hidden="true" class="katex-html"><span class="base"><span class="strut" style="height:0.8304em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">μ</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≥</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.7</span></span></span></span>. But perhaps you have observed yaw slippage in <a href="https://www.robocup.org/">RoboCup</a> situations?</p>
+                    </div>
+                        <ul>
+                                        <li class="with-border-top" id="comment-reply-yaw-slippage">
+                <div class="comment-left">
+                    <img src="../images/identicon/9440b73f56beca2832b851d0ae3b99c4.png"
+                         alt="Avatar"
+                         height="72"
+                         width="72">
+                </div>
+                <div class="comment-body">
+                    <div class="pull-right">
+                        <a class="btn" role="button" href="r4-2022.html#comment-reply-yaw-slippage" rel="bookmark" title="Permalink to this comment">
+                            <i class="permalink-icon"></i>
+                            Permalink
+                        </a>
+                        <button onclick="CommentSystem.setReply('reply-yaw-slippage', 'Gr%C3%A9goire%20Passault');">
+                            <i class="reply-icon"></i>
+                            Reply
+                        </button>
+                    </div>
+                    <h4 class="author">
+                            Grégoire Passault
+                    </h4>
+                    <p class="posted-on">
+                        Posted on
+                        <time datetime="2022-06-20T13:26:00+02:00" title="2022-06-20T13:26:00+02:00">Mon 20 June 2022</time>
+                    </p>
+                    <div class="comment-content" >
+                        <p>I'm not sure what the coefficient <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\mu</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">μ</span></span></span></span> is, but we observe yaw rotations sometimes, particularly during kicking motions.</p>
+
+                    </div>
+                </div>
+            </li>
+
+                        </ul>
+                </div>
+            </li>
+            <li class="with-border-top" id="comment-question-decoupling">
+                <div class="comment-left">
+                    <img src="../images/identicon/2a5f14e4cbf281caa92af957e7c7a3fb.png"
+                         alt="Avatar"
+                         height="72"
+                         width="72">
+                </div>
+                <div class="comment-body">
+                    <div class="pull-right">
+                        <a class="btn" role="button" href="r4-2022.html#comment-question-decoupling" rel="bookmark" title="Permalink to this comment">
+                            <i class="permalink-icon"></i>
+                            Permalink
+                        </a>
+                        <button onclick="CommentSystem.setReply('question-decoupling', 'Vincent%20Padois');">
+                            <i class="reply-icon"></i>
+                            Reply
+                        </button>
+                    </div>
+                    <h4 class="author">
+                            <a href="https://people.bordeaux.inria.fr/vincent.padois/">Vincent Padois</a>
+                    </h4>
+                    <p class="posted-on">
+                        Posted on
+                        <time datetime="2022-06-20T14:01:00+02:00" title="2022-06-20T14:01:00+02:00">Mon 20 June 2022</time>
+                    </p>
+                    <div class="comment-content" >
+                        <p>You oppose position and torque control, but isn't the relevant difference rather the <em>decoupling</em> between a low-frequency controller (position here) and the higher-frequency one?</p>
+                    </div>
+                        <ul>
+                                        <li class="with-border-top" id="comment-reply-decoupling-1">
+                <div class="comment-left">
+                    <img src="../images/identicon/e32ff903a0e87efe5d3854e53f016a72.png"
+                         alt="Avatar"
+                         height="72"
+                         width="72">
+                </div>
+                <div class="comment-body">
+                    <div class="pull-right">
+                        <a class="btn" role="button" href="r4-2022.html#comment-reply-decoupling-1" rel="bookmark" title="Permalink to this comment">
+                            <i class="permalink-icon"></i>
+                            Permalink
+                        </a>
+                        <button onclick="CommentSystem.setReply('reply-decoupling-1', 'St%C3%A9phane');">
+                            <i class="reply-icon"></i>
+                            Reply
+                        </button>
+                    </div>
+                    <h4 class="author">
+                            Stéphane
+                    </h4>
+                    <p class="posted-on">
+                        Posted on
+                        <time datetime="2022-06-20T14:02:00+02:00" title="2022-06-20T14:02:00+02:00">Mon 20 June 2022</time>
+                    </p>
+                    <div class="comment-content" >
+                        <p>I agree that frequency is the important feature here. [Note: slides have been updated to reflect this.] Here the higher-frequency controller is the <a class="reference external" href="https://github.com/mjbots/moteus/blob/main/docs/reference.md#theory-of-operation">moteus position controller</a> (despite its name it is actually a combined position, velocity and torque controller) which is updated on Upkie at 1 kHz by a <a class="reference external" href="https://upkie.github.io/upkie/spines.html">Vulp spine</a> process. Since the 2022-04-07 release, this controller actually implements <a class="reference external" href="https://jpieper.com/2022/04/08/velocity-and-acceleration-limited-trajectories/">velocity and acceleration limited trajectories</a> which allow us to update targets less frequently. Instead of sending a short-term target, we specify a mid-term trajectory profile that the actuator should follow. More generally this profile needs not be linear, if it can run it fast enough the higher-frequency process could also solve a small model predictive control problem, as tried out <em>e.g.</em> in the <a class="reference external" href="https://github.com/stack-of-tasks/ddp-actuator-solver">DDP actuator solver</a>.</p>
+
+                    </div>
+                </div>
+            </li>
+            <li class="with-border-top" id="comment-reply-decoupling-2">
+                <div class="comment-left">
+                    <img src="../images/identicon/e32ff903a0e87efe5d3854e53f016a72.png"
+                         alt="Avatar"
+                         height="72"
+                         width="72">
+                </div>
+                <div class="comment-body">
+                    <div class="pull-right">
+                        <a class="btn" role="button" href="r4-2022.html#comment-reply-decoupling-2" rel="bookmark" title="Permalink to this comment">
+                            <i class="permalink-icon"></i>
+                            Permalink
+                        </a>
+                        <button onclick="CommentSystem.setReply('reply-decoupling-2', 'St%C3%A9phane');">
+                            <i class="reply-icon"></i>
+                            Reply
+                        </button>
+                    </div>
+                    <h4 class="author">
+                            Stéphane
+                    </h4>
+                    <p class="posted-on">
+                        Posted on
+                        <time datetime="2022-06-20T14:03:00+02:00" title="2022-06-20T14:03:00+02:00">Mon 20 June 2022</time>
+                    </p>
+                    <div class="comment-content" >
+                        <p>To provide a more balanced answer, it is not clear to me whether decoupling is something to seek out necessarily. Decoupling means that between two steps of the lower-frequency loop, the higher-frequency loop is done regulating its target to the best of its ability. Yet, in the <a class="reference external" href="https://github.com/stephane-caron/lipm_walking_controller">walking controller</a> from slide 16, we don't have such a decoupling: force control and admittance control run at the same frequency. This choice elicited colorful feedback from some people with a control-theoretical background we showed it to, and yet this is how walking controllers of this family (since the <a class="reference external" href="https://www.youtube.com/watch?v=FEXSqsW6rMM">Honda P2</a>) have been operating.</p>
+
+                    </div>
+                        <ul>
+                                        <li class="with-border-top" id="comment-question-open-loop-mpc">
+                <div class="comment-left">
+                    <img src="../images/identicon/9440b73f56beca2832b851d0ae3b99c4.png"
+                         alt="Avatar"
+                         height="72"
+                         width="72">
+                </div>
+                <div class="comment-body">
+                    <div class="pull-right">
+                        <a class="btn" role="button" href="r4-2022.html#comment-question-open-loop-mpc" rel="bookmark" title="Permalink to this comment">
+                            <i class="permalink-icon"></i>
+                            Permalink
+                        </a>
+                        <button onclick="CommentSystem.setReply('question-open-loop-mpc', 'Gr%C3%A9goire%20Passault');">
+                            <i class="reply-icon"></i>
+                            Reply
+                        </button>
+                    </div>
+                    <h4 class="author">
+                            Grégoire Passault
+                    </h4>
+                    <p class="posted-on">
+                        Posted on
+                        <time datetime="2022-06-20T14:04:00+02:00" title="2022-06-20T14:04:00+02:00">Mon 20 June 2022</time>
+                    </p>
+                    <div class="comment-content" >
+                        <p>In this controller, is the model predictive controller (MPC) also running in the same loop? Is it a closed-loop MPC?</p>
+                    </div>
+                        <ul>
+                                        <li class="with-border-top" id="comment-reply-open-loop-mpc">
+                <div class="comment-left">
+                    <img src="../images/identicon/e32ff903a0e87efe5d3854e53f016a72.png"
+                         alt="Avatar"
+                         height="72"
+                         width="72">
+                </div>
+                <div class="comment-body">
+                    <div class="pull-right">
+                        <a class="btn" role="button" href="r4-2022.html#comment-reply-open-loop-mpc" rel="bookmark" title="Permalink to this comment">
+                            <i class="permalink-icon"></i>
+                            Permalink
+                        </a>
+                        <button onclick="CommentSystem.setReply('reply-open-loop-mpc', 'St%C3%A9phane');">
+                            <i class="reply-icon"></i>
+                            Reply
+                        </button>
+                    </div>
+                    <h4 class="author">
+                            Stéphane
+                    </h4>
+                    <p class="posted-on">
+                        Posted on
+                        <time datetime="2022-06-20T14:05:00+02:00" title="2022-06-20T14:05:00+02:00">Mon 20 June 2022</time>
+                    </p>
+                    <div class="comment-content" >
+                        <p>It is indeed running in the same loop, which cycles at 200 Hz on HRP-4. However this one is less of a theoretical question mark because it is an <a class="reference external" href="../robotics/open-closed-loop-model-predictive-control.html">open loop rather than closed loop MPC</a> (also called a <em>walking pattern generator</em>).</p>
+
+                    </div>
+                        <ul>
+                                        <li class="with-border-top" id="comment-question-planner">
+                <div class="comment-left">
+                    <img src="../images/identicon/9440b73f56beca2832b851d0ae3b99c4.png"
+                         alt="Avatar"
+                         height="72"
+                         width="72">
+                </div>
+                <div class="comment-body">
+                    <div class="pull-right">
+                        <a class="btn" role="button" href="r4-2022.html#comment-question-planner" rel="bookmark" title="Permalink to this comment">
+                            <i class="permalink-icon"></i>
+                            Permalink
+                        </a>
+                        <button onclick="CommentSystem.setReply('question-planner', 'Gr%C3%A9goire%20Passault');">
+                            <i class="reply-icon"></i>
+                            Reply
+                        </button>
+                    </div>
+                    <h4 class="author">
+                            Grégoire Passault
+                    </h4>
+                    <p class="posted-on">
+                        Posted on
+                        <time datetime="2022-06-20T14:06:00+02:00" title="2022-06-20T14:06:00+02:00">Mon 20 June 2022</time>
+                    </p>
+                    <div class="comment-content" >
+                        <p>So it is in effect a planner?</p>
+                    </div>
+                        <ul>
+                                        <li class="with-border-top" id="comment-reply-planner">
+                <div class="comment-left">
+                    <img src="../images/identicon/e32ff903a0e87efe5d3854e53f016a72.png"
+                         alt="Avatar"
+                         height="72"
+                         width="72">
+                </div>
+                <div class="comment-body">
+                    <div class="pull-right">
+                        <a class="btn" role="button" href="r4-2022.html#comment-reply-planner" rel="bookmark" title="Permalink to this comment">
+                            <i class="permalink-icon"></i>
+                            Permalink
+                        </a>
+                        <button onclick="CommentSystem.setReply('reply-planner', 'St%C3%A9phane');">
+                            <i class="reply-icon"></i>
+                            Reply
+                        </button>
+                    </div>
+                    <h4 class="author">
+                            Stéphane
+                    </h4>
+                    <p class="posted-on">
+                        Posted on
+                        <time datetime="2022-06-20T14:07:00+02:00" title="2022-06-20T14:07:00+02:00">Mon 20 June 2022</time>
+                    </p>
+                    <div class="comment-content" >
+                        <p>Absolutely, it is a planner that unrolls trajectory as it goes.</p>
+
+                    </div>
+                </div>
+            </li>
+
+                        </ul>
+                </div>
+            </li>
+
+                        </ul>
+                </div>
+            </li>
+
+                        </ul>
+                </div>
+            </li>
+
+                        </ul>
+                </div>
+            </li>
+
+                        </ul>
+                </div>
+            </li>
+        </ul>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="r4-2022.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="r4-2022.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("r4-2022"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="r4-2022.html">Page</a> published on <time class="dt-published" datetime="2022-06-21T00:00:00+0200">2022-06-21</time>.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

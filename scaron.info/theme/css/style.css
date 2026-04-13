@@ -1,0 +1,1155 @@
+/*
+ * Copyright 2015-2023 Stéphane Caron
+ *
+ * This file is licensed under a Creative Commons Attribution 4.0 International
+ * License. See https://creativecommons.org/licenses/by/4.0/
+ */
+
+/*****************************************************************************/
+/* Font faces                                                                */
+/*****************************************************************************/
+
+/*
+ * All fonts below are distributed under the SIL Open Font License (OFL).
+ */
+
+@font-face {
+    font-family: "Inconsolata";
+    font-style: normal;
+    font-weight: 400;
+    src: local("Inconsolata"), url(../fonts/Inconsolata.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Open Sans";
+    font-style: normal;
+    font-weight: 400;
+    src: local("Open Sans"), local("OpenSans-Regular"), url(../fonts/OpenSans-Regular.ttf) format("truetype");
+}
+
+@font-face {
+	font-family: "Open Sans";
+	font-style: normal;
+	font-weight: 700;
+    src: local("Open Sans Bold"), local("OpenSans-Bold"), url(../fonts/OpenSans-Bold.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "PT Sans Narrow";
+    font-style: normal;
+    font-weight: 400;
+    src: local("PT Sans Narrow"), local("PTSansNarrow-Regular"), url(../fonts/PTSansNarrow-Regular.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "PT Sans Narrow";
+    font-style: normal;
+    font-weight: 700;
+    src: local("PT Sans Narrow Bold"), local("PTSansNarrow-Bold"), url(../fonts/PTSansNarrow-Bold.ttf) format("truetype");
+}
+
+/*****************************************************************************/
+/* Root elements                                                             */
+/*****************************************************************************/
+
+html {
+    /* Root font-size for the rem unit */
+    /* font-size: 18px; */
+}
+
+body {
+    background: white;
+    color: rgb(55, 65, 81);
+    font-family: "Open Sans", Verdana, Arial, sans-serif;
+}
+
+/* @media only screen and (max-width: 50rem) {
+    body {
+        font-size: 16px;
+    }
+} */
+
+/*****************************************************************************/
+/* Menu                                                                      */
+/*****************************************************************************/
+
+/* Hide checkbox */
+.menu-toggle {
+    display: none;
+}
+
+/* Burger menu button - only visible on mobile */
+.burger-menu {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    padding: 10px;
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    z-index: 1000;
+    background: white;
+    border: thin solid #ddd;
+    border-radius: 4px;
+}
+
+.burger-menu span {
+    width: 25px;
+    height: 3px;
+    background-color: gray;
+    margin: 3px 0;
+    transition: 0.3s;
+    border-radius: 2px;
+}
+
+/* Animate burger to X when checked */
+.menu-toggle:checked + .burger-menu span:nth-child(1) {
+    transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.menu-toggle:checked + .burger-menu span:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-toggle:checked + .burger-menu span:nth-child(3) {
+    transform: rotate(45deg) translate(-5px, -6px);
+}
+
+@media only screen and (min-width: 76rem) {
+    nav {
+        margin-left: calc(50% - 39.5rem);
+        max-width: 10em;
+        position: absolute;
+    }
+
+    nav ul {
+        margin: 0;
+        padding-left: 0;
+    }
+
+    main {
+        margin-left: auto;
+    }
+
+    nav section {
+        margin-top: 1em;
+        margin-bottom: 1em;
+    }
+}
+
+@media only screen and (max-width: 76rem) {
+    /* Show burger menu on mobile */
+    .burger-menu {
+        display: flex;
+    }
+
+    /* Hide menu by default on mobile */
+    nav ul {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background: white;
+        position: absolute;
+        top: 0;
+        left: 0;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        z-index: 999;
+    }
+
+    /* Show menu when checkbox is checked */
+    .menu-toggle:checked ~ ul {
+        display: flex;
+    }
+
+    nav ul li {
+        list-style-type: none;
+        text-align: center;
+        border-bottom: thin solid #eee;
+    }
+
+    nav ul li a {
+        display: block;
+        padding: 1em;
+        width: 100%;
+    }
+
+    nav #basho,
+    nav #icons,
+    nav #logo {
+        display: none;
+    }
+}
+
+nav a, nav a:visited {
+    color: gray;
+}
+
+nav a:hover {
+    background: #EEE;
+    color: black;
+    text-decoration: none;
+}
+
+nav img {
+    max-width: 100%;
+}
+
+nav img.icon {
+    height: 24px;
+    margin-right: .15em;
+    vertical-align: middle;
+    width: 24px;
+}
+
+nav ul {
+    line-height: 2em;
+    list-style-type: none;
+}
+
+/*****************************************************************************/
+/* Main content                                                              */
+/*****************************************************************************/
+
+main {
+    margin: 0 auto;
+    max-width: 55em;
+    padding-left: 0.42em;
+    padding-right: 0.42em;
+    position: relative;
+}
+
+@media only screen and (min-width: 76rem) {
+    main {
+        text-align: justify;
+    }
+}
+
+@media only screen and (max-width: 76rem) {
+    main {
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+}
+
+main header {
+    overflow: auto;
+    text-align: center;
+}
+
+main header h1 {
+    margin: 0.75em 0;
+}
+
+main header div.h-card h1.p-name {
+    text-align: left;
+}
+
+main header div.h-card p {
+    margin: 0.2em 0;
+    text-align: left;
+}
+
+h1 {
+    color: #424242;
+    font-size: 2.6em;
+    font-variant: small-caps;
+    line-height: 100%;
+}
+
+h2 {
+    align-items: center;
+    background: #eee;
+    color: black;
+    display: flex;
+    font-family: "PT Sans Narrow", sans-serif;
+    font-size: 2.0em;
+    font-weight: normal;
+    margin-bottom: 0;
+    margin-top: 1.5em;
+    padding: .1em .3em;
+}
+
+h2 a.headerlink,
+h3 a.headerlink,
+h4 a.headerlink {
+    padding: 0 0.4em;
+    visibility: hidden;
+}
+
+h2 a.headerlink {
+    font-family: Arial, sans-serif;
+    font-size: 0.8em;
+}
+
+h2:hover a.headerlink,
+h3:hover a.headerlink,
+h4:hover a.headerlink {
+    visibility: visible;
+}
+
+h2 a.headerlink:hover {
+    background: #ddd;
+    text-decoration: none;
+}
+
+h3 {
+    font-family: "PT Sans Narrow", sans-serif;
+    font-size: 1.5em;
+    font-weight: bold;
+    line-height: 100%;
+    margin-bottom: 0;
+    margin-top: 1.5em;
+}
+
+h3, h3 a, h3 a:hover, h3 a:visited, details > summary {
+    color: #666;
+}
+
+h4 {
+    font-family: "PT Sans Narrow", sans-serif;
+    font-size: 1.25em;
+    line-height: 100%;
+    margin-bottom: 0;
+    margin-top: 2em;
+}
+
+h4, h4 a, h4 a:hover, h4 a:visited {
+    color: #9f9f9f;
+}
+
+a, a:visited, a:hover, a code {
+    color: #005DF9;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/*****************************************************************************/
+/* Article */
+/*****************************************************************************/
+
+article:after {
+    clear: both;
+    content: "";
+    display: table;
+}
+
+article header {
+    margin-bottom: 1em;
+    padding-bottom: 1em;
+    padding-top: 1em;
+    position: relative;
+}
+
+article header h1 {
+    margin: 0;
+}
+
+article p {
+    font-variant: normal;
+    line-height: 1.6rem;
+    text-transform: none;
+}
+
+article img {
+    max-width: 100%;
+}
+
+article ul.simple {
+    padding-left: 0.8em;
+}
+
+article li {
+    line-height: 1.4em;
+    margin: 5px 0px 5px 20px;
+}
+
+article ol a:hover,
+article p a:hover,  {
+    border-bottom: none;
+    text-decoration: none;
+    text-shadow: none;
+}
+
+article dl dt {
+    font-weight: bold;
+}
+
+/* Expandable list for Further topics in Publications */
+article details > summary {
+    margin-top: 1em;
+}
+
+/* Math formulas inside blockquotes produce nested blockquotes. To only match
+ * the outer blockquotes, we use the fact that our theme decomposes the article
+ * into divs (one per section or subsection) and only style their direct
+ * children. */
+article div > blockquote {
+    color: #666;
+    font-style: italic;
+    padding-left: 1em;
+    border-left: medium solid #ccc;
+}
+
+/*****************************************************************************/
+/* Footer                                                                    */
+/*****************************************************************************/
+
+footer {
+    border-top: thin solid #e5e5e5;
+    color: #999;
+    font-size: 0.9em;
+    margin-bottom: .5em;
+    margin-top: 1em;
+    padding-bottom: 1em;
+    padding-top: 1em;
+}
+
+footer a,
+footer a:visited,
+footer a:hover {
+    color: #999;
+    text-decoration: underline;
+}
+
+/* Tablets and above */
+@media (min-width: 768px) {
+    footer {
+        text-align: left;  /* search icon to the right */
+    }
+}
+
+/*****************************************************************************/
+/* Lists                                                                     */
+/*****************************************************************************/
+
+ul.list-all-articles,
+ul.papers {
+    list-style: none;
+    margin-bottom: 2em;
+    padding-left: 0;
+}
+
+ul.list-all-articles li,
+ul.papers li {
+    font-family: 'Trebuchet MS', Trebuchet, 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    padding: 0.3em 0;
+    margin-left: 0;
+}
+
+ul.list-all-articles li {
+    border-bottom: thin solid #CCC;
+}
+
+ul.list-all-articles li:last-child {
+    border-bottom: none;
+}
+
+ul.papers li {
+    border-bottom: none;
+}
+
+ul.list-all-articles li time {
+    color: #aaa;
+    float: right;
+}
+
+a.paper {
+    font-size: 1.1em;
+}
+
+ul.list-all-articles div.article-in-list {
+    font-size: 0.9em;
+}
+
+ul.tags {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    list-style: none;
+    margin: 0;
+    overflow: hidden;
+    padding: 5px 0;
+}
+
+ul.tags li {
+    line-height:28px;
+    float:left;
+    margin:0px;
+    margin: 2px 6px 2px 0px;
+}
+
+ul.tags a {
+    padding: 4px 8px;
+    color: #222;
+    background: #EFE3C9 none repeat scroll 0% 0%;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+ul.tags a span {
+    vertical-align: super;
+    font-size: 0.8em;
+}
+
+dl.news-list dt {
+    color: #aaa;
+    float: left;
+    font-weight: normal;
+    margin: 0;
+    width: 6em;
+}
+
+dl.news-list dd {
+    margin: 0 0 0.75em 6em;
+    padding-left: 1em;
+}
+
+/*****************************************************************************/
+/* Paper buttons                                                             */
+/*****************************************************************************/
+
+.collapse,
+a.pdf {
+    color: #999;
+    cursor: pointer;
+    display: inline;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+a.pdf {
+    color: #EE7979;
+}
+
+.collapse + input {
+    display: none;
+}
+
+p.abstract {
+    border-left: medium solid #DDD;
+    color: #666;
+    display: none;
+    margin-left: 1em;
+    margin-top: .5em;
+    padding-left: 1em;
+    text-align: justify;
+}
+
+.collapse + input:checked ~ p.abstract {
+    display: block;
+}
+
+a.all-posts {
+    color: rgb(153, 153, 153);
+    float: right;
+    font-size: 75%;
+    font-weight: normal;
+}
+
+ul.icons {
+    list-style-type: none;
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+
+ul.icons li {
+    border: 0;
+    display: inline;
+    margin-left: .5em;
+}
+
+ul.icons img {
+    border: 0;
+    height: 20px;
+    width: 20px;
+    vertical-align: bottom;
+}
+
+/*****************************************************************************/
+/* Code                                                                      */
+/*****************************************************************************/
+
+code, pre {
+    font-family: 'Inconsolata', monospace;
+}
+
+code {
+    background-color: #f9f9f9;
+    border-radius: 3px;
+    color: #bb2233;
+    padding: .25em .5em;
+}
+
+pre {
+    background-color: #f8f8f8;
+    line-height: 125%;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: auto;
+    padding: 1em;
+}
+
+.hll { background-color: #ffffcc }
+.c   { color: #93a1a1; font-style: italic } /* Comment */
+.cm  { color: #93a1a1; font-style: italic } /* Comment.Multiline */
+.cp  { color: #93a1a1; font-style: italic } /* Comment.Preproc */
+.c1  { color: #93a1a1; font-style: italic } /* Comment.Single */
+.cs  { color: #93a1a1; font-style: italic } /* Comment.Special */
+.err { color: #dc322f } /* Error */
+.g   { color: #657b83 } /* Generic */
+.k   { color: #859900 } /* Keyword */
+.l   { color: #657b83 } /* Literal */
+.n   { color: #586e75 } /* Name */
+.o   { color: #657b83 } /* Operator */
+.x   { color: #657b83 } /* Other */
+.p   { color: #657b83 } /* Punctuation */
+.gd  { color: #657b83 } /* Generic.Deleted */
+.ge  { color: #657b83 } /* Generic.Emph */
+.gr  { color: #657b83 } /* Generic.Error */
+.gh  { color: #657b83 } /* Generic.Heading */
+.gi  { color: #657b83 } /* Generic.Inserted */
+.go  { color: #657b83 } /* Generic.Output */
+.gp  { color: #657b83 } /* Generic.Prompt */
+.gs  { color: #657b83 } /* Generic.Strong */
+.gu  { color: #657b83 } /* Generic.Subheading */
+.gt  { color: #657b83 } /* Generic.Traceback */
+.kc  { color: #859900 } /* Keyword.Constant */
+.kd  { color: #859900 } /* Keyword.Declaration */
+.kn  { color: #cb4b16 } /* Keyword.Namespace */
+.kp  { color: #cb4b16 } /* Keyword.Pseudo */
+.kr  { color: #859900 } /* Keyword.Reserved */
+.kt  { color: #859900 } /* Keyword.Type */
+.ld  { color: #657b83 } /* Literal.Date */
+.m   { color: #2aa198 } /* Literal.Number */
+.s   { color: #2aa198 } /* Literal.String */
+.na  { color: #657b83 } /* Name.Attribute */
+.nb  { color: #268bd2 } /* Name.Builtin */
+.nc  { color: #268bd2 } /* Name.Class */
+.no  { color: #b58900 } /* Name.Constant */
+.nd  { color: #cb4b16 } /* Name.Decorator */
+.ni  { color: #cb4b16 } /* Name.Entity */
+.ne  { color: #cb4b16 } /* Name.Exception */
+.nf  { color: #268bd2 } /* Name.Function */
+.nl  { color: #657b83 } /* Name.Label */
+.nn  { color: #b58900 } /* Name.Namespace */
+.nx  { color: #657b83 } /* Name.Other */
+.py  { color: #268bd2 } /* Name.Property */
+.nt  { color: #859900 } /* Name.Tag */
+.nv  { color: #cd4b16 } /* Name.Variable */
+.ow  { color: #859900 } /* Operator.Word */
+.w   { color: #fdf6e3 } /* Text.Whitespace */
+.mf  { color: #2aa198 } /* Literal.Number.Float */
+
+/*****************************************************************************/
+/* Tables                                                                    */
+/*****************************************************************************/
+
+table {
+    margin-top: 1em;
+}
+
+table.files {
+    width: 100%;
+}
+
+table.files, table.files td {
+    border: 0;
+}
+
+table.files tr:last-child {
+    border-bottom: none;
+}
+
+table.files tr td {
+    padding: .5em;
+    text-align: center;
+    vertical-align: middle;
+}
+
+table.files tr td:last-child {
+    color: gray;
+    text-align: justify;
+}
+
+table.cheatsheet,
+table.shortcuts {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.cheatsheet td,
+table.shortcuts td {
+    border: thin solid gray;
+}
+
+table.cheatsheet tr td {
+    vertical-align: middle;
+    padding: .25em .5em;
+    text-align: center;
+}
+
+table.cheatsheet tr:first-child {
+    background: #F0F0F0;
+    font-weight: bold;
+}
+
+table.shortcuts tr td:nth-child(2n) {
+    vertical-align: middle;
+    padding: .25em .5em;
+}
+
+table.shortcuts tr td:nth-child(2n + 1) {
+    background: #F0F0F0;
+    text-align: center;
+    font-family: monospace;
+    vertical-align: middle;
+    padding: .25em .5em;
+}
+
+/*****************************************************************************/
+/* Other styles                                                              */
+/*****************************************************************************/
+
+.align-center,
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.float-right {
+    float: right;
+    margin-left: 1.5em;
+    margin-bottom: 0.5em;
+}
+
+.icon {
+    border: 0;
+    width: 2em;
+}
+
+.pad-bottom {
+    margin-bottom: 2em;
+}
+
+/* Laptops and above display search icon */
+@media screen and (min-width: 992px) {
+    .search-icon {
+        float: right;
+    }
+}
+
+/* Smaller devices hide it */
+@media screen and (max-width: 992px) {
+    .search-icon {
+        display: none;
+    }
+}
+
+#bibtex pre {
+    overflow: hidden;
+}
+
+img.border {
+    border: thin solid #EEEEEE;
+}
+
+img.gui,
+img.left,
+img.right {
+    max-height: 20em;
+    max-width: 50%;
+}
+
+img.left-rounded {
+    border-radius: 1em;
+    float: left;
+    margin-bottom: 0.5em;
+    margin-right: 1.5em;
+    margin-top: 1em;
+}
+
+img.list-figure {
+    background-color: white;
+    max-height: 15em;
+    max-width: 15em;
+    padding-left: 1em;
+}
+
+img.no-border {
+    border: 0;
+}
+
+img.right-rounded {
+    border-radius: 1em;
+    float: right;
+    margin-bottom: 0.5em;
+    margin-left: 1.5em;
+    margin-top: 1em;
+}
+
+img.single {
+    margin-bottom: 2.5em;
+}
+
+img.figure-width {
+    max-width: 9em;
+}
+
+.right,
+div.right-figure {
+    color: #887;
+    float: right;
+    font-size: 0.9em;
+    margin-bottom: 2em;
+    margin-left: 2em;
+    margin-top: 1rem;
+    text-align: left;
+}
+
+p.authors {
+    text-align: left;
+}
+
+p.authors a {
+    font-weight: bold;
+    color: #333;
+}
+
+div.clear {
+    clear: both;
+}
+
+img.padtop {
+    margin-top: 2.5em;
+}
+
+img.margin-top-1em {
+    margin-top: 1em;
+}
+
+pre.bash {
+    overflow: visible;
+    white-space: pre-wrap;
+}
+
+div.right-figure {
+    max-width: 250px;
+}
+
+div.right-figure p {
+    margin: 0;
+}
+
+img.max-height-15em { max-height: 15em; }
+img.max-height-20em { max-height: 20em; }
+img.max-height-25em { max-height: 25em; }
+
+img.max-height-100px { max-height: 100px; }
+img.max-height-125px { max-height: 125px; }
+img.max-height-150px { max-height: 150px; }
+img.max-height-175px { max-height: 175px; }
+img.max-height-200px { max-height: 200px; }
+img.max-height-225px { max-height: 225px; }
+img.max-height-250px { max-height: 250px; }
+img.max-height-275px { max-height: 275px; }
+img.max-height-300px { max-height: 300px; }
+img.max-height-325px { max-height: 325px; }
+img.max-height-350px { max-height: 350px; }
+img.max-height-375px { max-height: 375px; }
+img.max-height-400px { max-height: 400px; }
+img.max-height-425px { max-height: 425px; }
+img.max-height-450px { max-height: 450px; }
+img.max-height-475px { max-height: 475px; }
+img.max-height-500px { max-height: 500px; }
+
+img.max-width-20em { max-width: 20em; }
+img.max-width-25em { max-width: 25em; }
+img.max-width-30em { max-width: 30em; }
+img.max-width-35em { max-width: 35em; }
+img.max-width-40em { max-width: 40em; }
+img.max-width-45em { max-width: 45em; }
+img.max-width-50em { max-width: 50em; }
+img.max-width-55em { max-width: 55em; }
+img.max-width-60em { max-width: 60em; }
+
+img.max-width-20pct { max-width: 20%; }
+img.max-width-25pct { max-width: 25%; }
+img.max-width-30pct { max-width: 30%; }
+img.max-width-35pct { max-width: 35%; }
+img.max-width-40pct { max-width: 40%; }
+img.max-width-45pct { max-width: 45%; }
+img.max-width-49pct { max-width: 49%; }
+img.max-width-50pct { max-width: 50%; }
+img.max-width-55pct { max-width: 55%; }
+img.max-width-60pct { max-width: 60%; }
+img.max-width-65pct { max-width: 65%; }
+img.max-width-70pct { max-width: 70%; }
+img.max-width-75pct { max-width: 75%; }
+img.max-width-80pct { max-width: 80%; }
+img.max-width-85pct { max-width: 85%; }
+img.max-width-90pct { max-width: 90%; }
+
+img.width-100px { width: 100px; }
+img.width-150px { width: 150px; }
+img.width-200px { width: 200px; }
+img.width-250px { width: 250px; }
+img.width-300px { width: 300px; }
+img.width-350px { width: 350px; }
+img.width-400px { width: 400px; }
+img.width-450px { width: 450px; }
+img.width-500px { width: 500px; }
+img.width-550px { width: 550px; }
+img.width-600px { width: 600px; }
+
+ul.article-highlight {
+    background: #FED;
+    border: thin solid #DDD;
+    margin-left: 1em;
+    padding: 0 1em;
+}
+
+div.youtube {
+    margin-top: 1.5em;
+}
+
+details > summary {
+    cursor: pointer;
+}
+
+/*****************************************************************************/
+/* YouTube                                                                   */
+/*****************************************************************************/
+
+.youtube-4x3 {
+    padding-bottom: 75%;  /* inverse of 4:3 aspect ratio */
+}
+
+.youtube-16x9 {
+    padding-bottom: 56.25%;  /* inverse of 16:9 aspect ratio */
+}
+
+.youtube-4x3,
+.youtube-16x9 {
+    position: relative;
+    height: 0;
+    overflow: hidden;
+}
+
+.youtube-4x3 iframe,
+.youtube-16x9 iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    border: 0;
+}
+
+/*****************************************************************************/
+/* Unique pictures                                                           */
+/*****************************************************************************/
+
+img#basho {
+    max-width: 100%;
+    opacity: 0.5;
+}
+
+/*****************************************************************************/
+/* Discussion */
+/*****************************************************************************/
+
+#discussion > ul,
+#discussion .comment-body > ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+#discussion > ul > li,
+#discussion .comment-body > ul > li {
+    margin-left: 0;  /* override article li */
+}
+
+/* Tablets and above */
+@media only screen and (min-width: 768px) {
+    #discussion .comment-left {
+        display: table-cell;
+        padding-right: 10px;
+    }
+}
+
+#discussion .comment-left img {
+    max-width: inherit;
+}
+
+#discussion .comment-body {
+    display: table-cell;
+    vertical-align: top;
+    width: 100%;
+}
+
+#discussion .pull-right {
+    float: right;
+}
+
+#discussion a.btn,
+#discussion button {
+    background-color: #fff;
+    border-radius: .2rem;
+    border: thin solid #ccc;
+    color: #373a3c;
+    cursor: pointer;
+    display: inline-block;
+    font-family: inherit;
+    font-size: .875rem;
+    font-weight: normal;
+    line-height: 1.5;
+    padding: .25rem .75rem;
+    text-decoration: none;
+}
+
+#discussion a.btn:hover,
+#discussion button:hover {
+    background-color: #e6e6e6;
+    border-color: #adadad;
+}
+
+#discussion a.btn {
+    box-sizing: inherit;
+    text-align: center;
+    user-select: none;
+    white-space: nowrap;
+}
+
+#discussion h4.author {
+    background: transparent;
+    font-size: 1.5rem;
+    font-weight: normal;
+    line-height: 1.1;
+    margin-bottom: 5px;
+    margin-top: 0;
+    padding: 0;
+}
+
+#discussion p.posted-on {
+    color: #818a91;
+    margin-top: 0;
+}
+
+#discussion li.with-border-top {
+    border-top: thin solid rgba(0.0, 0.0, 0.0, 0.1);
+    margin-bottom: 0;
+    margin-top: 0;
+    padding-top: 1rem;
+}
+
+#discussion pre {
+    /* word-wrap rather than overflow */
+    /* see https://stackoverflow.com/questions/1165497/how-to-prevent-text-from-overflowing-in-css */
+    white-space: pre-wrap;
+    word-break: break-word;
+    word-wrap: break-word;
+}
+
+#discussion .permalink-icon::before {
+    content: "\f0c1";
+    font-family: "FontAwesome";
+}
+
+#discussion .reply-icon::before {
+    content: "\f064";
+    font-family: "FontAwesome";
+}
+
+#discussion .rss-icon::before {
+    content: "\f09e";
+    font-family: "FontAwesome";
+}
+
+#discussion #comment-form {
+    margin-top: 1em;
+}
+
+#discussion #comment-form input,
+#discussion #comment-form textarea {
+    width: 100%;
+}
+
+#discussion #comment-form fieldset {
+    border: 0;
+    margin: 1rem 0 0 0;
+    min-width: 0;
+    padding: 0;
+}
+
+#discussion #comment-form label {
+    display: inline-block;
+    float: left;
+    font-weight: bold;
+    padding: .375rem .75rem;
+    width: 10%;
+}
+
+/* Phones and above */
+@media only screen and (min-width: 480px) {
+    #discussion #comment-form label {
+        text-align: right;
+    }
+}
+
+#discussion #comment-form p#agree-cc-by {
+    margin: 0;
+}
+
+#discussion #comment-form p#email-button-comment {
+    color: #818a91;
+    display: inline-block;
+    margin-left: 1em;
+}
+
+#discussion #comment-form-display-replyto {
+    padding: .1em 1em;
+    background-color: #eef;
+    margin-bottom: 1em;
+}
+
+#discussion #comment-form-display-replyto p {
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
+}
+
+#discussion #comment-form p.use-markdown {
+    color: #818a91;
+    margin: .75rem 0;
+}
+
+#discussion #comment-form .form-input {
+    border-radius: .25rem;
+    border: 1px solid #ccc;
+    color: #55595c;
+    display: block;
+    font-family: 'Inconsolata', monospace;
+    font-size: 1rem;
+    line-height: 1.5;
+    padding: .375rem .75rem;
+    width: 80%;
+}
+
+#discussion button#comment-form-button-submit {
+    background-color: #0275d8;
+    border-color: #0275d8;
+    color: #fff;
+    font-size: 1em;
+}
+
+#discussion button#comment-form-button-submit:hover {
+    color: #fff;
+    background-color: #025aa5;
+    border-color: #01549b;
+}

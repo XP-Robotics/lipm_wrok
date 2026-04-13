@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Robotics - Master MVA - Fall 2023</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="Silvère Bonnabel, Stéphane Caron, Justin Carpentier and Pierre-Brice Wieber. Fall 2023 course at Master MVA, Paris. Abstract¶ A large part of the recent progress in robotics has sided with advances in machine learning, optimization and computer vision. The objective of this lecture is to introduce the general conceptual tools behind …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Teaching">
+        <meta name="keywords" content="Teaching, Courses, Robotics, Master MVA">
+
+        <meta property="og:title" content="Robotics - Master MVA - Fall 2023">
+        <meta property="og:description" content="Silvère Bonnabel, Stéphane Caron, Justin Carpentier and Pierre-Brice Wieber. Fall 2023 course at Master MVA, Paris. Abstract¶ A large part of the recent progress in robotics has sided with advances in machine learning, optimization and computer vision. The objective of this lecture is to introduce the general conceptual tools behind …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/teaching/mva-2023.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/teaching.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/teaching.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <h1>Robotics - Master MVA - Fall 2023</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p class="authors"><a class="reference external" href="https://sites.google.com/view/silvere-bonnabel/">Silvère Bonnabel</a>, <strong>Stéphane Caron</strong>, <a class="reference external" href="https://jcarpent.github.io/">Justin Carpentier</a> and <strong>Pierre-Brice Wieber</strong>. Fall 2023 course at <a class="reference external" href="https://www.master-mva.com/">Master MVA</a>, Paris.</p>
+<div class="section" id="abstract">
+<h2>Abstract<a class="headerlink" href="mva-2023.html#abstract" title="Permalink to this headline">¶</a></h2>
+<p>A large part of the recent progress in robotics has sided with advances in machine learning, optimization and computer vision. The objective of this lecture is to introduce the general conceptual tools behind these advances and show how they have enabled robots to perceive the world and perform tasks ranging, beyond factory automation, to highly-dynamic saltos or mountain hikes. The course covers modeling and simulation of robotic systems, motion planning, inverse problems for motion control, optimal control, and reinforcement learning. It also includes practical exercises with state-of-the-art robotics libraries, and a broader reflection on our responsibilities when it comes to doing research and innovation in robotics.</p>
+</div>
+<div class="section" id="materials">
+<h2>Materials<a class="headerlink" href="mva-2023.html#materials" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="files docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><img alt="github" class="icon" src="../images/icons/github.png" /></td>
+<td><a class="reference external" href="https://github.com/stephane-caron/robotics-mva-2023">Assignments</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="introduction-to-robotics">
+<h2>1. Introduction to robotics<a class="headerlink" href="mva-2023.html#introduction-to-robotics" title="Permalink to this headline">¶</a></h2>
+<p>This first lecture is a general introduction of modeling robotic systems. We review basic notions of control theory to describe the evolution of dynamical systems and introduce standard robot dynamics concepts.</p>
+<p>Lecturer: Justin Carpentier.</p>
+</div>
+<div class="section" id="kinematics-and-rigid-transformations">
+<h2>2. Kinematics and rigid transformations<a class="headerlink" href="mva-2023.html#kinematics-and-rigid-transformations" title="Permalink to this headline">¶</a></h2>
+<p>Robotics is about producing motion. We now dive into the mathematical representation of robots (articulated systems of rigid bodies) and their motions (relative transforms and generalized velocities of these rigid bodies).</p>
+<table border="1" class="files docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><img alt="html" class="icon" src="../images/icons/html5.png" /></td>
+<td>Materials: <a class="reference external" href="kinematics-rigid-transformations.html">Kinematics and rigid transformations</a></td>
+</tr>
+</tbody>
+</table>
+<p>Lecturer: Stéphane Caron.</p>
+<div class="section" id="topics">
+<h3>Topics:<a class="headerlink" href="mva-2023.html#topics" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Rotations: SO(3)</li>
+<li>Angular velocities: so(3)</li>
+<li>Rigid-body transforms: SE(3)</li>
+<li>Rigid-body velocities: se(3)</li>
+</ul>
+</div>
+<div class="section" id="related-mva-courses">
+<h3>Related MVA courses:<a class="headerlink" href="mva-2023.html#related-mva-courses" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference external" href="https://www.master-mva.com/cours/geometrie-et-espaces-de-formes/">Géometrie et espaces de formes</a>: differentiable geometry, Lie groups</li>
+</ul>
+</div>
+<div class="section" id="references">
+<h3>References:<a class="headerlink" href="mva-2023.html#references" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference external" href="http://www.cds.caltech.edu/~murray/mlswiki">A mathematical introduction to robotic manipulation</a>, Murray, Li and Sastry (2017).</li>
+<li><a class="reference external" href="https://ethaneade.org/lie.pdf">Lie Groups for 2D and 3D Transformations</a>, Ethan Eade (2017).</li>
+<li><a class="reference external" href="https://hades.mech.northwestern.edu/index.php/Modern_Robotics">Modern Robotics: Mechanics, Planning, and Control</a>, Lynch and Park (2017).</li>
+<li>To go further: <a class="reference external" href="https://arxiv.org/pdf/1812.01537">A micro Lie theory for state estimation in robotics</a>, Solà et al. (2021).</li>
+<li>To go even further: <em>An introduction to optimization on smooth manifolds</em>, Boumal (2023).</li>
+</ul>
+</div>
+</div>
+<div class="section" id="inverse-kinematics">
+<h2>3. Inverse kinematics<a class="headerlink" href="mva-2023.html#inverse-kinematics" title="Permalink to this headline">¶</a></h2>
+<p>We start our review standard inverse problems in robotics with inverse kinematics, the problem of computing configuration-space motions from workspace motions. This corresponds to, for instance, moving a robotic arm to reach a given object. We introduce the concepts of task functions and how to cast differential inverse kinematics as a quadratic program. In the tutorial, we will put these notions to use with <a class="reference external" href="https://github.com/stack-of-tasks/pinocchio">Pinocchio</a>. In a short excursion, we also take a peek at model predictive control for legged locomotion, also cast as a quadratic program.</p>
+<p>Lecturer: Stéphane Caron.</p>
+<div class="section" id="topics-1">
+<h3>Topics:<a class="headerlink" href="mva-2023.html#topics-1" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Jacobian matrix</li>
+<li>Inverse kinematics</li>
+<li>Quadratic programming</li>
+<li>Model predictive control</li>
+</ul>
+</div>
+<div class="section" id="references-1">
+<h3>References:<a class="headerlink" href="mva-2023.html#references-1" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><em>Numerical optimization</em>, Nocedal &amp; Wright (1999).</li>
+<li><em>Robot control: the task function approach</em>, Samson, Espiau &amp; Borgne (1991).</li>
+<li><em>Introduction to Humanoid Robotics</em>, Kajita et al. (2014).</li>
+</ul>
+</div>
+</div>
+<div class="section" id="perception-and-estimation">
+<h2>4. Perception and estimation<a class="headerlink" href="mva-2023.html#perception-and-estimation" title="Permalink to this headline">¶</a></h2>
+<p>In this lecture, we will start by briefly describing the sensors that are used by robots to perceive their environment and self-localize in it, namely IMUs, cameras, point clouds, and absolute position measurements (GPS outdoors, motion capture indoors). We will introduce the sensor fusion problem for dynamical systems and its optimal solution in the linear case: the Kalman filter. We will then turn to the nonlinear case and its tools: EKF, Invariant EKF, factor graphs.</p>
+<p>As praticle exercises, we will first start with simple wheeled robot localization in 2D, and then move to the principles behind the recent contact-aided invariant EKF for legged robot, and also simultaneous localization and mapping (SLAM) and the MSCKF for visual inertial odometry (VIO).</p>
+<p>Lecturer: Sivlère Bonnabel.</p>
+<div class="section" id="topics-2">
+<h3>Topics:<a class="headerlink" href="mva-2023.html#topics-2" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Estimation theory</li>
+<li>Kalman filtering, Invariant Kalman filtering</li>
+<li>SLAM, visual inertial odometry</li>
+<li>Sensors (inertial, visual)</li>
+</ul>
+</div>
+<div class="section" id="references-2">
+<h3>References:<a class="headerlink" href="mva-2023.html#references-2" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><em>State Estimation for Robotics</em>, Barfoot (2017).</li>
+<li><em>Bayesian filtering and smoothing</em>, Särkkä (2013).</li>
+</ul>
+</div>
+</div>
+<div class="section" id="motion-planning">
+<h2>5. Motion planning<a class="headerlink" href="mva-2023.html#motion-planning" title="Permalink to this headline">¶</a></h2>
+<p>This lecture is about motion planning, the problem of finding feasible continuous motions between two robot configurations that may be quite far away or require careful execution, such as navigating between obstacles. We will recall the concepts of configuration space and workspace, then discuss state-of-the-art sampling-based algorithms. We will cover the cases of non-holonomic vehicles and manipulation. In the tutorial session, we will implement motion planning algorithms on a robotic arm scenario.</p>
+<p>Lecturer: Stéphane Caron.</p>
+<div class="section" id="topics-3">
+<h3>Topics:<a class="headerlink" href="mva-2023.html#topics-3" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Configuration space</li>
+<li>Randomized algorithms: PRM and RRT</li>
+</ul>
+</div>
+<div class="section" id="references-3">
+<h3>References:<a class="headerlink" href="mva-2023.html#references-3" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference external" href="https://www.di.ens.fr/jean-paul.laumond/promotion/book.pdf">Robot Motion Planning and Control</a>, Laumond (Ed.) (1998).</li>
+<li><a class="reference external" href="http://lavalle.pl/planning/">Planning algorithms</a>, LaValle (2006).</li>
+</ul>
+</div>
+</div>
+<div class="section" id="optimal-control">
+<h2>6. Optimal control<a class="headerlink" href="mva-2023.html#optimal-control" title="Permalink to this headline">¶</a></h2>
+<p>In this course, we will introduce optimal control and dynamics simulation. We will review the fundamuntal principles (Prontryagin maximum principle and Hamilton-Jacobi-Bellman equations) and their derivation in the context of numerical applications (constrained optimization, differentiable dynamic programming).</p>
+<p>Lecturer: Justin Carpentier.</p>
+<div class="section" id="topics-4">
+<h3>Topics:<a class="headerlink" href="mva-2023.html#topics-4" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Optimal control and calculus of variations</li>
+<li>Prontryagin principles and Hamilton-Jacobi-Bellman equations</li>
+<li>Trajectory optimization</li>
+<li>Differential dynamic programming</li>
+<li>Model predictive control</li>
+<li>Distinction between OC and MPC?</li>
+</ul>
+</div>
+<div class="section" id="references-4">
+<h3>References:<a class="headerlink" href="mva-2023.html#references-4" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><em>Calculus of variations and optimal control theory: a concise introduction</em>, Liberzon (2011).</li>
+<li><em>Contrôle optimal: théorie &amp; applications</em>, Trélat (2005).</li>
+<li><em>Model predictive control: theory, computation, and design</em>, Rawlings, Mayne &amp; Diehl (2017).</li>
+</ul>
+</div>
+</div>
+<div class="section" id="reinforcement-learning-for-legged-robots">
+<h2>7. Reinforcement learning for legged robots<a class="headerlink" href="mva-2023.html#reinforcement-learning-for-legged-robots" title="Permalink to this headline">¶</a></h2>
+<p>In this lecture, we will outline recent breakthroughs of reinforcement learning in real-robot locomotion and manipulation. We will step through the technical decisions in training pipelines, and describe the state-of-the-art toolbox for transferring simulation-trained policies to real robots.</p>
+<table border="1" class="files docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><img alt="html" class="icon" src="../images/icons/html5.png" /></td>
+<td>Materials: <a class="reference external" href="reinforcement-learning-legged-robots.html">Reinforcement learning for legged robots</a></td>
+</tr>
+</tbody>
+</table>
+<p>Lecturer: Stéphane Caron.</p>
+<div class="section" id="topics-5">
+<h3>Topics:<a class="headerlink" href="mva-2023.html#topics-5" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Partially-observable Markov decision process (POMDP)</li>
+<li>Goal of reinforcement learning</li>
+<li>Model, policy, value function</li>
+<li>Policy optimization: REINFORCE, policy gradient, PPO</li>
+<li>Application to robotics: domain randomization, Markov property, &quot;rewArt&quot;</li>
+</ul>
+</div>
+<div class="section" id="references-5">
+<h3>References:<a class="headerlink" href="mva-2023.html#references-5" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><em>Reinforcement learning: An introduction</em>, Sutton &amp; Barto (2018).</li>
+<li><a class="reference external" href="https://arxiv.org/abs/2010.11251">Learning quadrupedal locomotion over challenging terrain</a>, Lee, Hwangbo, Wellhausen, Koltun &amp; Hutter (2020).</li>
+</ul>
+</div>
+</div>
+<div class="section" id="responsible-robotics">
+<h2>8. Responsible robotics<a class="headerlink" href="mva-2023.html#responsible-robotics" title="Permalink to this headline">¶</a></h2>
+<p>What is Ethics, how does it work and what are your obligations when it comes to doing research and innovation in robotics? After a bit of history and a review of major aspects related to responsible robotics, we'll work through examples such as self-driving vehicles.</p>
+<p>Lecturer: Pierre-Brice Wieber.</p>
+<div class="section" id="topics-6">
+<h3>Topics:<a class="headerlink" href="mva-2023.html#topics-6" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Human agency and oversight</li>
+<li>Technical robustness and safety</li>
+<li>Environmental and societal well-being</li>
+<li>Accountability</li>
+</ul>
+</div>
+<div class="section" id="references-6">
+<h3>References:<a class="headerlink" href="mva-2023.html#references-6" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference external" href="https://digital-strategy.ec.europa.eu/en/library/ethics-guidelines-trustworthy-ai">Ethics guidelines for trustworthy AI</a></li>
+<li><a class="reference external" href="http://cerna-ethics-allistene.org/digitalAssets/54/54000_38704_Avis_robotique_livret.pdf">Éthique de la recherche en robotique</a></li>
+<li><a class="reference external" href="https://bmdv.bund.de/SharedDocs/EN/publications/report-ethics-commission.pdf?__blob=publicationFile">Ethics commission on automated and connected driving</a></li>
+<li><a class="reference external" href="https://www.ccne-ethique.fr/sites/default/files/2023-01/Avis2_CNPEN_web.pdf">Le « véhicule autonome » : enjeux d’éthique</a></li>
+<li><a class="reference external" href="https://comite-ethique.cnrs.fr/avis-du-comets-integrer-les-enjeux-environnementaux-a-la-conduite-de-la-recherche-une-responsabilite-ethique/">Intégrer les enjeux environnementaux à la conduite de la recherche – Une responsabilité éthique</a></li>
+</ul>
+</div>
+</div>
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="mva-2023.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="mva-2023.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="mva-2023.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("mva-2023"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="mva-2023.html">Page</a> published on <time class="dt-published" datetime="2023-10-05T00:00:00+0200">2023-10-05</time>.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

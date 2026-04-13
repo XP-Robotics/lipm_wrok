@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Robotics - Stéphane Caron</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="Stéphane Caron's robotics">
+        <meta name="generator" content="Pelican 4.8.0">
+
+        <meta property="og:title" content="Robotics - Stéphane Caron">
+        <meta property="og:description" content="Stéphane Caron's robotics">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info">
+        <meta property="og:type" content="website">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/robotics.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/robotics.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="publications.html">Publications</a></li>
+                <li><a href="robotics.html">Robotics</a></li>
+                <li><a href="talks.html">Talks</a></li>
+                <li><a href="teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+    <h1>Robotics</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p>
+    Notes in this section connect various aspects of robotics. They are loosely ordered from introductory concepts like kinematics to more advanced topics like locomotion control. Don't hesitate to chime in on the discussions at the bottom of each page if you have questions.
+</p>
+
+
+<ul class="tags">
+<li><a href="robotics.html#kinematics">Kinematics</a></li>
+<li><a href="robotics.html#dynamics">Dynamics</a></li>
+<li><a href="robotics.html#contact-dynamics">Contact dynamics</a></li>
+<li><a href="robotics.html#models">Models</a></li>
+<li><a href="robotics.html#locomotion">Locomotion</a></li>
+<li><a href="robotics.html#see-also">See also</a></li>
+</ul>
+
+<h2 id="kinematics">
+    Kinematics
+    <a class="headerlink" href="robotics.html#kinematics" title="Permalink to this tag">¶</a>
+</h2>
+
+<img src="../figures/rigid-body-system.png" class="list-figure right-rounded">
+
+<ul class="list-all-articles">
+    <li>
+        <a href="../robotics/differential-inverse-kinematics.html">
+            Differential inverse kinematics
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/from-spatial-to-body-acceleration.html">
+            From spatial to body acceleration
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/jacobian-of-a-kinematic-task-and-derivatives-on-manifolds.html">
+            Jacobian of a kinematic task and derivatives on manifolds
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/kinematics-jargon.html">
+            Kinematics jargon
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/kinematics-of-a-symmetric-leg.html">
+            Kinematics of a symmetric leg
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/position-and-coordinate-systems.html">
+            Position and coordinate systems
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/revolute-joints.html">
+            Revolute joints
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/screw-axes.html">
+            Screw axes
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/screw-theory.html">
+            Screw theory
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/spatial-vector-algebra-cheat-sheet.html">
+            Spatial vector algebra cheat sheet
+        </a>
+    </li>
+</ul>
+<h2 id="dynamics">
+    Dynamics
+    <a class="headerlink" href="robotics.html#dynamics" title="Permalink to this tag">¶</a>
+</h2>
+
+<img src="../figures/humanoid-2d-dyneq.png" class="list-figure right-rounded">
+
+<ul class="list-all-articles">
+    <li>
+        <a href="../robotics/constrained-equations-of-motion.html">
+            Constrained equations of motion
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/equations-of-motion.html">
+            Equations of motion
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/forward-dynamics.html">
+            Forward dynamics
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/knee-torque-lumped-mass-model.html">
+            Knee torque of a lumped mass model
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/newton-euler-equations.html">
+            Newton-Euler equations
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/point-de-non-basculement.html">
+            Point de non-basculement
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/principle-of-virtual-work.html">
+            Principle of virtual work
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/recursive-newton-euler-algorithm.html">
+            Recursive Newton-Euler algorithm
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/revolute-joints.html">
+            Revolute joints
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/screw-theory.html">
+            Screw theory
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/zero-tilting-moment-point.html">
+            Zero-tilting moment point
+        </a>
+    </li>
+</ul>
+<h2 id="contact-dynamics">
+    Contact dynamics
+    <a class="headerlink" href="robotics.html#contact-dynamics" title="Permalink to this tag">¶</a>
+</h2>
+
+<img src="../figures/foot-contact.png" class="list-figure right-rounded">
+
+<ul class="list-all-articles">
+    <li>
+        <a href="../robotics/contact-flexibility-and-force-control.html">
+            Contact flexibility and force control
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/contact-modes.html">
+            Contact modes
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/contact-stability.html">
+            Contact stability
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/friction-cones.html">
+            Friction cones
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/point-de-non-basculement.html">
+            Point de non-basculement
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/twisting-friction-at-surface-contacts.html">
+            Twisting friction at surface contacts
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/wrench-friction-cones.html">
+            Wrench friction cones
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/zero-tilting-moment-point.html">
+            Zero-tilting moment point
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/zmp-support-area.html">
+            ZMP support area
+        </a>
+    </li>
+</ul>
+<h2 id="models">
+    Models
+    <a class="headerlink" href="robotics.html#models" title="Permalink to this tag">¶</a>
+</h2>
+
+<img src="../figures/lipm.png" class="list-figure right-rounded">
+
+<ul class="list-all-articles">
+    <li>
+        <a href="../robotics/contact-flexibility-and-force-control.html">
+            Contact flexibility and force control
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/linear-inverted-pendulum-model.html">
+            Linear inverted pendulum model
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/point-mass-model.html">
+            Point mass model
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/variable-height-inverted-pendulum-model.html">
+            Variable-height inverted pendulum model
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/wheeled-inverted-pendulum-model.html">
+            Wheeled inverted pendulum model
+        </a>
+    </li>
+</ul>
+<h2 id="locomotion">
+    Locomotion
+    <a class="headerlink" href="robotics.html#locomotion" title="Permalink to this tag">¶</a>
+</h2>
+
+<img src="../images/stair-climbing-side.jpg" class="list-figure right-rounded">
+
+<ul class="list-all-articles">
+    <li>
+        <a href="../robotics/capture-point.html">
+            Capture point
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/floating-base-estimation.html">
+            Floating base estimation
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/how-do-biped-robots-walk.html">
+            How do biped robots walk?
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/linear-inverted-pendulum-model.html">
+            Linear inverted pendulum model
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/open-closed-loop-model-predictive-control.html">
+            Open loop and closed loop model predictive control
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/prototyping-a-walking-pattern-generator.html">
+            Prototyping a walking pattern generator
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/tuning-the-lipm-walking-controller.html">
+            Tuning the LIPM walking controller
+        </a>
+    </li>
+    <li>
+        <a href="../robotics/variable-height-inverted-pendulum-model.html">
+            Variable-height inverted pendulum model
+        </a>
+    </li>
+</ul>
+
+<h2 id="see-also">
+    See also
+    <a class="headerlink" href="robotics.html#see-also" title="Permalink to this tag">¶</a>
+</h2>
+
+<ul class="list-all-articles">
+    <li>
+        <a href="http://www.slimy.com/~steuard/teaching/tutorials/Lagrange.html">
+            An Introduction to Lagrange Multipliers
+        </a>
+        <div class="article-in-list">
+            How Lagrange multipliers arise from optimization constraints.
+        </div>
+    </li>
+    <li>
+        <a href="https://gafferongames.com/post/integration_basics/">
+            Integration Basics
+        </a>
+        <div class="article-in-list">
+            How to integrate the equations of motion.
+        </div>
+    </li>
+    <li>
+        <a href="https://hal.inria.fr/inria-00390428/document">
+            Some comments on the structure of the dynamics of articulated motion
+        </a>
+        <div class="article-in-list">
+            My go-to writeup on the equations of motion.
+        </div>
+    </li>
+    <li>
+        <a href="http://www.feynmanlectures.caltech.edu/II_19.html">
+            The Principle of Least Action
+        </a>
+        <div class="article-in-list">
+            A special lecture by Richard Feynman.
+        </div>
+    </li>
+</ul>                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

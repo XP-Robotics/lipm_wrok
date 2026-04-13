@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Introduction à GNU Make</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="Lorsque je découvre un nouvel outil, j'ai envie d'écrire un pense-bête, un tutorial, quelque chose qui permet à la fois de partager la découverte et de ranger les informations utiles quelque part, au cas où. Ce pense-bête sur GNU Make ne fait pas exception à la règle : la première version …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Blog">
+        <meta name="keywords" content="Linux">
+
+        <meta property="og:title" content="Introduction à GNU Make">
+        <meta property="og:description" content="Lorsque je découvre un nouvel outil, j'ai envie d'écrire un pense-bête, un tutorial, quelque chose qui permet à la fois de partager la découverte et de ranger les informations utiles quelque part, au cas où. Ce pense-bête sur GNU Make ne fait pas exception à la règle : la première version …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/blog/gnu-make.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/blog.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/blog.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <h1>Introduction à GNU Make</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p>Lorsque je découvre un nouvel outil, j'ai envie d'écrire un pense-bête, un
+tutorial, quelque chose qui permet à la fois de partager la découverte et de
+ranger les informations utiles quelque part, au cas où. Ce pense-bête sur <a class="reference external" href="http://www.gnu.org/software/make/">GNU
+Make</a> ne fait pas exception à la règle : la première version doit dater de
+2005, il disparaît à chaque nouvelle version de mon site, et réapparaît lorsque
+j'ai de nouveau besoin d'écrire un Makefile ;)</p>
+<div class="section" id="generalites">
+<h2>Généralités<a class="headerlink" href="gnu-make.html#generalites" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="http://www.gnu.org/software/make/">GNU Make</a>, ou tout simplement « Make », permet de scripter la compilation et
+le déploiement d'un projet, tout en économisant certaines opérations inutiles
+(comme la recompilation de fichiers sources inchangés). C'est généralement l'un
+des outils utilisés lors de l'installation sous Unix d'un programme à partir du
+code source.</p>
+<p>Considérons par exemple la compilation d'un fichier C avec gcc :</p>
+<div class="highlight"><pre><span></span>gcc<span class="w"> </span>fichier.c<span class="w"> </span>-o<span class="w"> </span>executable<span class="w"> </span>-Wall<span class="w"> </span>-O2<span class="w"> </span>-Wpedantic
+</pre></div>
+<p>Si le projet compte huit fichiers similaires, l'ensemble des instructions
+devient :</p>
+<div class="highlight"><pre><span></span>gcc<span class="w"> </span>fichier1.c<span class="w"> </span>-c<span class="w"> </span>-o<span class="w"> </span>objet1.o<span class="w"> </span>-Wall<span class="w"> </span>-O2<span class="w"> </span>-Wpedantic
+gcc<span class="w"> </span>fichier2.c<span class="w"> </span>-c<span class="w"> </span>-o<span class="w"> </span>objet2.o<span class="w"> </span>-Wall<span class="w"> </span>-O2<span class="w"> </span>-Wpedantic
+gcc<span class="w"> </span>fichier3.c<span class="w"> </span>-c<span class="w"> </span>-o<span class="w"> </span>objet3.o<span class="w"> </span>-Wall<span class="w"> </span>-O2<span class="w"> </span>-Wpedantic
+gcc<span class="w"> </span>fichier4.c<span class="w"> </span>-c<span class="w"> </span>-o<span class="w"> </span>objet4.o<span class="w"> </span>-Wall<span class="w"> </span>-O2<span class="w"> </span>-Wpedantic
+gcc<span class="w"> </span>fichier5.c<span class="w"> </span>-c<span class="w"> </span>-o<span class="w"> </span>objet5.o<span class="w"> </span>-Wall<span class="w"> </span>-O2<span class="w"> </span>-Wpedantic
+gcc<span class="w"> </span>fichier6.c<span class="w"> </span>-c<span class="w"> </span>-o<span class="w"> </span>objet6.o<span class="w"> </span>-Wall<span class="w"> </span>-O2<span class="w"> </span>-Wpedantic
+gcc<span class="w"> </span>fichier7.c<span class="w"> </span>-c<span class="w"> </span>-o<span class="w"> </span>objet7.o<span class="w"> </span>-Wall<span class="w"> </span>-O2<span class="w"> </span>-Wpedantic
+gcc<span class="w"> </span>fichier8.c<span class="w"> </span>-c<span class="w"> </span>-o<span class="w"> </span>objet8.o<span class="w"> </span>-Wall<span class="w"> </span>-O2<span class="w"> </span>-Wpedantic
+gcc<span class="w"> </span>objet1.o<span class="w"> </span>objet2.o<span class="w"> </span>objet3.o<span class="w"> </span>objet4.o<span class="w"> </span>objet5.o<span class="w"> </span>objet6.o<span class="w"> </span>objet7.o<span class="w"> </span>objet8.o<span class="w"> </span>-o<span class="w"> </span>executable
+</pre></div>
+<p>C'est généralement à partir de ce stade que l'on se met à utiliser Make ;) Pour
+ce faire, il suffit de créer un fichier appelé « Makefile » dans le répertoire
+où se trouvent nos fichiers sources. Un Makefile de base (ici pour un petit
+projet en C) ressemble à ceci :</p>
+<div class="highlight"><pre><span></span><span class="nv">CC</span><span class="o">=</span>gcc<span class="w"> </span>-Wall<span class="w"> </span>-O2
+<span class="nv">SRC</span><span class="o">=</span><span class="k">$(</span>wildcard<span class="w"> </span>*.c<span class="k">)</span>
+<span class="nv">OBJ</span><span class="o">=</span><span class="k">$(</span>SRC:.c<span class="o">=</span>.o<span class="k">)</span>
+<span class="nv">EXE</span><span class="o">=</span>roger.bin
+
+<span class="nf">all</span><span class="o">:</span><span class="w"> </span><span class="k">$(</span><span class="nv">OBJ</span><span class="k">)</span>
+<span class="w">    </span><span class="k">$(</span>CC<span class="k">)</span><span class="w"> </span><span class="k">$(</span>OBJ<span class="k">)</span><span class="w"> </span>-o<span class="w"> </span><span class="k">$(</span>EXE<span class="k">)</span>
+<span class="w">    </span>@echo<span class="w"> </span><span class="s2">&quot;Fini.&quot;</span>
+
+<span class="nf">%.o</span><span class="o">:</span><span class="w"> </span>%.<span class="n">c</span>
+<span class="w">    </span>@echo<span class="w"> </span><span class="s2">&quot;Compiling </span><span class="nv">$@</span><span class="s2">...&quot;</span>
+<span class="w">    </span><span class="k">$(</span>CC<span class="k">)</span><span class="w"> </span><span class="k">$(</span>CFLAGS<span class="k">)</span><span class="w"> </span><span class="k">$(</span>LIBS<span class="k">)</span><span class="w"> </span>$^<span class="w"> </span>-o<span class="w"> </span><span class="nv">$@</span>
+
+<span class="nf">clean</span><span class="o">:</span>
+<span class="w">    </span>rm<span class="w"> </span>-f<span class="w"> </span>*~
+
+<span class="nf">distclean</span><span class="o">:</span><span class="w"> </span><span class="n">clean</span>
+<span class="w">    </span>rm<span class="w"> </span>-f<span class="w"> </span>*.o<span class="w"> </span><span class="k">$(</span>EXE<span class="k">)</span>
+</pre></div>
+<p>Cet exemple rassemble toutes les notions que nous allons aborder ici : en
+partant, il vous permettra de vérifier en un coup d'œil si vous avez compris ce
+qu'il y a à comprendre ;)</p>
+<p>Commençons par les premières lignes, qui définissent des variables : Make
+utilise la même syntaxe que tout bon shell (<code>bash</code>, <code>zsh</code>, ...),
+c'est-à-dire <code>VAR=valeur</code>, où <code>VAR</code> est le nom de variable (généralement en
+majuscules) et où <code>valeur</code> est une chaîne de caractère ; la syntaxe
+<code>$(VAR)</code> permet quant à elle d'évaluer la variable ainsi définie.</p>
+</div>
+<div class="section" id="regles">
+<h2>Règles<a class="headerlink" href="gnu-make.html#regles" title="Permalink to this headline">¶</a></h2>
+<p>Viennent ensuite les <em>règles</em>, qui constituent le cœur du Makefile. Chaque
+règle représente les opérations à exécuter lorsqu'un ensemble de fichiers (les
+« pré-requis » de la règle) ont été mis à jour depuis le dernier <code>make</code>. Une
+règle décrit par exemple comment compiler un fichier ou supprimer les fichiers
+temporaires. La syntaxe d'une règle est la suivante :</p>
+<div class="highlight"><pre><span></span><span class="nf">cible</span><span class="o">:</span><span class="w"> </span><span class="n">pr</span>é-<span class="n">requis</span>
+<span class="w">    </span>instructions
+</pre></div>
+<p>Un point de syntaxe important : les instructions sous une règle sont toutes
+indentées par une tabulation (cette indentation est importante pour Make). Vous
+pouvez utiliser le caractère d'échappement '' en fin de ligne pour continuer
+une instruction trop longue sur la ligne suivante.</p>
+<p>Ainsi, dans le Makefile précédent, la règle « clean » supprime les fichiers
+temporaires (des éditeurs de texte comme <code>vim</code> ou <code>emacs</code>, qui sont
+préfixés par un tilde) du répertoire courant. Pour exécuter une règle donnée,
+il suffit de la passer en argument lors de l'appel à Make, par exemple ici :
+<code>make clean</code>. Lorsqu'aucune règle n'est précisée, la règle par défaut est
+« all » ; tout Makefile (principal) qui se respecte se doit donc de la définir.</p>
+<p>Les pré-requis peuvent être des fichiers ou les cibles d'autres règles qui
+doivent être « construits » avant d'exécuter les instructions de la règle
+actuelle. Lors de l'évaluation d'une règle, Make inspecte ses pré-requis pour
+déterminer si elle a besoin d'être « reconstruite », c'est-à-dire si les
+instructions ont besoin d'être exécutées. Une règle a besoin d'être
+reconstruite si l'un des trois cas suivants se présente :</p>
+<ul class="simple">
+<li>la règle n'a aucun pré-requis,</li>
+<li>l'un des pré-requis est un fichier et a été mis à jour depuis la dernière
+exécution de <code>make</code>,</li>
+<li>l'un des pré-requis est une règle qui a besoin d'être reconstruite.</li>
+</ul>
+<p>Voici un exemple de Makefile reposant sur les règles que nous venons de décrire
+:</p>
+<div class="highlight"><pre><span></span><span class="nv">CC</span><span class="o">=</span>gcc<span class="w"> </span>-Wall<span class="w"> </span>-O2
+<span class="nv">SRC</span><span class="o">=</span>main.c<span class="w"> </span>module1.c<span class="w"> </span>module2.c
+<span class="nv">OBJ</span><span class="o">=</span>main.o<span class="w"> </span>module1.o<span class="w"> </span>module2.o
+<span class="nv">EXE</span><span class="o">=</span>roger.bin
+
+<span class="nf">all</span><span class="o">:</span><span class="w"> </span><span class="k">$(</span><span class="nv">OBJ</span><span class="k">)</span>
+<span class="w">    </span><span class="k">$(</span>CC<span class="k">)</span><span class="w"> </span><span class="k">$(</span>OBJ<span class="k">)</span><span class="w"> </span>-o<span class="w"> </span><span class="k">$(</span>EXE<span class="k">)</span>
+
+<span class="nf">main.o</span><span class="o">:</span><span class="w"> </span><span class="n">main</span>.<span class="n">c</span>
+<span class="w">    </span><span class="k">$(</span>CC<span class="k">)</span><span class="w"> </span>main.c<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>-o<span class="w"> </span>main.o
+<span class="nf">module1.o</span><span class="o">:</span><span class="w"> </span><span class="n">module</span>1.<span class="n">c</span>
+<span class="w">    </span><span class="k">$(</span>CC<span class="k">)</span><span class="w"> </span>module1.c<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>-o<span class="w"> </span>module1.o
+<span class="nf">module2.o</span><span class="o">:</span><span class="w"> </span><span class="n">module</span>2.<span class="n">c</span>
+<span class="w">    </span><span class="k">$(</span>CC<span class="k">)</span><span class="w"> </span>module2.c<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>-o<span class="w"> </span>module2.o
+
+<span class="nf">clean</span><span class="o">:</span>
+<span class="w">    </span>rm<span class="w"> </span>-f<span class="w"> </span>*~
+
+<span class="nf">distclean</span><span class="o">:</span><span class="w"> </span><span class="n">clean</span>
+<span class="w">    </span>rm<span class="w"> </span>-f<span class="w"> </span>*.o<span class="w"> </span><span class="k">$(</span>EXE<span class="k">)</span>
+</pre></div>
+<p>Ce Makefile a un peu bourrin présente déjà l'intérêt que les fichiers objet
+(extension <code>.o</code>) ne seront recompilés que si les fichiers sources
+correspondants ont été modifiés. Nous verrons par la suite comment définir des
+règles génériques qui nous éviteront d'écrire une règle par fichier.</p>
+</div>
+<div class="section" id="variables-et-procedures">
+<h2>Variables et procédures<a class="headerlink" href="gnu-make.html#variables-et-procedures" title="Permalink to this headline">¶</a></h2>
+<p>Nous avons vu que Make permettait de manipuler des variables de même que dans
+un script shell. La syntaxe pour la procédure est également similaire au shell
+: <code>$(cmd param1, param2, ...)</code> (mais notez les virgules entre les
+paramètres) où <code>cmd</code> est une commande <em>interne</em> à Make ; cette syntaxe ne
+permet pas d'appeler des commandes système. Aussi, souvenez-vous que les
+valeurs des variables sont évaluées comme des chaînes de caractères : dans les
+trois définitions suivantes,</p>
+<div class="highlight"><pre><span></span><span class="nv">SRC</span><span class="o">=</span>*.c
+<span class="nv">LS1</span><span class="o">=</span><span class="sb">`</span>ls<span class="sb">`</span>
+<span class="nv">LS2</span><span class="o">=</span><span class="k">$(</span>ls<span class="k">)</span>
+</pre></div>
+<p>les valeurs respectives de ces trois variables seront &quot;*.c&quot;, &quot;<cite>ls</cite>&quot; et &quot;&quot; (la
+chaîne vide, à moins que vous n'ayez défini une variable nommée <code>ls</code>
+auparavant). Ce comportement peut porter à confusion dans le cas de <code>SRC</code>
+: une règle comme</p>
+<div class="highlight"><pre><span></span><span class="nf">all</span><span class="o">:</span>
+<span class="w">    </span>gcc<span class="w"> </span><span class="k">$(</span>SRC<span class="k">)</span><span class="w"> </span>-o<span class="w"> </span>kron.bin
+</pre></div>
+<p>aura bien le comportement attendu, car Make enverra au terminal l'instruction
+<code>gcc *.c -o kron.bin</code> (le terminal remplacera ensuite &quot;*.c&quot; par la liste des
+fichiers C du répertoire). Toutefois, pour Make <code>SRC</code> n'est que la chaîne de
+caractères &quot;*.c&quot; : pour lui indiquer d'<em>évaluer</em> cette chaîne, il faut
+utiliser la commande <code>wildcard</code> :</p>
+<div class="highlight"><pre><span></span><span class="nv">SRC</span><span class="o">=</span><span class="k">$(</span>wildcard<span class="w"> </span>*.c<span class="k">)</span>
+
+<span class="nf">all</span><span class="o">:</span>
+<span class="w">    </span>gcc<span class="w"> </span><span class="k">$(</span>SRC<span class="k">)</span><span class="w"> </span>-o<span class="w"> </span>kron.bin
+</pre></div>
+<p>Dans ce cas, si le répertoire courant contient deux fichiers C <code>main.c</code>
+et <code>annexe.c</code>, Make enverra au terminal l'instruction <code>gcc main.c
+annexe.c -o kron.bin</code>. Faire évaluer la liste des fichiers par Make permet de
+l'utiliser ensuite comme pré-requis, par exemple :</p>
+<div class="highlight"><pre><span></span><span class="nv">SRC</span><span class="o">=</span><span class="k">$(</span>wildcard<span class="w"> </span>*.c<span class="k">)</span>
+
+<span class="nf">all</span><span class="o">:</span><span class="w"> </span><span class="k">$(</span><span class="nv">SRC</span><span class="k">)</span>
+<span class="w">    </span>gcc<span class="w"> </span><span class="k">$(</span>SRC<span class="k">)</span><span class="w"> </span>-o<span class="w"> </span>kron.bin
+</pre></div>
+<p>Ici, un appel à <code>make</code> ne recompilera <code>kron.bin</code> que si l'un des
+fichiers C a été modifié.</p>
+<p>Un autre commande utile est <code>patsubst</code> : <code>$(patsubst motif, rempl,
+str)</code> remplace les occurrences de <code>motif</code> par <code>rempl</code> dans la
+chaîne de caractères <code>str</code>, où <code>motif</code> et <code>rempl</code> sont des
+expressions rationnelles. En bref, la syntaxe des expressions rationnelles dans
+Make est la même que dans un shell (comme <code>bash</code> ou <code>zsh</code>), si ce
+n'est que le caractère wildcard * est remplacé par % pour éviter les
+confusions. Ainsi,</p>
+<div class="highlight"><pre><span></span><span class="nv">SRC</span><span class="o">=</span><span class="k">$(</span>wildcard<span class="w"> </span>*.c<span class="k">)</span>
+<span class="nv">OBJ</span><span class="o">=</span><span class="k">$(</span>patsubst<span class="w"> </span>%.c,<span class="w"> </span>%.o,<span class="w"> </span><span class="k">$(</span>SRC<span class="k">))</span>
+</pre></div>
+<p>a le comportement attendu. Cela dit, comme vous avez pu le voir dans le
+Makefile d'introduction ci-avant, il existe une syntaxe simplifiée pour
+remplacer seulement les extensions de fichiers :</p>
+<div class="highlight"><pre><span></span><span class="nv">SRC</span><span class="o">=</span><span class="k">$(</span>wildcard<span class="w"> </span>*.c<span class="k">)</span>
+<span class="nv">OBJ</span><span class="o">=</span><span class="k">$(</span>SRC:.c<span class="o">=</span>.o<span class="k">)</span>
+</pre></div>
+<p><em>Note en passant</em> : si vous ne voulez pas que les instructions du terminal
+(comme <code>rm</code>, <code>echo</code>, ...) soient recopiées sur la sortie standard,
+vous pouvez précéder les précéder par un arobase '&#64;' pour rendre la commande
+silencieuse.</p>
+</div>
+<div class="section" id="regles-implicites">
+<h2>Règles implicites<a class="headerlink" href="gnu-make.html#regles-implicites" title="Permalink to this headline">¶</a></h2>
+<p>Il existe deux types de règles dans GNU Make : les règles « explicites » et
+« implicites ». Jusqu'à présent nous n'avons vu que des règles explicites : les
+cible et pré-requis sont des chaînes de caractères (écrite directement ou
+issues de l'évaluation de variables) et Make n'a pas à se creuser la tête : il
+lui suffit de les évaluer. Avec les règles implicites au contraire, les ennuis
+commencent (pour lui) et nous apportent le niveau de généralité dans nous avons
+besoins pour compiler tous nos fichiers sources (tous ? non ! les irréductibles
+problèmes de templates en C++ entraîneront l'émergence d'outils encore plus
+compliqués comme CMake, mais c'est une autre histoire…)</p>
+<p>Une règle implicite permet de donner à Make des instructions du type « si tu as
+besoin d'un pré-requis de la forme X, tu peux utiliser cette règle pour le
+construire à partir de pré-requis de la forme Y ». Plus concrètement, toujours
+en C : « si tu as besoin de construire un fichier <code>xxx.o</code>, voici comment
+le construire à partir du fichier <code>xxx.c</code> ». En pratique, cela donne :</p>
+<div class="highlight"><pre><span></span><span class="nf">%.o</span><span class="o">:</span><span class="w"> </span>%.<span class="n">c</span>
+<span class="w">    </span><span class="k">$(</span>CC<span class="k">)</span><span class="w"> </span>$&lt;<span class="w"> </span>-o<span class="w"> </span><span class="nv">$@</span>
+</pre></div>
+<p>On retrouve le pourcent <code>%</code> utilisé comme wildcard dans les expressions
+rationnelles de Make : il représente ici le motif commun aux noms de fichier de
+la cible (<code>%.o</code>) et du pré-requis (<code>%.c</code>). Ce que nous avons vu
+précédemment pour les règles explicites s'applique aussi aux règles implicites
+; ainsi,</p>
+<div class="highlight"><pre><span></span><span class="nf">aa_%.o</span><span class="o">:</span><span class="w"> </span><span class="n">bb_</span>%.<span class="n">c</span> <span class="n">bb_</span>%.<span class="n">h</span> <span class="n">global</span>.<span class="n">h</span>
+<span class="w">    </span><span class="k">$(</span>CC<span class="k">)</span><span class="w"> </span>$&lt;<span class="w"> </span>-o<span class="w"> </span><span class="nv">$@</span>
+</pre></div>
+<p>permet de construire des fichiers objets avec le préfixe « aa_ » à partir des
+fichiers C et H qui partagent le même motif, mais préfixé par « bb_ » ; aussi,
+si le fichier <code>global.h</code> est modifié, il faudra reconstruire tous les
+objets produits par cette règle.</p>
+<p>Vous aurez remarqué les deux variables <code>$&lt;</code> et <code>$&#64;</code> dont je n'ai
+pas encore parlé : lorsqu'une règle implicite est exécutée, ses différents
+paramètres (la valeur du motif <code>%</code>, la liste des pré-requis, etc.) sont
+stockés dans des variables aux noms barbares, que voici :</p>
+<ul class="simple">
+<li><code>$&#64;</code> : cible de la règle</li>
+<li><code>$&lt;</code> : premier pré-requis</li>
+<li><code>$?</code> : noms de tous les pré-requis plus récents que la cible</li>
+<li><code>$^</code> : noms de tous les pré-requis</li>
+<li><code>$*</code> : nom du fichier sans suffixe (pour les règles génériques)</li>
+</ul>
+<p>Encore une fois, lorsqu'il s'agit juste de remplacer une extension de fichier,
+Make propose une syntaxe simplifiée. Par l'exemple : les deux règles suivantes
+sont équivalentes :</p>
+<div class="highlight"><pre><span></span><span class="nf">.c.o</span><span class="o">:</span>
+<span class="w">    </span><span class="k">$(</span>CC<span class="k">)</span><span class="w"> </span>$&lt;<span class="w"> </span>-o<span class="w"> </span><span class="nv">$@</span>
+
+<span class="nf">%.o</span><span class="o">:</span><span class="w"> </span>%.<span class="n">c</span>
+<span class="w">    </span><span class="k">$(</span>CC<span class="k">)</span><span class="w"> </span>-o<span class="w"> </span><span class="nv">$@</span><span class="w"> </span>$&lt;
+</pre></div>
+</div>
+<div class="section" id="appels-de-sous-makefiles">
+<h2>Appels de sous-Makefiles<a class="headerlink" href="gnu-make.html#appels-de-sous-makefiles" title="Permalink to this headline">¶</a></h2>
+<p>Lorsque la taille de votre projet vous pousse à l'organiser en répertoires et
+sous-répertoires, vous aurez sans doute envie de définir des Makefiles
+spécifiques à chacun. Ce cas de figure dépasse largement le cadre de ce billet,
+et vous aurez alors sans doute intérêt à utiliser des outils comme <a class="reference external" href="http://www.cmake.org/">CMake</a> pour
+générer vos Makefiles automatiquement. Nous allons nous contenter de voir
+comment appeler des sous-Makefiles depuis un Makefile parent.</p>
+<p>Pour ce faire, on passe par le shell en utilisant des parentèses pour isoler le
+contexte, c'est-à-dire que tout ce qui se passe entre les parenthèses
+(changement de répertoire, modification des variables d'environnement, etc.)
+reste entre les parenthèses ;) Au passage, une autre variable utile :
+<code>MAKE</code> contient l'appel actuel à Make (par exemple <code>make clean</code>).</p>
+<div class="highlight"><pre><span></span><span class="nv">CC</span><span class="o">=</span>gcc<span class="w"> </span>-Wall
+<span class="nv">SRC</span><span class="o">=</span><span class="k">$(</span>wildcard<span class="w"> </span>*.c<span class="k">)</span>
+<span class="nv">OBJ</span><span class="o">=</span><span class="k">$(</span>SRC:.c<span class="o">=</span>.o<span class="k">)</span>
+
+<span class="nf">all</span><span class="o">:</span><span class="w"> </span><span class="n">modules</span> <span class="k">$(</span><span class="nv">OBJ</span><span class="k">)</span>
+<span class="w">    </span><span class="k">$(</span>CC<span class="k">)</span><span class="w"> </span><span class="k">$(</span>OBJ<span class="k">)</span><span class="w"> </span>module1/final.o<span class="w"> </span>module2/final.o
+
+<span class="nf">.c.o</span><span class="o">:</span>
+<span class="w">    </span><span class="k">$(</span>CC<span class="k">)</span><span class="w"> </span>-o<span class="w"> </span><span class="nv">$@</span><span class="w"> </span>$&lt;
+
+<span class="nf">modules</span><span class="o">:</span>
+<span class="w">    </span><span class="o">(</span><span class="nb">cd</span><span class="w"> </span>module1<span class="p">;</span><span class="w"> </span><span class="k">$(</span>MAKE<span class="k">)</span><span class="o">)</span>
+<span class="w">    </span><span class="o">(</span><span class="nb">cd</span><span class="w"> </span>module2<span class="p">;</span><span class="w"> </span><span class="k">$(</span>MAKE<span class="k">)</span><span class="o">)</span>
+</pre></div>
+</div>
+<div class="section" id="dupont-et-dupond-non-vpath-et-vpath">
+<h2>Dupont et Dupond ? Non, VPATH et vpath<a class="headerlink" href="gnu-make.html#dupont-et-dupond-non-vpath-et-vpath" title="Permalink to this headline">¶</a></h2>
+<p>Une dernière curiosité : VPATH et vpath permettent d'indiquer à Make d'autres
+répertoires où aller chercher les fichiers dont il a besoin (comme pré-requis
+de règles implicites). VPATH est une variable globale utilisée dans n'importe
+quelle situation, tandis que vpath permet de préciser quels types de fichiers
+aller chercher dans quels répertoires, suivant la syntaxe <code>vpath motif
+répertoires</code> (les répertoires sont séparés par <code>:</code> lorsqu'il y en a
+plusieurs), par exemple :</p>
+<div class="highlight"><pre><span></span><span class="cp">vpath %.sh /usr/bin:/home/kron/bin:./scripts</span>
+</pre></div>
+<p>Attention : VPATH ne modifie pas le répertoire courant, et n'a par exemple
+aucun effet sur le résultat de <code>$(wildcard *.c)</code>. Voici un dernier
+exemple : supposons que l'on dispose d'un script Python <code>rst2html.py</code>
+dans le répertoire courant, qui lit sur l'entrée standard un fichier au format
+RST (comme le billet que je suis actuellement en train d'écrire) et écrit en
+sortie une traduction au format HTML. Si tous nos fichiers <code>.rst</code> sont
+stockés dans un sous-répertoire <code>billets/</code>, on peut utiliser
+<code>VPATH</code> comme suit :</p>
+<div class="highlight"><pre><span></span><span class="nv">VPATH</span><span class="o">=</span>billets/
+
+<span class="nf">all</span><span class="o">:</span><span class="w"> </span><span class="n">make</span>.<span class="n">html</span>
+
+<span class="nf">%.html</span><span class="o">:</span><span class="w"> </span>%.<span class="n">rst</span>
+<span class="w">    </span>cat<span class="w"> </span>$&lt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>python<span class="w"> </span>rst2html.py<span class="w"> </span>&gt;<span class="w"> </span><span class="nv">$@</span>
+</pre></div>
+<div class="highlight"><pre><span></span>$<span class="w"> </span>find
+.
+./Makefile
+./billets
+./billets/make.rst
+$<span class="w"> </span>make
+cat<span class="w"> </span>billets/make.rst<span class="w"> </span><span class="p">|</span><span class="w"> </span>python<span class="w"> </span>rst2html.py<span class="w"> </span>&gt;<span class="w"> </span>make.html
+</pre></div>
+</div>
+<div class="section" id="conclusion">
+<h2>Conclusion<a class="headerlink" href="gnu-make.html#conclusion" title="Permalink to this headline">¶</a></h2>
+<p>Ce billet touche à sa fin. Peut-être vous aura-t-il permis de mieux comprendre
+cet outil que certains utilisent tous les jours ; ou peut-être que, comme moi
+depuis des années, vous vous en foutez pas mal et vous vous êtes contentés de
+recopier le Makefile générique que j'ai donné en introduction ;)</p>
+<p>Si vous avez vraiment aimé cette expérience et que vous ne demandez qu'à
+l'approfondir, je vous recommande cette <a class="reference external" href="http://graal.ens-lyon.fr/~fvivien/Enseignement/PPP-2001-2002/TP03-GNUmake/index.html">page de manuel en français</a>, en plus
+de la <a class="reference external" href="http://www.gnu.org/software/make/manual/">documentation officielle</a>.</p>
+</div>
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="gnu-make.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="gnu-make.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="gnu-make.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("gnu-make"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="gnu-make.html">Page</a> published on <time class="dt-published" datetime="2009-08-22T00:00:00+0200">2009-08-22</time>, last edited on 2013-02-04.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Configuring Awesome with Gnome on Ubuntu</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="The default installation of Awesome for Ubuntu 16.04 (via sudo apt-get install awesome) will create a new X session from which you can run the window manager as a stand-alone. You can then select the entry "awesome" rather than "Unity" at login time. This is fine to get started …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Blog">
+        <meta name="keywords" content="Linux">
+
+        <meta property="og:title" content="Configuring Awesome with Gnome on Ubuntu">
+        <meta property="og:description" content="The default installation of Awesome for Ubuntu 16.04 (via sudo apt-get install awesome) will create a new X session from which you can run the window manager as a stand-alone. You can then select the entry "awesome" rather than "Unity" at login time. This is fine to get started …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/blog/awesome-with-gnome-on-ubuntu.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/blog.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/blog.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <h1>Configuring Awesome with Gnome on Ubuntu</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p>The default installation of Awesome for Ubuntu 16.04 (via <code>sudo apt-get
+install awesome</code>) will create a new X session from which you can run the window
+manager as a stand-alone. You can then select the entry &quot;awesome&quot; rather than
+&quot;Unity&quot; at login time. This is fine to get started, but you will find that a
+number of features coming up with GNOME are then missing:</p>
+<ul class="simple">
+<li>GTK+ theme and configuration (font sizes, etc.) are not applied. This is
+visible when you run applications like Firefox or Thunderbird.</li>
+<li>Without the GNOME Keyring, you will have to either type your password every
+time or run your SSH/GPG agents separately in each terminal.</li>
+<li>Awesome's wallpaper overrides the GNOME/Unity one, with the latter only
+showing up when you run e.g. <code>nautilus</code>.</li>
+</ul>
+<p>You can avoid this by loading both Awesome and a GNOME Session (without GNOME's
+window manager and panels) in parallel. Instructions can be found on the page
+<a class="reference external" href="https://awesomewm.org/wiki/Quickly_Setting_up_Awesome_with_Gnome#Gnome_3.9_.2F_Ubuntu_13.10">Quickly Setting up Awesome with Gnome</a>
+of the official Awesome wiki, however it is a bit crowded now, so let me
+summarize below the steps that work for Ubuntu 14.04 and 16.04.</p>
+<div class="section" id="configuration-files-for-awesome">
+<h2>Configuration files for Awesome<a class="headerlink" href="awesome-with-gnome-on-ubuntu.html#configuration-files-for-awesome" title="Permalink to this headline">¶</a></h2>
+<p>You will need to create three system-wide files. First,
+<code>/usr/share/xsessions/awesome-gnome.desktop</code>:</p>
+<pre class="code literal-block">
+[Desktop Entry]
+Name=Awesome GNOME
+Comment=Dynamic window manager
+Exec=gnome-session --session=awesome
+TryExec=awesome
+Type=Application
+X-LightDM-DesktopName=Awesome GNOME
+X-Ubuntu-Gettext-Domain=gnome-session-3.0
+</pre>
+<p>Second, <code>/usr/share/gnome-session/sessions/awesome.session</code>:</p>
+<pre class="code literal-block">
+[GNOME Session]
+Name=Awesome session
+RequiredComponents=awesome;gnome-settings-daemon;
+DesktopName=Awesome
+</pre>
+<p>Finally, <code>/usr/share/applications/awesome.desktop</code>:</p>
+<pre class="code literal-block">
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Awesome
+Comment=The awesome launcher!
+TryExec=awesome
+Exec=awesome
+</pre>
+<p>The second file describes the components that GNOME Session should load to
+start up the session (we told it the name of the file via the option
+<code>--session=awesome</code>). Note that <code>gnome-settings-daemon</code> is not
+installed by default on Ubuntu, so you will also have to run <code>sudo
+apt-get install gnome-settings-daemon</code>.</p>
+</div>
+<div class="section" id="gnome-session-configuration">
+<h2>GNOME session configuration<a class="headerlink" href="awesome-with-gnome-on-ubuntu.html#gnome-session-configuration" title="Permalink to this headline">¶</a></h2>
+<p>At this point, GNOME Session will be started along with Awesome, but it will
+not load all of its components at startup. These components are described by
+the files <code>/etc/xdg/autostart/*.desktop</code>, but some of them contain the
+<code>OnlyShowIn</code> parameter:</p>
+<pre class="code literal-block">
+OnlyShowIn=GNOME;Unity;
+</pre>
+<p>When this parameter is set, the behavior of GNOME Session is to load the
+component only for GNOME or Unity. As we will be running Awesome, we need to
+update it to:</p>
+<pre class="code literal-block">
+OnlyShowIn=GNOME;Unity;Awesome;
+</pre>
+<p>Go to <code>/etc/xdg/autostart/</code>, open the file <code>gnome-settings-daemon.desktop</code>
+and apply this modification. Then, open the <code>.desktop</code> files for the other
+services that you which to run at startup and apply the same modification. In
+my case, I ended up editting:</p>
+<ul class="simple">
+<li><code>gnome-keyring-*.desktop</code> for the session-wide password keyring</li>
+<li><code>gnome-screensaver.desktop</code> for the screensaver</li>
+<li><code>gnome-settings-daemon.desktop</code> (this one needs to be edited)</li>
+<li><code>nautilus-autostart.desktop</code> to load the GNOME wallpaper at startup</li>
+</ul>
+<p>Finally, you will notice that the session does not close when you quit Awesome:
+GNOME Session keeps running, even if there is no window manager left. To quit
+it properly, one needs to run <code>gnome-session-quit</code>. The awesome wiki
+proposes a <a class="reference external" href="https://awesomewm.org/wiki/Quickly_Setting_up_Awesome_with_Gnome#Problems">hook of the quit function</a>
+to remediate this. First, go to your <code>rc.lua</code> configuration file. It
+should be located in <code>~/.config/awesome/rc.lua</code>. If you don't have it
+yet, copy it from the default configuration by:</p>
+<pre class="code bash literal-block">
+mkdir<span class="w"> </span>-p<span class="w"> </span>~/.config/awesome<span class="w">
+</span>cp<span class="w"> </span>/etc/xdg/awesome/rc.lua<span class="w"> </span>~/.config/awesome/
+</pre>
+<p>Then, add the following at the <strong>beginning</strong> of the file:</p>
+<pre class="code literal-block">
+-- Override awesome.quit when we're using GNOME
+_awesome_quit = awesome.quit
+awesome.quit = function()
+    if os.getenv(&quot;DESKTOP_SESSION&quot;) == &quot;awesome-gnome&quot; then
+       os.execute(&quot;/usr/bin/gnome-session-quit&quot;) -- for Ubuntu 14.04
+       os.execute(&quot;pkill -9 gnome-session&quot;) -- I use this on Ubuntu 16.04
+    else
+    _awesome_quit()
+    end
+end
+</pre>
+<p>And <em>voilà</em>, you should now have Awesome and GNOME Session living in <em>bonne
+entente</em> ;-)</p>
+</div>
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="awesome-with-gnome-on-ubuntu.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="awesome-with-gnome-on-ubuntu.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="awesome-with-gnome-on-ubuntu.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("awesome-with-gnome-on-ubuntu"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="awesome-with-gnome-on-ubuntu.html">Page</a> published on <time class="dt-published" datetime="2016-04-01T00:00:00+0200">2016-04-01</time>.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

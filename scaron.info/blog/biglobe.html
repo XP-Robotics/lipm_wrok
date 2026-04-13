@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Setting up a BIGLOBE Connection</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="Disclaimer: this technical note is probably outdated. It was written in 2013 when I faced this issue and has not been maintained since. The instructions are provided as-is, don't expect any support here. Good luck! I've just finished setting up my fiber optics connection at home, and with all the …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Blog">
+        <meta name="keywords" content="Japanese">
+
+        <meta property="og:title" content="Setting up a BIGLOBE Connection">
+        <meta property="og:description" content="Disclaimer: this technical note is probably outdated. It was written in 2013 when I faced this issue and has not been maintained since. The instructions are provided as-is, don't expect any support here. Good luck! I've just finished setting up my fiber optics connection at home, and with all the …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/blog/biglobe.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/blog.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/blog.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <h1>Setting up a BIGLOBE Connection</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p><strong>Disclaimer:</strong> this technical note is probably outdated. It was written in
+2013 when I faced this issue and has not been maintained since. The
+instructions are provided as-is, don't expect any support here. Good luck!</p>
+<p>I've just finished setting up my fiber optics connection at home, and with all
+the official documents in Japanese, it wasn't straightforward ;) My Internet
+Service Provider (ISP) is BIGLOBE, and the fiber optics plan is FLETS Hikari
+Next (フレッツ光ネクスト) contracted with NTT East Corporation (NTT東日本), the
+national telephone company. Here are setup instructions for Windows and Linux
+based on my experience.</p>
+<div class="section" id="connection-info">
+<h2>Connection info<a class="headerlink" href="biglobe.html#connection-info" title="Permalink to this headline">¶</a></h2>
+<p>You need only two pieces of information to get the connection working:</p>
+<ol class="arabic simple">
+<li>your Connection User ID (お申し込みコースでの入力方法)</li>
+<li>your Password (接続パスワード)</li>
+</ol>
+<p>Both are in the document BIGLOBE会員証会員証 that you should have received from
+BIGLOBE. (The Connection User ID should be your User ID (ユーザID) followed by
+&quot;&#64;biglobe.ne.jp&quot;.)</p>
+</div>
+<div class="section" id="on-windows">
+<h2>On Windows<a class="headerlink" href="biglobe.html#on-windows" title="Permalink to this headline">¶</a></h2>
+<p>Do not bother trying to install the software that is on the CD provided by NTT,
+it will only work on Japanese systems. Just plug the Ethernet cable to your
+computer and follow the instructions from <a class="reference external" href="http://windows.microsoft.com/en-in/windows-vista/create-a-pppoe-connection-to-the-internet">Create a PPPoE connection to the
+Internet</a>
+to configure the connection. Your username and password are the Connection User
+ID and Password from above.</p>
+</div>
+<div class="section" id="on-linux">
+<h2>On Linux<a class="headerlink" href="biglobe.html#on-linux" title="Permalink to this headline">¶</a></h2>
+<p>Assuming you use the NetworkManager applet:</p>
+<ul class="simple">
+<li>right-click on the applet icon</li>
+<li>Edit Connections</li>
+<li>Add</li>
+<li>Choose a Connection Type: DSL</li>
+<li>Username: your Connection User ID (User ID followed by &quot;&#64;biglobe.ne.jp&quot;)</li>
+<li>Service: BIGLOBE</li>
+<li>Password: from your BIGLOBE会員証会員証</li>
+</ul>
+<p>In tab &quot;General&quot;, you may want to check &quot;Automatically connect to this network
+when it is available&quot;.</p>
+</div>
+<div class="section" id="partial-connection-issue">
+<h2>Partial connection issue<a class="headerlink" href="biglobe.html#partial-connection-issue" title="Permalink to this headline">¶</a></h2>
+<p>On a typical router, you can go to the WAN (Wide-Area Network) section and
+follow the Linux instructions above (connection type will be &quot;PPPoE&quot;). However,
+when I did this a weird problem occurred: &quot;most&quot; of my Internet connections
+would work fine, but some would fail systematically.  For instance, I could use
+DuckDuckGo or watch YouTube, yet my web browser would keep hanging at
+Amazon.co.jp, nor could I connect to the PSN. In other words, I had a <em>partial
+Internet connection</em>, and the difference between what would go through or not
+was far from obvious.</p>
+<p>My WiFi router was a Netgear LAN-WH300N/RE. Netgear routers are known to give
+such problems when the MTU (Maximum Transmission Unit) parameter is not set
+properly. The standard MTU for PPPoE connections is 1492, but <em>the MTU used by
+Hikari NEXT is 1454</em>! My router should have detected that, but it did not.
+Worse, the LAN-WH300N/RE does not allow you to set the MTU directly. My
+alternative was thus to flash its firmware with <a class="reference external" href="http://www.dd-wrt.com/">dd-wrt</a> or use another router. I had another router at hand,
+so I chose the latter, set the MTU to 1454, and that solved the
+issue.</p>
+</div>
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="biglobe.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+        <p>
+        You can subscribe to this <i class="rss-icon"></i>&nbsp;<a href="https://scaron.info/feeds/comment.biglobe.atom.xml">Discussion's atom feed</a> to stay tuned.
+        </p>
+<ul>
+            <li class="with-border-top" id="comment-mss-clamping">
+                <div class="comment-left">
+                    <img src="../images/identicon/7b705016f8bdac036c34b573d7c425c8.png"
+                         alt="Avatar"
+                         height="72"
+                         width="72">
+                </div>
+                <div class="comment-body">
+                    <div class="pull-right">
+                        <a class="btn" role="button" href="biglobe.html#comment-mss-clamping" rel="bookmark" title="Permalink to this comment">
+                            <i class="permalink-icon"></i>
+                            Permalink
+                        </a>
+                        <button onclick="CommentSystem.setReply('mss-clamping', 'Gonzague');">
+                            <i class="reply-icon"></i>
+                            Reply
+                        </button>
+                    </div>
+                    <h4 class="author">
+                            <a href="http://www.gregg.ac.jp">Gonzague</a>
+                    </h4>
+                    <p class="posted-on">
+                        Posted on
+                        <time datetime="2022-11-24T12:48:00+09:00" title="2022-11-24T12:48:00+09:00">Thu 24 November 2022</time>
+                    </p>
+                    <div class="comment-content" >
+                        <p>To add to this post that is very informative (Merci!!!), for those who do not have MTU as an option, some more professional routers, such as UDM or UDM-Pro (Ubiquiti Dream Machine) will not accept MTU, but instead will only offer you MSS Clamping as an alternative. And the correct value will not be 1454 but 1414 in this case!</p>
+<p>Rules of thumbs MSS = MTU - 40. So With an MTU of 1454 your MSS is 1414 ;-)... It turned me mad for a while to figure this out!</p>
+                    </div>
+                        <ul>
+                                        <li class="with-border-top" id="comment-reply-mss-clamping">
+                <div class="comment-left">
+                    <img src="../images/identicon/e32ff903a0e87efe5d3854e53f016a72.png"
+                         alt="Avatar"
+                         height="72"
+                         width="72">
+                </div>
+                <div class="comment-body">
+                    <div class="pull-right">
+                        <a class="btn" role="button" href="biglobe.html#comment-reply-mss-clamping" rel="bookmark" title="Permalink to this comment">
+                            <i class="permalink-icon"></i>
+                            Permalink
+                        </a>
+                        <button onclick="CommentSystem.setReply('reply-mss-clamping', 'St%C3%A9phane');">
+                            <i class="reply-icon"></i>
+                            Reply
+                        </button>
+                    </div>
+                    <h4 class="author">
+                            Stéphane
+                    </h4>
+                    <p class="posted-on">
+                        Posted on
+                        <time datetime="2022-12-20T19:55:00-08:00" title="2022-12-20T19:55:00-08:00">Tue 20 December 2022</time>
+                    </p>
+                    <div class="comment-content" >
+                        <p>Thanks for sharing your findings with future travelers 😀</p>
+                    </div>
+                </div>
+            </li>
+
+                        </ul>
+                </div>
+            </li>
+            <li class="with-border-top" id="comment-availability">
+                <div class="comment-left">
+                    <img src="../images/identicon/4a29aa2e60fa22b5c83e07a5cefadcd7.png"
+                         alt="Avatar"
+                         height="72"
+                         width="72">
+                </div>
+                <div class="comment-body">
+                    <div class="pull-right">
+                        <a class="btn" role="button" href="biglobe.html#comment-availability" rel="bookmark" title="Permalink to this comment">
+                            <i class="permalink-icon"></i>
+                            Permalink
+                        </a>
+                        <button onclick="CommentSystem.setReply('availability', 'Mayer');">
+                            <i class="reply-icon"></i>
+                            Reply
+                        </button>
+                    </div>
+                    <h4 class="author">
+                            Mayer
+                    </h4>
+                    <p class="posted-on">
+                        Posted on
+                        <time datetime="2023-01-05T19:55:00-08:00" title="2023-01-05T19:55:00-08:00">Thu 05 January 2023</time>
+                    </p>
+                    <div class="comment-content" >
+                        <p>Is the Biglobe service available to foreign nationals who do not have Japan residency?</p>
+                    </div>
+                        <ul>
+                                        <li class="with-border-top" id="comment-reply-availability">
+                <div class="comment-left">
+                    <img src="../images/identicon/e32ff903a0e87efe5d3854e53f016a72.png"
+                         alt="Avatar"
+                         height="72"
+                         width="72">
+                </div>
+                <div class="comment-body">
+                    <div class="pull-right">
+                        <a class="btn" role="button" href="biglobe.html#comment-reply-availability" rel="bookmark" title="Permalink to this comment">
+                            <i class="permalink-icon"></i>
+                            Permalink
+                        </a>
+                        <button onclick="CommentSystem.setReply('reply-availability', 'St%C3%A9phane');">
+                            <i class="reply-icon"></i>
+                            Reply
+                        </button>
+                    </div>
+                    <h4 class="author">
+                            Stéphane
+                    </h4>
+                    <p class="posted-on">
+                        Posted on
+                        <time datetime="2023-01-10T08:55:00-08:00" title="2023-01-10T08:55:00-08:00">Tue 10 January 2023</time>
+                    </p>
+                    <div class="comment-content" >
+                        <p>I have no clue 😅 Sorry it was missing but I added a disclaimer at the top of this post: this is just a technical note I wrote in 2013 when I faced this configuration issue. For information or support you should go to the ISP's website directly.</p>
+                    </div>
+                </div>
+            </li>
+
+                        </ul>
+                </div>
+            </li>
+        </ul>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="biglobe.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="biglobe.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("biglobe"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="biglobe.html">Page</a> published on <time class="dt-published" datetime="2013-08-01T00:00:00+0200">2013-08-01</time>, last edited on 2014-10-12.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

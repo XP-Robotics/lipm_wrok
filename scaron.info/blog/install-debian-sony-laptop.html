@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Installing Debian on a Sony laptop</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="As often happens with season changes, I found myself installing a new system on my laptop. This time, I wanted to switch to Debian, as I was pretty impressed by the Debian Social Contract and Free Software Guidelines. With the shift in developed societies (North American and European) toward automated …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Blog">
+        <meta name="keywords" content="Linux">
+
+        <meta property="og:title" content="Installing Debian on a Sony laptop">
+        <meta property="og:description" content="As often happens with season changes, I found myself installing a new system on my laptop. This time, I wanted to switch to Debian, as I was pretty impressed by the Debian Social Contract and Free Software Guidelines. With the shift in developed societies (North American and European) toward automated …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/blog/install-debian-sony-laptop.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/blog.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/blog.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <h1>Installing Debian on a Sony laptop</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p>As often happens with season changes, I found myself installing a new system on
+my laptop. This time, I wanted to switch to <a class="reference external" href="http://www.debian.org">Debian</a>,
+as I was pretty impressed by the <a class="reference external" href="http://www.debian.org/social_contract">Debian Social Contract</a> and Free Software Guidelines. With
+the shift in developed societies (North American and European) toward automated
+surveillance systems, I am now fully convinced that we need to push for free
+software. But this is another story ;)</p>
+<p>Back to this Autumn install, my laptop is a Sony Vaio Z (VPC-Z13M9E) and I went
+on to install Debian 7.1.0 (Wheezy). I downloaded the
+<code>debian-7.1.0-amd64-lxde-CD-1.iso</code> image from the official website as
+I wanted to start from a lightweight system. However, I ended up installing
+<a class="reference external" href="http://www.xfce.org/">Xfce</a> to get various features working, so I would
+recommend starting directly from a bigger image like
+<code>debian-7.1.0-amd64-xfce-CD-1.iso</code>.</p>
+<div class="section" id="power-consumption">
+<h2>Power consumption<a class="headerlink" href="install-debian-sony-laptop.html#power-consumption" title="Permalink to this headline">¶</a></h2>
+<p>My first reflex, after installing, was to check for power consumption with
+<code>powertop</code>:</p>
+<div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>powertop
+$<span class="w"> </span>sudo<span class="w"> </span>powertop
+</pre></div>
+<p>Not surprisingly, it displayed a roaring 20+ W consumption. I know from
+experience that it comes from the dual graphics hardware of the machine: both
+the Intel and Nvidia cards are powered up, the latter accounting for at least
+5W even when it's not working. The solution to this problem is to pass the
+<code>acpi_osi=</code> option (note: nothing after the '=' sign) to the kernel at
+bootup: edit <code>/etc/default/grub</code>, and add this argument to the
+<code>GRUB_CMDLINE_LINUX_DEFAULT</code> variable.  After edditing, mine is as follows
+(more on the other arguments below):</p>
+<div class="highlight"><pre><span></span><span class="nv">GRUB_CMDLINE_LINUX_DEFAULT</span><span class="o">=</span><span class="s2">&quot;quiet acpi_osi= acpi_backlight=vendor video.brightness_switch_enabled=1&quot;</span>
+</pre></div>
+<p>Do your editting, then update grub and restart your system:</p>
+<div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>vim<span class="w"> </span>/etc/default/grub
+$<span class="w"> </span>sudo<span class="w"> </span>update-grub
+</pre></div>
+<p>When the &quot;STAMINA&quot; LED goes green, you are good to go. If none of the LEDs
+(&quot;STAMINA&quot;, &quot;SPEED&quot; or &quot;AUTO&quot;) power up, it means both cards are activated and
+you need to reboot your system again.</p>
+</div>
+<div class="section" id="more-power-savings">
+<h2>More power savings<a class="headerlink" href="install-debian-sony-laptop.html#more-power-savings" title="Permalink to this headline">¶</a></h2>
+<p>My first reflex was to install the <a class="reference external" href="http://packages.debian.org/wheezy/laptop-mode-tools">laptop-mode-tools</a>, as well as Powertop to
+get the battery discharge rate. Powertop will give you some advices in the
+&quot;Tunables&quot; section, which you may want to add to <code>/etc/rc.local</code> so they are
+permanently applied. In my case, I added a few lines to disable Bluetooth, WWAN
+and Ethernet Wake-on-LAN, as well as additional sysctls from <a class="reference external" href="http://www.thinkwiki.org/wiki/How_to_reduce_power_consumption">this page</a>. Here is my
+<code>/etc/rc.local</code>:</p>
+<div class="highlight"><pre><span></span><span class="ch">#!/bin/sh -e</span>
+<span class="c1">#</span>
+<span class="c1"># rc.local</span>
+<span class="c1">#</span>
+<span class="c1"># This script is executed at the end of each multiuser runlevel.</span>
+<span class="c1"># Make sure that the script will &quot;exit 0&quot; on success or any other</span>
+<span class="c1"># value on error.</span>
+<span class="c1">#</span>
+<span class="c1"># In order to enable or disable this script just change the execution</span>
+<span class="c1"># bits.</span>
+<span class="c1">#</span>
+<span class="c1"># By default this script does nothing.</span>
+
+/usr/sbin/rfkill<span class="w"> </span>block<span class="w"> </span>bluetooth
+/usr/sbin/rfkill<span class="w"> </span>block<span class="w"> </span>wwan
+/sbin/ethtool<span class="w"> </span>-s<span class="w"> </span>eth0<span class="w"> </span>wol<span class="w"> </span>d<span class="w">  </span><span class="c1"># disable wake-on-lan</span>
+
+<span class="c1"># Additional sysctls</span>
+<span class="nb">echo</span><span class="w"> </span><span class="m">5</span><span class="w"> </span>&gt;<span class="w"> </span>/proc/sys/vm/laptop_mode
+<span class="nb">echo</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>&gt;<span class="w"> </span>/proc/sys/kernel/nmi_watchdog
+<span class="nb">echo</span><span class="w"> </span><span class="m">1500</span><span class="w"> </span>&gt;<span class="w"> </span>/proc/sys/vm/dirty_writeback_centisecs
+<span class="nb">echo</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>&gt;<span class="w"> </span>/sys/devices/system/cpu/sched_mc_power_savings
+<span class="nb">echo</span><span class="w"> </span>Y<span class="w"> </span>&gt;<span class="w"> </span>/sys/module/snd_hda_intel/parameters/power_save
+<span class="nb">echo</span><span class="w"> </span>ondemand<span class="w"> </span>&gt;<span class="w"> </span>/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+<span class="nb">echo</span><span class="w"> </span>min_power<span class="w"> </span>&gt;<span class="w"> </span>/sys/class/scsi_host/host0/link_power_management_policy
+<span class="nb">echo</span><span class="w"> </span>min_power<span class="w"> </span>&gt;<span class="w"> </span>/sys/class/scsi_host/host1/link_power_management_policy
+<span class="nb">echo</span><span class="w"> </span>min_power<span class="w"> </span>&gt;<span class="w"> </span>/sys/class/scsi_host/host2/link_power_management_policy
+<span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span>/sys/bus/usb/devices/*/power/autosuspend<span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>&gt;<span class="w"> </span><span class="nv">$i</span><span class="p">;</span><span class="w"> </span><span class="k">done</span>
+
+<span class="nb">exit</span><span class="w"> </span><span class="m">0</span>
+</pre></div>
+<p>You will need to install <a class="reference external" href="http://packages.debian.org/wheezy/rfkill">rfkill</a>
+and <a class="reference external" href="http://packages.debian.org/wheezy/ethtool">ethtool</a> to disable
+bluetooth, wwan and Wake-on-LAN.</p>
+</div>
+<div class="section" id="screen-brightness">
+<h2>Screen brightness<a class="headerlink" href="install-debian-sony-laptop.html#screen-brightness" title="Permalink to this headline">¶</a></h2>
+<p>At this point, I could not set the screen brightness at all. The problem is
+partially documented in this bug report: <a class="reference external" href="http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=651741">gnome-power-manager: display
+backlight brightness has no effect on Sony Vaio VPCYA1V9E</a>. I therefore added
+the two backlight-related kernel arguments to my GRUB config (above). After
+rebooting, <code>/sys/class/backlight/acpi_video0</code> was indeed replaced by
+<code>/sys/class/backlight/sony</code>, which comes from the <code>sony-laptop</code> kernel
+module, and I could set the brightness using, for instance:</p>
+<div class="highlight"><pre><span></span>$<span class="w"> </span>xbacklight<span class="w"> </span>-set<span class="w"> </span><span class="m">20</span>
+</pre></div>
+</div>
+<div class="section" id="installing-xfce">
+<h2>Installing Xfce<a class="headerlink" href="install-debian-sony-laptop.html#installing-xfce" title="Permalink to this headline">¶</a></h2>
+<p>The Fn keys for volume and screen-brightness control were still not working,
+though, which prompted me to install Xfce and use <code>xfce4-power-manager</code>. Xfce
+comes with a bunch of other nice features: font anti-aliasing, network and
+power management as taskbar icons, the Thunar file manager, GTK+ themes, ...
+As I use the <a class="reference external" href="http://awesome.naquadah.org/">awesome</a> window manager (tiling
+rocks!), the simplest way for me to integrate both was to remove
+<code>xfce4-panel</code> from my Xfce session (in <code>xfce4-session-settings</code>), and
+create the following <code>~/.Xsession</code> file:</p>
+<div class="highlight"><pre><span></span><span class="nb">exec</span><span class="w"> </span>awesome<span class="w"> </span><span class="p">&amp;</span><span class="w"> </span>xfce4-session
+</pre></div>
+<p>This <code>Xsession</code> file is executed by <code>lightdm</code> when you select &quot;Default
+Xsession&quot; at login time.</p>
+</div>
+<div class="section" id="final-consumption">
+<h2>Final consumption<a class="headerlink" href="install-debian-sony-laptop.html#final-consumption" title="Permalink to this headline">¶</a></h2>
+<p>With all these settings, I get a round 10.0 W discharge rate, with no
+particular application running and minimum screen brightness.</p>
+</div>
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="install-debian-sony-laptop.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="install-debian-sony-laptop.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="install-debian-sony-laptop.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("install-debian-sony-laptop"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="install-debian-sony-laptop.html">Page</a> published on <time class="dt-published" datetime="2013-09-28T00:00:00+0200">2013-09-28</time>.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

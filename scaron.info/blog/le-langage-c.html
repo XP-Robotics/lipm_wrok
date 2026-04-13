@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Le langage C</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="Nous allons tremper un premier orteil dans le célèbre langage C, encore largement utilisé aujourd'hui pour ses performances (par exemple pour la programmation des microcontrôleurs en robotique). Ce billet donne une introduction au langage pour nous familiariser avec les concepts essentiels, qui sont communs à la plupart des langages de …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Blog">
+        <meta name="keywords" content="C/C++">
+
+        <meta property="og:title" content="Le langage C">
+        <meta property="og:description" content="Nous allons tremper un premier orteil dans le célèbre langage C, encore largement utilisé aujourd'hui pour ses performances (par exemple pour la programmation des microcontrôleurs en robotique). Ce billet donne une introduction au langage pour nous familiariser avec les concepts essentiels, qui sont communs à la plupart des langages de …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/blog/le-langage-c.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/blog.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/blog.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <h1>Le langage C</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p>Nous allons tremper un premier orteil dans le célèbre langage C, encore largement utilisé aujourd'hui pour ses performances (par exemple pour la programmation des microcontrôleurs en robotique). Ce billet donne une introduction au langage pour nous familiariser avec les concepts essentiels, qui sont communs à la plupart des langages de programmation.</p>
+<p>Le langage C a été créé par <a class="reference external" href="https://fr.wikipedia.org/wiki/Dennis_Ritchie">Dennis Ritchie</a> en parallèle de l'invention du système d'exploitation Unix (ancêtre de Linux) avec <a class="reference external" href="https://fr.wikipedia.org/wiki/Ken_Thompson">Ken Thompson</a> et <a class="reference external" href="https://en.wikipedia.org/wiki/Brian_Kernighan">Brian Kernighan</a>. Depuis sa création, le C a connu un essor fulgurant, ne prenant que relativement de l'âge grâce à sa simplicité et à ses hautes performances qui en font un langage de choix par exemple pour les applications embarquées (robots, voitures, ...). En 2021, le langage est encore actif, avec un prochain standard <a class="reference external" href="https://en.wikipedia.org/wiki/C2x">C2x</a> prévu pour 2023.</p>
+<p>Ce billet couvre les concepts majeurs du langage C pour coder vos propres applications et jeux vidéos, en mode console pour commencer. Il nous faudra pour cela un bon compilateur, par <cite>gcc</cite> sur Linux, qui s'installe directement sous <a class="reference external" href="https://ubuntu.com/">Ubuntu</a> par <code>sudo apt install gcc</code>. Le compilateur nous permettra plus tard de profiter des bibliothèques graphiques comme SDL ou OpenGL.</p>
+<div class="section" id="premier-programme">
+<h2>Premier programme<a class="headerlink" href="le-langage-c.html#premier-programme" title="Permalink to this headline">¶</a></h2>
+<p>Commencons par notre premier programme : afficher le message &quot;Hello World!&quot;, un grand classique en programmation ! Ce programme est un mythe, les grands programmeurs sont  également passés par là, vous ne pouvez donc pas y échapper ;) Examinons le code source suivant :</p>
+<pre class="code cpp literal-block">
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span><span class="w">
+</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+   </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Hello World !</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w">
+   </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Appuyez sur [ENTREE] pour continuer.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w">
+   </span><span class="n">getchar</span><span class="p">();</span><span class="w">
+   </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">
+</span><span class="p">}</span>
+</pre>
+<p>La première ligne du programme est indispensable : elle sert à &quot;inclure&quot; des fonctions de base (&quot;stdio&quot; pour &quot;standard input/output&quot;, entrées et sorties standard) pour les utiliser dans notre programme. Une fonction, dans ce langage, est assez proche d'une fonction mathématique : c'est une suite d'acions finies sur les données passées en argument. Ici <code>int main()</code> déclare la fonction principale, le point de départ du programme. En C, on indique le début et la fin d'une fonction par des accolades '{' et '}'. La fonction <code>main</code> (pour &quot;main function&quot; soit &quot;fonction principale&quot; en anglais) se termine donc après la dernière instruction <code>return 0;</code> avant l'accolade fermante. Le contenu entre les accolades s'appelle un <em>bloc</em> de code.</p>
+<div class="section" id="syntaxe-du-langage">
+<h3>Syntaxe du langage<a class="headerlink" href="le-langage-c.html#syntaxe-du-langage" title="Permalink to this headline">¶</a></h3>
+<p>À la fin de chaque ligne, nous mettons des points-virgules : ils sont indispensables. En effet, le C interprête les points-virgules comme la fin d'une instruction et il ne tient pas compte des espaces ou des retours à la ligne. La fonction <code>printf</code> sert à écrire du texte : elle prend en argument une chaîne de caractère (du texte entre guillemets) suivie d'un nombre indéfini de variables. Pour écrire du texte à l'écran, on entre donc &quot;printf&quot;, on ouvre des parenthèses et des guillemets, puis on entre le texte, après quoi on referme les guillemets et les parenthèses pour terminer la ligne par un point-virgule. Il existe aussi des caractères spéciaux que nous pouvons pour utiliser entre guillemets, par exemple :</p>
+<table border="1" class="shortcuts docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><strong>Caractère</strong></td>
+<td><strong>Effet</strong></td>
+</tr>
+<tr><td><tt class="docutils literal">'\n'</tt></td>
+<td>Retour à la ligne (entrée)</td>
+</tr>
+<tr><td><tt class="docutils literal">'\t'</tt></td>
+<td>Tabulation</td>
+</tr>
+</tbody>
+</table>
+<p>Nous reviendrons sur ces caractères spéciaux plus loin. Un programme se termine quand toutes les instructions de la fonction principale ont été exécutées. Donc, pour l'instant, le programme se ferme dès que le texte est affiché, et on a pas le temps de voir. Il font donc faire une &quot;pause&quot; une fois le texte affichée. On écrit donc une phrase indiquant qu'il faut appuyer sur une touche pour terminer le programme, puis on entre l'instruction getchar(). Cette instruction attend que l'utilisateur appuie sur une touche : plus tard, nous récupèrerons la valeur de cette touche. Pour l'instant, elle sert juste à faire une pause jusqu'à ce qu'une touche soit pressée. On termine toujours la fonction principale par return 0;, qui sert à indiquer au système que tout s'est déroulé sans problème.</p>
+<p>L'instruction <code>return</code> indique la valeur de retour d'une fonction, c'est à dire les données qu'elle associe aux arguments passés, comme en mathématiques où <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mn>1</mn><mi mathvariant="normal">/</mi><mi>x</mi></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+f(x) = 1/x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1/</span><span class="mord mathnormal">x</span></span></span></span> a pour valeur de retour l'inverse de x. On ferme l'accolade pour terminer notre fonction main. Allez-y, compilez et admirez votre premier programme. C'est un début qui nous mènera loin :) Sachez cependant que le C ne supporte aucun accent en mode console (il faut pour cela effectuer un petit détournement que nous ne verrons pas ici).
+Commentaires</p>
+<p>Dans vos fichiers sources, tout caractère est considéré comme du code C, à moins de préciser au compilateur le contraire. En fait, il est possible de &quot;commenter&quot; certaines parties du fichier source, ce qui veut dire que le texte choisi sera ignoré par le compilateur. Cela sert à donner des indications aux autres développeurs, mais aussi à se rappeler rapidemment l'utilité de telle ou telle portion de code. Par exemple, les sources fournis dans ce cours sont tous commentés afin de faciliter la compréhension du lecteur ;)</p>
+</div>
+<div class="section" id="commentaires">
+<h3>Commentaires<a class="headerlink" href="le-langage-c.html#commentaires" title="Permalink to this headline">¶</a></h3>
+<p>Pour commenter du code en C, il existe deux moyens. Le premier est celui recommandé pour rester compatible avec les anciennes versions du langage : tout code situé entre <code>/*</code> et <code>*/</code> dans le code est ignoré. Attention : le début d'un commentaire ne peut être donné qu'en-dehors de guillemets. Ce type de commentaire est &quot;multi-ligne&quot;, car tout un paragraphe peut être commenté.</p>
+<pre class="code cpp literal-block">
+<span class="cm">/*
+ * Exemple de commentaire
+ * multi-ligne en C
+ */</span>
+</pre>
+<p>Par ailleurs, il existe une seconde manière de commenter du code : tout texte situé après les caractères // sera ignoré pour toute la ligne, ce qui signifie que le commentaire s'étendra du double-slash jusqu'à la fin de la ligne. Idem, le double-slash doit être placé en-dehors de guillemets.</p>
+<pre class="code cpp literal-block">
+<span class="c1">// Exemple de commentaire sur une ligne</span>
+</pre>
+</div>
+<div class="section" id="blocs">
+<h3>Blocs<a class="headerlink" href="le-langage-c.html#blocs" title="Permalink to this headline">¶</a></h3>
+<p>Le code C est organisé en <em>blocs</em>, un bloc étant le code compris entre une accolade ouvrante <code>{</code> et une accolade fermante <code>}</code>. Tout code entre ces deux caractères fait partie du bloc. Ainsi, les instructions d'une fonction comme la fonction principale sont comprises dans un bloc, limité par les accolades ouvrante et fermante. Mais la notion de bloc ne se limite pas à ces accolades, car les blocs peuvent être &quot;imbriqués&quot; : ainsi, nous pouvons insérer un bloc dans un autre, obtenant un code du style :</p>
+<pre class="code cpp literal-block">
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="c1">// instructions
+</span><span class="w">        </span><span class="p">}</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="c1">// instructions
+</span><span class="w">        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="c1">// instructions
+</span><span class="w">    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span>
+</pre>
+<p>Attention : les blocs sont ouverts et fermés dans le même ordre, c'est-à-dire qu'un bloc ouvert dans un bloc sera égalemment fermé dans celui-ci. On peut considérer un bloc comme &quot;descendant&quot; d'un autre s'il est ouvert (et donc fermé) dans ce dernier, qui est alors son &quot;parent&quot;. Cette notion de parentée est importante, entre autre, afin de disposer de variables, comme nous allons le voir plus loin. Les fonctions et certaines autres instructions du langage nécessitent égalemment un bloc contenant le code associé.</p>
+</div>
+</div>
+<div class="section" id="variables">
+<h2>Variables<a class="headerlink" href="le-langage-c.html#variables" title="Permalink to this headline">¶</a></h2>
+<p>Nous allons poursuivre notre exploration du langage par les <em>variables</em>. Là encore, le concept est assez proche des variables mathématiques. En C cependant, les variables sont &quot;typées&quot;, c'est à dire qu'une variable ne peut contenir qu'un certain type de données, les types étant les nombres entiers, flottants, décimaux, les caractères ou encore les booléens (vrai/faux). Plus précisément, les variables sont des entitées nommées auxquelles nous pouvons associer les valeurs que nous voulons, tant que nous respectons leur type. Ces valeurs peuvent évoluer, d'où le nom &quot;variable&quot;, à l'opposé des &quot;constantes&quot; qui sont des valeurs invariables dans votre code. Par exemple, 1 et 8.42 sont des constantes. Voici un bref aperçu des types de variables standards :</p>
+<table border="1" class="shortcuts docutils">
+<colgroup>
+<col width="13%" />
+<col width="63%" />
+<col width="25%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Type</td>
+<td>Description</td>
+<td>Bornes</td>
+</tr>
+<tr><td><tt class="docutils literal">bool</tt></td>
+<td>Variable booléenne, &quot;vraie&quot; ou &quot;fausse&quot;, 1 ou 0.</td>
+<td><code>true</code> ou <code>false</code></td>
+</tr>
+<tr><td><tt class="docutils literal">char</tt></td>
+<td>Désigne un caractère, peut être utilisé comme entier (8 bits)</td>
+<td>[-128; 127]</td>
+</tr>
+<tr><td><tt class="docutils literal">unsigned char</tt></td>
+<td>Désigne un caractère, peut être utilisé comme entier positif (8 bits)</td>
+<td>[0; 255]</td>
+</tr>
+<tr><td><tt class="docutils literal">short int</tt></td>
+<td>Nombre entier (16 bits)</td>
+<td>[-32 768 ; 32 767]</td>
+</tr>
+<tr><td><tt class="docutils literal">unsigned short int</tt></td>
+<td>Nombre entier positif (16 bits)</td>
+<td>[0 ; 65 535]</td>
+</tr>
+<tr><td><tt class="docutils literal">int</tt></td>
+<td>Nombre entier (integer value = nombre entier) (32 bits)</td>
+<td>[-2^31 ; (2^31-1)]</td>
+</tr>
+<tr><td><tt class="docutils literal">unsigned int</tt></td>
+<td>Nombre entier (32 bits)</td>
+<td>[0 ; (2^32-1)]</td>
+</tr>
+<tr><td><tt class="docutils literal">long</tt></td>
+<td>Entier long, peut prendre des valeurs plus importantes qu'un int. Dépend du compilateur (32 bits)</td>
+<td>[-2^31 ; (2^31-1)]</td>
+</tr>
+<tr><td><tt class="docutils literal">unsigned long</tt></td>
+<td>Entier long, peut prendre des valeurs plus importantes qu'un int. Dépend du compilateur (32 bits)</td>
+<td>[0 ; (2^32-1)]</td>
+</tr>
+<tr><td><tt class="docutils literal">float</tt></td>
+<td>Réel à virgule flottante (32 bits)</td>
+<td>[3.4e-38 ; 3.4e+38]</td>
+</tr>
+<tr><td><tt class="docutils literal">double</tt></td>
+<td>Réel à virgule flottante (64 bits)</td>
+<td>[1.7e-308 ; 1.7e+308]</td>
+</tr>
+<tr><td><tt class="docutils literal">long double</tt></td>
+<td>Réel à virgule flottante (80 bits)</td>
+<td>[3.4e-4932 ; 1.1e+4932]</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="initialisation">
+<h3>Initialisation<a class="headerlink" href="le-langage-c.html#initialisation" title="Permalink to this headline">¶</a></h3>
+<p>Vous remarquerez que les types du C ont des bornes, c'est à dire que les variables d'un type précis ne peuvent prendre que les valeurs comprisent entre la borne inférieure et la borne supérieure du type. A noter aussi que vous pouvez ajouter signed ou unsigned avant le type de votre variable : signed est l'option par défaut, et indique que celle-ci sera signée, c'est-à-dire qu'elle pourra prendre des valeurs négatives et positives. A l'inverse, une variable non-signée est toujours positive, ce qui lui permet d'accepter des valeurs extrèmes plus élevées. Par exemple, une variable de type unsigned int pourra prendre des valeurs de [0; 10^32]. La syntaxe pour déclarer une variable est la suivante : type nom_de_variable;. Ainsi, voici comment créer une variable 'dix' :</p>
+<pre class="code cpp literal-block">
+<span class="kt">int</span><span class="w"> </span><span class="n">dix</span><span class="p">;</span>
+</pre>
+<p>La variable dix ainsi déclarée, on peut lui affecter n'importe quelles valeurs entières comprises entre les bornes du type 'int'. Il est possible de déclarer plusieures variables d'un même type sur une même ligne de code, en séparant leurs noms par des virgules. Toutes les variables disposent de leurs propres opérateurs, c'est-à-dire des symboles permettant de modifier la variable ; ainsi, '=' est appelé &quot;opérateur d'égalité&quot;, et permet d'affecter une valeur à une variable. Nous pouvons affecter une valeur à une variable n'importe quand, y compris dès sa déclaration :</p>
+<pre class="code cpp literal-block">
+<span class="kt">int</span><span class="w"> </span><span class="n">dix</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="n">onze</span><span class="p">;</span><span class="w">
+</span><span class="n">dix</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">11</span><span class="p">;</span><span class="w">  </span><span class="c1">// le compilateur ne nous le reprochera pas ;)
+</span><span class="n">onze</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dix</span><span class="p">;</span><span class="w">
+</span><span class="n">dix</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+</pre>
+</div>
+<div class="section" id="operations-sur-les-variables">
+<h3>Opérations sur les variables<a class="headerlink" href="le-langage-c.html#operations-sur-les-variables" title="Permalink to this headline">¶</a></h3>
+<p>Nous avons désormais des variables, reste à les faire évoluer. Pour ce faire, le C propose des opérations primaires, correspondants aux principales opérations mathématiques (addition, soustraction...) jusqu'à des théories plus complexes (voir l'en-tête <code>math.h</code>). Plus tard, vous serez à même d'écrire vos propres fonctions pour manipuler ces variables, mais pour l'instant l'essentiel est d'apprendre à utiliser les opérateurs dits binaires. Ceux-ci se nomment ainsi car ils nécessitent deux paramètres, l'un étant votre variable, l'autre la valeur à manipuler. Par exemple, variable = 2; utilise l'opérateur binaire '=', qui affecte la valeur 2 à votre variable. Rien de bien difficile à ce niveau, les principales opérations arithmétiques s'utilisant de la même manière que dans la vie courrante. Voici la liste des principaux opérateurs binaires, suivie d'un code source d'exemple :</p>
+<table border="1" class="shortcuts docutils">
+<colgroup>
+<col width="11%" />
+<col width="89%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Opérateur</td>
+<td>Résultat</td>
+</tr>
+<tr><td><tt class="docutils literal">=</tt></td>
+<td>Affecte une valeur à une variable. Celle-ci doit être à gauche de l'opérateur.</td>
+</tr>
+<tr><td><tt class="docutils literal">+</tt></td>
+<td>Retourne la somme des deux paramètres.</td>
+</tr>
+<tr><td><tt class="docutils literal">-</tt></td>
+<td>Retourne la différence des deux paramètres.</td>
+</tr>
+<tr><td><tt class="docutils literal">*</tt></td>
+<td>Retourne le produit des deux paramètres.</td>
+</tr>
+<tr><td><tt class="docutils literal">/</tt></td>
+<td>Retourne le quotient des deux paramètres.</td>
+</tr>
+<tr><td><tt class="docutils literal">%</tt></td>
+<td>Retourne le modulo des deux paramètres (c'est-à-dire le reste de la <a class="reference external" href="https://fr.wikipedia.org/wiki/Division_euclidienne">division euclidienne</a> du premier par le second).</td>
+</tr>
+</tbody>
+</table>
+<pre class="code cpp literal-block">
+<span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w">
+</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w">                 </span><span class="c1">// affecte la valeur 2 à x
+</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w">             </span><span class="c1">// après cette instruction x vaut 4
+</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="mi">4</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span><span class="w"> </span><span class="c1">// maintenant x vaut 6
+</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w">             </span><span class="c1">// après cette instruction x vaut 4 à nouveau
+</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w">             </span><span class="c1">// maintenant x vaut 2</span>
+</pre>
+<p>Ces opérations s'effectuent exactement de la même manière qu'en mathématiques, et ne présentent donc pas de réelle difficulté. Idem pour les parenthèses. Comme vous pouvez le remarquer, nous avons également utilisé x à droite de l'opérateur '=' : dans ce cas, c'est la valeur de x qui est évaluée, et la dernière opération de l'exemple ci-dessus revient au même que d'écrire x = (8/4); puisque la valeur de x avant l'opération était 4. Il peut être fastidieux de toujours avoir à utiliser l'opérateur d'égalité pour modifier une variable, aussi existe-t-il d'autres opérateurs permettant de clarifier et d'alléger la rédaction du code.</p>
+</div>
+<div class="section" id="incrementation-et-decrementation">
+<h3>Incrémentation et décrémentation<a class="headerlink" href="le-langage-c.html#incrementation-et-decrementation" title="Permalink to this headline">¶</a></h3>
+<p>Le sens de ces deux termes est simple : <em>incrémenter</em> une variable <em>de K</em> signifie ajouter la valeur <em>K</em> à la variable, tandis que <em>décrémenter</em> une variable <em>de K</em> signifie soustraire la valeur <em>K</em> à cette variable. Il existe des opérateurs unaires (c'est-à-dire qui ne prennent qu'un seul paramètre) qui incrémentent ou décrémentent de 1, par exemple l'opérateur <code>++</code> : l'instruction <code>foo++;</code> incrémente la variable <cite>foo</cite> de 1. Cet opérateur est dit unaire car il ne prend qu'un seul paramètre : la variable à incrémenter. A l'opposée, il existe l'opérateur '--'. Ce sont les seuls opérateurs unaires qui seront abordés dans ce cours, mais ils sont relativement important pour pouvoir utiliser des boucles.</p>
+<pre class="code cpp literal-block">
+<span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">12</span><span class="p">;</span><span class="w">              </span><span class="c1">// variable i = 12
+</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;i = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">);</span><span class="w">  </span><span class="c1">// affichage de i
+</span><span class="n">i</span><span class="o">++</span><span class="p">;</span><span class="w">                     </span><span class="c1">// maintenant i = 13
+</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;i = %d&quot;</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">);</span><span class="w">    </span><span class="c1">// affichage de i</span>
+</pre>
+<p>Voici le résultat à l'écran de ce bloc de code :</p>
+<pre class="code cpp literal-block">
+<span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">12</span><span class="w">
+</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">13</span>
+</pre>
+<p>Dans notre exemple <code>i++;</code> est une <em>post</em>-incrémentation. Nous aurions aussi pu écrire <code>i--;</code> pour une post-décrémentation. Cette syntaxe vous évite d'écrire à chaque fois i = (i + 1);, ce qui est déjà un gain de temps considérable. Il existe aussi des opérateurs de pré-décrémentation et de pré-incrémentation. Leur intérêt intervient au niveau de l'évaluation : nous avons vu plus haut que la valeur d'une variable est évaluée si, par exemple, elle se situe à droite de l'opérateur d'égalité. Utiliser une post-incrémentation dans une portion de code où la variable est évaluée ajoutera 1 à celle-ci une fois qu'elle aura été évaluée, tandis qu'utiliser une pré-incrémentation ajoutera 1 à la variable avant l'évaluation. Le code suivant illustre ce cas de figure :</p>
+<pre class="code cpp literal-block">
+<span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w">
+
+</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">++</span><span class="p">);</span><span class="w">
+</span><span class="cm">/* Ici, x = 1 et i = 2 */</span><span class="w">
+
+</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="o">++</span><span class="n">i</span><span class="p">);</span><span class="w">
+</span><span class="cm">/* Ici, x = 3 et i = 3 */</span>
+</pre>
+<p>Il existe d'autres opérateurs d'incrémentation et de décrémentation, binaire ceux-ci : il s'agit de <code>+=</code>, <code>-=</code>, <code>*=</code> et <code>/=</code>, qui correspondent aux quatre opérations arithmétiques de base. La syntaxe à utiliser est la même que pour l'opérateur <code>=</code>, c'est-à-dire la variable à gauche et la valeur à droite :</p>
+<pre class="code cpp literal-block">
+<span class="n">i</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="cm">/* iden que i = (i+5); */</span><span class="w">
+</span><span class="n">i</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="cm">/* idem que i = (i-5); */</span><span class="w">
+
+</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w">
+</span><span class="n">i</span><span class="w"> </span><span class="o">*=</span><span class="w"> </span><span class="p">(</span><span class="o">++</span><span class="n">i</span><span class="p">);</span><span class="w">
+</span><span class="cm">/* Ici, i = 9 */</span>
+</pre>
+<p>Maîtriser ces principaux opérateurs est essentiel, d'une part pour se familiariser avec la syntaxe du langage, mais surtout parceque vous les utiliserez à outrance.</p>
+</div>
+<div class="section" id="affichage">
+<h3>Affichage<a class="headerlink" href="le-langage-c.html#affichage" title="Permalink to this headline">¶</a></h3>
+<p>Vous pouvez avoir besoin de consulter le contenu de vos variables durant le programme. Plus tard, vous serez à même de les manipuler à l'écran ou dans un fichier, mais pour l'instant le moyen le plus simple et d'utiliser la fonction <code>printf</code> :</p>
+<pre class="code cpp literal-block">
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;La variable dix est égale à %d&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">dix</span><span class="p">);</span>
+</pre>
+<p>Le <em>flag</em> <code>%d</code> est utilisé pour appeler une variable entière dans printf() : vous pouvez taper ceci à l'intérieur des guillemets, et devez indiquer par la suite (après la virgule) les variables associées, dans l'ordre d'apparition des flags dans le texte. Voici les différents &quot;flags&quot; disponnibles, par type de variable :</p>
+<table border="1" class="shortcuts docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><tt class="docutils literal">%d</tt></td>
+<td><code>int</code></td>
+</tr>
+<tr><td><tt class="docutils literal">%c</tt></td>
+<td><code>char</code></td>
+</tr>
+<tr><td><tt class="docutils literal">%f</tt></td>
+<td><code>double</code></td>
+</tr>
+<tr><td><tt class="docutils literal">%e</tt></td>
+<td><code>float</code></td>
+</tr>
+<tr><td><tt class="docutils literal">%ld</tt></td>
+<td><code>long</code></td>
+</tr>
+<tr><td><tt class="docutils literal">%s</tt></td>
+<td><code>char*</code> : chaîne de caractères</td>
+</tr>
+</tbody>
+</table>
+<p>Exemple :</p>
+<pre class="code cpp literal-block">
+<span class="cm">/* Affichage de variables */</span><span class="w">
+</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">var1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="n">var2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w">
+</span><span class="kt">char</span><span class="w"> </span><span class="n">lettre</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">'x'</span><span class="p">;</span><span class="w">
+</span><span class="kt">double</span><span class="w"> </span><span class="n">var3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">10.0</span><span class="p">;</span><span class="w">
+</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%c = (%d + %d) = %f&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">lettre</span><span class="p">,</span><span class="w"> </span><span class="n">var1</span><span class="p">,</span><span class="w"> </span><span class="n">var2</span><span class="p">,</span><span class="w"> </span><span class="n">var3</span><span class="p">);</span>
+</pre>
+<p>Résultat :</p>
+<pre class="code cpp literal-block">
+<span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">10.000000</span>
+</pre>
+<p>Vous remarquerez l'affichage de la variable de type 'double'. Les variables double contiennent plusieurs chiffres après la virgule. En C, vous n'avez pas d'autres choix, pour le moment, que de laisser ceci tel quel. Les variables de ce type ne peuvent en effet s'écrire avec printf qu'en décimal (six chiffres après la virgule) ou en exponentiel (puissance de 10). Laissons donc cela de côté pour le moment, nous y reviendrons un peu plus tard.</p>
+</div>
+<div class="section" id="chaines-de-caracteres">
+<h3>Chaînes de caractères<a class="headerlink" href="le-langage-c.html#chaines-de-caracteres" title="Permalink to this headline">¶</a></h3>
+<p>Les chaînes de caractères représentent une suite de caractères accessible via une seule variable. Elles reposent sur les concepts liés des tableaux et des pointeurs, que nous n'aborderons pas encore. Néanmoins, nous avons jugé qu'il est plus intéressant pour un débutant de manipuler du texte rapidement, aussi seront-elles introduites dès maintenant et expliquées en profondeur plus loin. Une chaîne de caractère se définit comme une variable de type char dont, à la déclaration, on suffixe le nom par une paire de crochets contenant le nombre de caractères à stocker. Ainsi, l'instruction <code>char nom[20 + 1];</code> déclare une variable de type &quot;tableau de caractères&quot; dont le nom est <code>nom</code> et qui peut contenir 21 caractères.</p>
+<p>Sur ces 21 caractères, seuls 20 seront accessibles car le dernier caractère d'une chaîne est toujours le caractère '0', soit l'entier 0. Cela indique au langage la fin de chaîne. Ceci fait, on peut utiliser la variable via son nom (sans les crochets) dans le code, mais les opérateurs sur les variables vus plus haut, comme '=', ne fonctionnent pas : ainsi, nom = &quot;Robert&quot;;, avec nom tableau de caractères, ne fonctionnera absolument pas. Pour ce faire, on utilisera des fonctions standards qui seront vues plus loin, le but de cet encart étant simplement de vous familiariser avec cette syntaxe que vous verrez plus amplement avec les tableaux.</p>
+<p>Écrivons notre deuxième programme complet. Le code suivant permet d'écrire en sortie le nom, l'age et la taille d'une personne stockés dans des variables. Plus tard, nous utiliserons les fonctions d'interaction avec l'utilisateur pour qu'il entre ses propres paramètres. Ne pas oublier l'instruction <code>getchar();</code> avant le <code>return 0;</code> de la fonction principale.</p>
+<pre class="code cpp literal-block">
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span><span class="w">
+</span><span class="cm">/* Fonction principale */</span><span class="w">
+</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w">
+</span><span class="p">{</span><span class="w">
+   </span><span class="cm">/* Variables utilisees */</span><span class="w">
+   </span><span class="kt">int</span><span class="w"> </span><span class="n">age</span><span class="p">;</span><span class="w">
+   </span><span class="kt">double</span><span class="w"> </span><span class="n">taille</span><span class="p">;</span><span class="w">
+   </span><span class="kt">char</span><span class="w"> </span><span class="n">nom</span><span class="p">[</span><span class="mi">20</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">];</span><span class="w">
+
+   </span><span class="cm">/* Affectation des valeurs*/</span><span class="w">
+   </span><span class="n">age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">41</span><span class="p">;</span><span class="w">
+   </span><span class="n">taille</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.75</span><span class="p">;</span><span class="w">
+
+   </span><span class="cm">/* La fonction strcpy(variable, &quot;texte&quot;);
+      affecte la valeur &quot;texte&quot; à une chaîne
+      de caractères. Elle ajoute le 0 de fin
+      de chaîne automatiquement */</span><span class="w">
+   </span><span class="n">strcpy</span><span class="p">(</span><span class="n">nom</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Billou&quot;</span><span class="p">);</span><span class="w">
+
+   </span><span class="cm">/* Affichage du resultat */</span><span class="w">
+   </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Billou a %d ans et mesure %f metres.&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">nom</span><span class="p">,</span><span class="w"> </span><span class="n">age</span><span class="p">,</span><span class="w"> </span><span class="n">taille</span><span class="p">);</span><span class="w">
+
+   </span><span class="cm">/* Fin d'execution */</span><span class="w">
+   </span><span class="n">getchar</span><span class="p">();</span><span class="w">
+   </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">
+</span><span class="p">}</span>
+</pre>
+<p>Ce programme donne :</p>
+<pre class="code console literal-block">
+<span class="go">Billou a 41 ans et mesure 1.750000 metres._</span>
+</pre>
+<p>Nous n'avons pas utilisé de variable pour stocker le nom &quot;Billou&quot; car il s'agit d'une chaîne de caractères, et que ce concept recquiert la maîtrise des tableaux et des pointeurs. Néanmoins, vous en savez désormais assez sur les variables pour pouvoir les utiliser dans vos premiers programmes.</p>
+</div>
+</div>
+<div class="section" id="conditions">
+<h2>Conditions<a class="headerlink" href="le-langage-c.html#conditions" title="Permalink to this headline">¶</a></h2>
+<p>Un des points forts du langage C est qu'il permet une gestion puissante des boucles et des conditions, et les variables vont ici prendre une place essentielle. De façon schématique, le langage comporte des instructions <em>conditionnelles</em> :</p>
+<pre class="code literal-block">
+si (condition)
+    faire ceci;
+sinon, et si (condition)
+    faire cela;
+sinon
+    faire ça;
+</pre>
+<p>Mais aussi des <em>boucles</em> comme :</p>
+<pre class="code literal-block">
+pendant que (condition)
+    faire ceci;
+</pre>
+<p>Ces deux concepts de programmation, désormais communs à tous les langages, ont constitué une révolution à l'époque de leur création. Vous devrez maîtriser les diverses instructions qui suivent sur le bout des doigts, car elles constituent la base même de l'interactivité de tout logiciel :</p>
+<ul class="simple">
+<li>Les conditions <code>if</code>/<code>else</code></li>
+<li>Les conditions <code>switch</code></li>
+<li>Les boucles <code>while</code></li>
+<li>Les boucles <code>for</code></li>
+</ul>
+<div class="section" id="conditions-if">
+<h3>Conditions if<a class="headerlink" href="le-langage-c.html#conditions-if" title="Permalink to this headline">¶</a></h3>
+<p>L'instruction <code>if</code> est la plus commune des instructions conditionnelles, c'est-à-dire les instructions qui n'exécutent une portion de code que si une ou plusieures conditions sont vérifiées. Elle s'emploie de la façon suivante :</p>
+<pre class="code cpp literal-block">
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">condition</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="c1">// instructions
+</span><span class="p">}</span>
+</pre>
+<p>La condition est une valeur <em>booléenne</em>, c'est-à-dire <code>true</code> (vrai) ou <code>false</code> (faux), oui ou non, 1 ou 0. Cette valeur peut être celle d'une variable ou la valeur de retour d'une fonction, mais la plupart du temps elle est le résultat de l'évaluation d'une condition, utilisant les opérateurs de comparaison et les opérateurs logiques. Voici un exemple d'utilisation de cette instruction :</p>
+<pre class="code cpp literal-block">
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">taille</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mf">2.20</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Vous etes grand !&quot;</span><span class="p">);</span><span class="w">
+</span><span class="p">}</span>
+</pre>
+<p>On fournit la condition de l'instruction entre les parenthèses. Ici, si la variable <code>taille</code> est égale à 2.20, on affichera la chaîne de caractères &quot;Vous etes grand !&quot;. Sinon, cette portion de code ne sera pas exécutée. A noter le double-égal : nous n'affectons pas une nouvelle valeur à <code>taille</code>, mais nous testons sa valeur, ce qui explique l'utilisation d'un symbole différent pour éviter toute confusion : l'opérateur logique d'égalité <code>==</code>. Une instruction <code>if</code> sera exécuté si les valeurs passé en conditions prennent la valeur booléenne vraie.</p>
+<div class="section" id="operateurs-de-comparaison">
+<h4>Opérateurs de comparaison<a class="headerlink" href="le-langage-c.html#operateurs-de-comparaison" title="Permalink to this headline">¶</a></h4>
+<p>Voici les opérateurs de comparaison disponibles en C :</p>
+<table border="1" class="shortcuts docutils">
+<colgroup>
+<col width="11%" />
+<col width="44%" />
+<col width="44%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><strong>Opérateur</strong></td>
+<td><strong>Condition</strong></td>
+<td><strong>Exemple</strong></td>
+</tr>
+<tr><td><tt class="docutils literal">==</tt></td>
+<td>Egalité de deux valeurs</td>
+<td><code>(foo == 1)</code></td>
+</tr>
+<tr><td><tt class="docutils literal">!=</tt></td>
+<td>Inégalité, c'est-à-dire vérifier que les deux valeurs sont différentes</td>
+<td><code>(variable != 1)</code></td>
+</tr>
+<tr><td><tt class="docutils literal">&lt;</tt></td>
+<td>Infériorité d'une valeur par rapport à une autre</td>
+<td><code>(variable &lt; 8)</code></td>
+</tr>
+<tr><td><tt class="docutils literal">&lt;</tt></td>
+<td>Infériorité ou égalité d'une valeur par / à une autre</td>
+<td><code>(variable &lt;= 8)</code></td>
+</tr>
+<tr><td><tt class="docutils literal">&gt;</tt></td>
+<td>Supériorité d'une valeur par / à une autre</td>
+<td><code>(variable1 &gt; variable2)</code></td>
+</tr>
+<tr><td><tt class="docutils literal">&gt;</tt></td>
+<td>Supériorité ou égalité d'une valeur par / à une autre</td>
+<td><code>(variable &gt;= 6)</code></td>
+</tr>
+</tbody>
+</table>
+<p>En utilisant ceux-ci, il est possible de comparer des valeurs entre elles (le terme valeur comprend aussi bien les constantes que les variables). Il est bien entendu possible de tester plusieures conditions en même temps : pour ce faire, il est préférable de mettre chaque expression (condition) entre parenthèses, et d'associer les expressions entre elles en utilisant les opérateurs logiques que voici :</p>
+</div>
+<div class="section" id="operateurs-logiques">
+<h4>Opérateurs logiques<a class="headerlink" href="le-langage-c.html#operateurs-logiques" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="shortcuts docutils">
+<colgroup>
+<col width="10%" />
+<col width="50%" />
+<col width="40%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><strong>Opérateur</strong></td>
+<td><strong>Effet</strong></td>
+<td><strong>Exemple</strong></td>
+</tr>
+<tr><td><tt class="docutils literal">&amp;&amp;</tt></td>
+<td>Et logique : test vrai si et seulement si les deux conditions sont vraies</td>
+<td><code>(i == 1 &amp;&amp; j == 2)</code></td>
+</tr>
+<tr><td><tt class="docutils literal">||</tt></td>
+<td>Ou logique : test vrai si l'une ou l'autre des deux conditions est vraie</td>
+<td><code>(i == 1 || i == 3)</code></td>
+</tr>
+<tr><td><tt class="docutils literal">!</tt></td>
+<td>Non logique : test vrai si et seulement si la condition est fausse</td>
+<td><code>(i == 1 &amp;&amp; !(j == 2))</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="conditions-else">
+<h3>Conditions else<a class="headerlink" href="le-langage-c.html#conditions-else" title="Permalink to this headline">¶</a></h3>
+<p>Il est possible d'ajouter d'autres d'instructions à la suite d'une instruction <code>if</code>, qui ne seront exécutées que si les instructions <code>if</code> précédentes ne l'ont pas étées. Pour ce faire, on peut utiliser :</p>
+<pre class="code cpp literal-block">
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">condition1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="c1">// instructions exécutées seulement si condition1 est vraie
+</span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">condition2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="c1">// instructions exécutées seulement si condition1 est fausse et
+</span><span class="w">    </span><span class="c1">// condition2 est vraie
+</span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="c1">// instructions exécutées seulement si toutes les autres conditions
+</span><span class="w">    </span><span class="c1">// (ici condition1 et condition2) sont fausses
+</span><span class="p">}</span>
+</pre>
+<p>Dans qui consiste en une seconde instruction if qui ne sera évaluée que si l'instruction if précédente n'a pas été exécutée. Cette syntaxe permet de tester certaines possibilités uniquement si les précédentes sont fausses, ce qui optimise le code car dans certains cas ce n'est pas la peine de tester ces valeurs en fonction des tests précédents. On peut aussi utiliser else, dont les instructions ne seront exécutées que si toutes les instructions if..else if précédentes ne l'ont pas étées. On obtient ainsi des tests type si..ou si..sinon, syntaxe pratique et performante. Il est possible d'omettre les accolades si une instructions if, else if ou else ne comporte qu'une seule instruction, comme suit : if (x == 1) x = 0;. Ainsi, considérons l'exemple suivant :</p>
+<pre class="code cpp literal-block">
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">taille</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">2.0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Vous mesurez plus de 2 m.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w">
+</span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">taille</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">1.8</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Vous mesurez entre 1,6 m et 1,8 m.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w">
+</span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">taille</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">1.6</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Vous mesurez entre 1,6 m et 1,8 m.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w">
+</span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">taille</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">1.4</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Vous mesurez entre 1,4 m et 1,6 m.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w">
+</span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="cm">/* taille &lt;= 1.4 */</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Vous mesurez moins de 1,4 m.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w">
+</span><span class="p">}</span>
+</pre>
+<p>Cet exemple illustre l'intérêt de telles constructions : nous n'avons pas besoin de tester si la taille de l'utilisateur est supérieure à 1,6 m si l'on sait déjà qu'elle est supérieure à 1,8 m et qu'on a déjà exécuté les instructions associées. Ainsi, dès que la taille de l'utilisateur aura été située, les conditions suivantes ne seront pas testées, ce qui rend le code plus clair (sachant que les conditions précédentes sont fausses, nous n'avons pas à tester les deux bornes de taille à nouveau) mais aussi plus performant puisque nous effectuons moins de tests. Afin de clarifier un peu les choses, voici un autre programme d'exemple plus évolué utilisant des conditions à la chaîne :</p>
+<pre class="code cpp literal-block">
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span><span class="w">
+</span><span class="cm">/* Fonction principale */</span><span class="w">
+</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="cm">/* Variables utilisees */</span><span class="w">
+    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">21</span><span class="p">;</span><span class="w">
+    </span><span class="kt">double</span><span class="w"> </span><span class="n">taille</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.28</span><span class="p">;</span><span class="w">
+    </span><span class="kt">bool</span><span class="w"> </span><span class="n">adulte</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span><span class="w">
+
+    </span><span class="cm">/* Test de l'age */</span><span class="w">
+    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">age</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">18</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Vous etes adulte &quot;</span><span class="p">);</span><span class="w">
+      </span><span class="n">adulte</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w">
+    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Vous etes un enfant &quot;</span><span class="p">);</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+
+    </span><span class="cm">/* Evaluation de la taille */</span><span class="w">
+    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">taille</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">2.0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;et vous mesurez plus de 2 m.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w">
+    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">taille</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">1.8</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;et vous mesurez entre 1,6 m et 1,8 m.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w">
+    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">taille</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">1.6</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;et vous mesurez entre 1,6 m et 1,8 m.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w">
+    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">taille</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">1.4</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;et vous mesurez entre 1,4 m et 1,6 m.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w">
+    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">adulte</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;et vous mesurez moins de 1,4 m.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w">
+    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="cm">/* !adulte &amp;&amp; taille &lt;= 1.4 */</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;mais vous etes encore petiot ;)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+
+   </span><span class="cm">/* Fin d'exécution */</span><span class="w">
+   </span><span class="n">getchar</span><span class="p">();</span><span class="w">
+   </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">
+</span><span class="p">}</span>
+</pre>
+<p>Après compilation, ce programme donne :</p>
+<pre class="code console literal-block">
+<span class="go">Vous etes adulte et vous mesurez moins de 1,4 m._</span>
+</pre>
+<p>A noter l'utilisation d'une variable booléenne <code>adulte</code>, qui ne peut prendre que les valeurs <code>true</code> ou <code>false</code> : si l'age est supérieur à 18 ans, nous mettons cette variable à <code>true</code> (vrai) ; plus tard, lors de l'évaluation de la taille, on ne se permet de souligner la petite taille de la personne que si elle est adulte, la condition testée étant la valeur de la variable. On aurait aussi pu écrire <code>else if (adulte == true)</code>, mais la variable étant déjà booléenne ce n'est pas nécessaire. Nous ne savons pas encore acquérir les valeurs de <code>age</code> et <code>taille</code> par l'utilisateur du programme, mais nous y arrivons bientôt ;)</p>
+</div>
+<div class="section" id="conditions-switch">
+<h3>Conditions switch<a class="headerlink" href="le-langage-c.html#conditions-switch" title="Permalink to this headline">¶</a></h3>
+<p>L'instruction switch est une autre instruction de branchement, plus utilisée pour tester les valeurs possibles d'une variable. Sa syntaxe est différente, mais relativement simple. Elle s'utilise de la façon suivante : switch (variable) { case valeur: { instructions; break; } default: { instructions; break; }}. switch peut aussi servir à tester n'importe quel valeur, comme un retour de fonction ou une valeur booléenne (variable, condition...) Chaque test de valeur se rédige sous la forme case valeur: {instructions; break;}, et il est possible de prévoir un cas par défaut, comportant les instructions exécutées si aucun autre test n'a été vrai. Les accolades après les tests ne sont pas nécessaires. Voici un exemple d'utilisation :</p>
+<pre class="code cpp literal-block">
+<span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">variable</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+   </span><span class="k">case</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span><span class="w">
+      </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;OK&quot;</span><span class="p">);</span><span class="w">
+      </span><span class="k">break</span><span class="p">;</span><span class="w">
+   </span><span class="k">case</span><span class="w"> </span><span class="mi">2</span><span class="p">:</span><span class="w">
+      </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;FALSE&quot;</span><span class="p">);</span><span class="w">
+      </span><span class="k">break</span><span class="p">;</span><span class="w">
+   </span><span class="k">default</span><span class="o">:</span><span class="w">
+      </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;?&quot;</span><span class="p">);</span><span class="w">
+      </span><span class="k">break</span><span class="p">;</span><span class="w">
+</span><span class="p">}</span>
+</pre>
+<p>Ici, si la variable variable est égale à 1 on affiche &quot;OK&quot;, et &quot;FALSE&quot; si elle est égale à 2. Si elle n'est égale ni à 1 ni à 2, c'est-à-dire à aucune des possibilitées prévues, on affiche &quot;?&quot;. A noter l'obligation du mot clef &quot;break&quot; après une condition remplie : si ce mot-clef était ommis, les instructions des tests suivants seraient aussi exécutées.
+L'opérateur ternaire</p>
+<p>Plus complexe mais très utile, l'opérateur ternaire permet d'écrire de façon concise ce qui aurait put être une longue suite d'instructions if. Il se définit ainsi : (condition) ? oui : non; Si la condition condition est remplie, le code oui après le ? est évalué. Sinon, ce sera le cas du code non après les deux points ':'. Cet opérateur peut s'employer avec des variables comme avec des instructions. Voici quelques exemples concrets illustrant son utilisation :</p>
+<pre class="code cpp literal-block">
+<span class="cm">/* Instructions : */</span><span class="w">
+</span><span class="p">(</span><span class="n">age</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">18</span><span class="p">)</span><span class="w">
+    </span><span class="o">?</span><span class="w"> </span><span class="n">puts</span><span class="p">(</span><span class="s">&quot;Vous etes adulte.&quot;</span><span class="p">)</span><span class="w">
+    </span><span class="o">:</span><span class="w"> </span><span class="n">puts</span><span class="p">(</span><span class="s">&quot;Vous n'etes pas adulte&quot;</span><span class="p">);</span><span class="w">
+
+</span><span class="cm">/* Valeurs : */</span><span class="w">
+</span><span class="n">puts</span><span class="w"> </span><span class="p">((</span><span class="n">age</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">18</span><span class="p">)</span><span class="w">
+    </span><span class="o">?</span><span class="w"> </span><span class="s">&quot;Vous etes adulte.&quot;</span><span class="w">
+    </span><span class="o">:</span><span class="w"> </span><span class="s">&quot;Vous n'etes pas adulte.&quot;</span><span class="p">);</span>
+</pre>
+<p>Dans le premier cas, la première instruction puts (équivalente à printf) est exécutée si l'age est supérieur ou égal à 20, faute de quoi la seconde sera exécutée. Dans le second cas, ce ne sont plus les instructions qui sont soumies à condition mais les valeurs à afficher : idem, en fonction de l'age, une chaîne de caractères constante sera affichée plutôt qu'une autre. L'avantage de cet opérateur est qu'il peut être inclus dans n'importe quelle portion de code, même au milieu d'un appel de fonction (comme ci-dessus). Il vous sera sans doute utile, mais attention car la relecture du code n'en devient que plus ardue, ce qui est source de bugs.</p>
+</div>
+</div>
+<div class="section" id="boucles">
+<h2>Boucles<a class="headerlink" href="le-langage-c.html#boucles" title="Permalink to this headline">¶</a></h2>
+<p>Nous allons maintenant voir le cas des boucles. Il s'agit d'un concept essentiel en programmation. Une boucle est un ensemble d'instructions qui s'ont exécutées répétitivement jusqu'à ce qu'une condition soit remplie, ou qu'on quitte la boucle via une instruction spécifique.</p>
+<div class="section" id="boucles-while">
+<h3>Boucles while<a class="headerlink" href="le-langage-c.html#boucles-while" title="Permalink to this headline">¶</a></h3>
+<p>Le premier cas de boucle étudé sera celui de while, qui peut être utilisée seule ou avec le mot-clef do. Nous verrons les deux possibilités. La première syntaxe est la boucle do-while :</p>
+<pre class="code cpp literal-block">
+<span class="kt">int</span><span class="w"> </span><span class="n">cpt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">
+</span><span class="k">do</span><span class="w"> </span><span class="p">{</span><span class="w">
+   </span><span class="o">++</span><span class="n">cpt</span><span class="p">;</span><span class="w">
+   </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;cpt = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">cpt</span><span class="p">);</span><span class="w">
+</span><span class="p">}</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">cpt</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">5</span><span class="p">);</span>
+</pre>
+<p>La seconde est la boucle while :</p>
+<pre class="code cpp literal-block">
+<span class="kt">int</span><span class="w"> </span><span class="n">cpt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">
+</span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">cpt</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+   </span><span class="o">++</span><span class="n">cpt</span><span class="p">;</span><span class="w">
+   </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;cpt = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">cpt</span><span class="p">);</span><span class="w">
+</span><span class="p">}</span>
+</pre>
+<p>Résultat dans les deux cas :</p>
+<pre class="code cpp literal-block">
+<span class="n">cpt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span><span class="n">cpt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w">
+</span><span class="n">cpt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="w">
+</span><span class="n">cpt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="w">
+</span><span class="n">cpt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span>
+</pre>
+<p>Le principe d'une boucle est d'exécuter un ensemble d'instructions jusqu'à ce qu'une ou plusieures conditions soient validées. Le test de ces conditions est appelé &quot;test de sortie&quot;, et selon la syntaxe utilisée il est effectué avant ou après avoir exécuté les instructions. Dans le premier cas, comme le laisse suggérer la syntaxe du code, les instructions sont exécutées avant le test de sortie, ce qui signifie au moins une fois, à l'inverse du second où le test sera effectué en premier. Il existe un mot-clef permettant de sortir d'une boucle à partir de n'importe laquelle de ses instructions : break; La plupart du temps, il est utilisé au sein des instructions de la boucle pour quitter celle-ci si une ou plusieures conditions sont validées.</p>
+<p>Par ailleurs, il existe un autre mot-clef, continue;, qui permet de &quot;revenir&quot; au début de la boucle après avoir exécuté le test de sortie. Les boucles while et do..while sont les plus accessibles du langage. Elles sont souvent utilisées comme &quot;boucles principales&quot; d'un programme, c'est à dire une boucle dans la fonction principale qui se répète tant que l'utilisateur n'a pas demandé à quitter. Il existe cependant un autre type de boucles, plus complet : les boucles for.</p>
+</div>
+<div class="section" id="boucles-for">
+<h3>Boucles for<a class="headerlink" href="le-langage-c.html#boucles-for" title="Permalink to this headline">¶</a></h3>
+<p>Les boucles <code>for</code> sont un type de boucle un peu plus complexe que les boucles while, car elles ne se contentent pas de répéter une suite d'instructions soumises à condition. On peut les rapprocher de l'utilisation du symbole mathématique Sigma : en effet, la principale utilisation de telles boucles est le parcours d'une suite d'éléments. Pour ce faire, on leur fournit trois paramètres, qui peuvent tous trois être omis en fonction des besoins. En premier lieu, on peut déclarer des variables spécifiques à la boucle, c'est-à-dire qu'elles ne seront disponnible que dans le bloc d'instructions de la boucle. La plupart du temps, ces variables sont des compteurs sur le nombre d'éléments de la liste. Le second paramètre est la condition de poursuite. Le troisième paramètre constitue une suite d'instructions à exécuter en fin de boucle, qui représente la plupart du temps une mise-à-jour de l'élément courrant de la liste. Voici le schéma syntaxique d'utilisation des boucles for :</p>
+<pre class="code cpp literal-block">
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">déclaration</span><span class="w"> </span><span class="n">de</span><span class="w"> </span><span class="n">variables</span><span class="p">;</span><span class="w"> </span><span class="n">condition</span><span class="p">;</span><span class="w"> </span><span class="n">instructions</span><span class="w"> </span><span class="n">de</span><span class="w"> </span><span class="n">fin</span><span class="w"> </span><span class="n">de</span><span class="w"> </span><span class="n">boucle</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="c1">// instructions
+</span><span class="p">}</span>
+</pre>
+<p>Sans les premiers et troisièmes paramètres, une telle boucle est similaire à une boucle while. Cette syntaxe particulière est néanmoins très pratique, surtout dans le cas où l'on parcours une liste d'éléments, car elle permet de séparer les instructions pour chaque élément du code de parcours. Ainsi, si l'on veut reproduire l'exemple présenté ci-avant pour les boucles while, il suffit de déclarer une variable compteur cpt spécifique à la boucle, et d'incrémenter cpt en fin de boucle. Le code obtenu est bien plus clair et concis que le précédent, et le code d'affichage est distinct du code de &quot;parcours&quot; qui compte le nombre d'éléments.</p>
+<pre class="code cpp literal-block">
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">cpt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">cpt</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">cpt</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+   </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;cpt = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">cpt</span><span class="p">);</span><span class="w">
+</span><span class="p">}</span>
+</pre>
+<p>Le résultat est strictement le même que précédemment, mais l'écriture en est plus concise. Quelques détails diffèrent : on donne la valeur 1 à cpt plutôt que 0 car l'instruction <code>++cpt;</code> n'est plus effectuée au début mais à la fin de la boucle. Aussi, on utilise &lt;= plutôt que &lt; car while vérifiait la condition de poursuite en fin de boucle, tandis que for le fait au début. L'utilité de la boucle de l'exemple ci-dessus est donc d'effectuer 5 fois les instructions entre accolade, la variable cpt servant de compteur. Il vous sera impossible d'utiliser cpt en-dehors de la boucle, mais vous pouvez toujours la déclarer dans un bloc parent.</p>
+</div>
+</div>
+<div class="section" id="interactions-avec-l-utilisateur">
+<h2>Interactions avec l'utilisateur<a class="headerlink" href="le-langage-c.html#interactions-avec-l-utilisateur" title="Permalink to this headline">¶</a></h2>
+<p>Nous connaissons maintenant les bases pour faire un programme autonome, suivant une liste d'instructions données, mais nous ne savons pas encore interagir avec l'utilisateur, c'est-à-dire lui demander des informations avant d'agir en conséquence. Nous allons apprendre ci-dessous les principales fonctions d'entrée/sortie qui répondent à ce besoin :</p>
+<ul class="simple">
+<li>La fonction <code>getchar</code></li>
+<li>La fonction <code>fgets</code></li>
+<li>La fonction <code>puts</code></li>
+<li>La fonction <code>scanf</code></li>
+</ul>
+<div class="section" id="fonction-getchar">
+<h3>Fonction getchar<a class="headerlink" href="le-langage-c.html#fonction-getchar" title="Permalink to this headline">¶</a></h3>
+<p>Comme son nom l'indique, cette fonction demande à l'utilisateur d'entrer un caractère quelconque, lettre ou chiffre. getchar() retourne ce caractère, de la même manière que votre fonction main() retourne la valeur 0. Ainsi, évaluer getchar() revient à évaluer sa valeur de retour, soit le caractère tapé par l'utilisateur. On peut donc utiliser l'opérateur '=' pour affecter ce caractère à une variable :</p>
+<pre class="code cpp literal-block">
+<span class="n">caractere</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getchar</span><span class="p">();</span>
+</pre>
+<p>La valeur de la variable caractere de type <code>char</code> sera celle du caractère tapé par l'utilisateur. Attention : afin de valider son caractère, l'utilisateur appuyera sur [Entrée]. Or, entrée est considéré comme un autre caractère, 'n', que vous avez déjà utilisé. Ainsi, les prochaines fois que vous utiliserez <code>getchar</code>, il vous faudra effectuer deux appels : un appel seul, pour passer cette entrée, et un appel affectant la valeur du caractère à votre variable. Cette fonction peut servir à toutes sortes de traitements de caractères, mais n'est souvent utilisée que pour demander à l'utilisateur de taper [Entrée].</p>
+</div>
+<div class="section" id="fonction-fgets">
+<h3>Fonction fgets<a class="headerlink" href="le-langage-c.html#fonction-fgets" title="Permalink to this headline">¶</a></h3>
+<p>La fonction <code>getchar</code> ne permet de lire qu'un seul caractère à la fois. Afin d'y pallier, nous allons utiliser une autre fonction, <code>fgets</code>, qui lit non pas un caractère mais une <em>chaîne</em> de caractères (on pourra la stocker dans un tableau comme précédemment). Demandons son nom à l'utilisateur de notre programme, et stockons le dans une variable <code>char nom[20 + 1];</code> qui peut contenir jusqu'à vingt caractères. Nous pouvons procéder comme suit :</p>
+<pre class="code cpp literal-block">
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span><span class="w">
+</span><span class="cm">/* Fonction principale */</span><span class="w">
+</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+   </span><span class="cm">/* Tableau de caractère */</span><span class="w">
+   </span><span class="kt">char</span><span class="w"> </span><span class="n">nom</span><span class="p">[</span><span class="mi">20</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">];</span><span class="w">
+
+   </span><span class="cm">/* Message de demande : */</span><span class="w">
+   </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Entrez votre nom :</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w">
+
+   </span><span class="cm">/* Lecture dans la variable `nom`,
+    * 20 caractères maximum,
+    * depuis l'entrée standard `stdin` (clavier) */</span><span class="w">
+   </span><span class="n">fgets</span><span class="p">(</span><span class="n">nom</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="n">stdin</span><span class="p">);</span><span class="w">
+
+   </span><span class="cm">/* Affichage de la chaîne avec le flag `%s` */</span><span class="w">
+   </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Votre nom est %s.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">nom</span><span class="p">);</span><span class="w">
+
+   </span><span class="cm">/* Fin d'exécution, petit getchar pour attendre */</span><span class="w">
+   </span><span class="n">getchar</span><span class="p">();</span><span class="w">
+   </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">
+</span><span class="p">}</span>
+</pre>
+<p>Mettons que vous entriez &quot;Robert&quot;. Le binaire exécuté donne :</p>
+<pre class="code console literal-block">
+<span class="go">Entrez votre nom :
+Robert
+Votre nom est Robert._</span>
+</pre>
+<p>En-dehors des chaînes de caractères, <code>fgets</code> permet aussi de lire des entiers ou des réels à virgule flottante. Néanmoins, l'utilisation de <code>scanf</code> lui est préférable dans ces cas (voir plus loin). Dans l'exemple ci-dessus, nous demandons à <code>fgets</code> de lire vingt caractères au maximum : il s'agit d'une sécurité pour éviter les erreurs de segmentation (&quot;segmentation faults&quot; ou &quot;segfaults&quot;) dues aux débordements de mémoire. Sans ce test (ou si par exemple nous exécutons <code>fgets(nom, 42, stdin);</code> alors que <code>nom</code> ne contient que vingt caractères), si l'utilisateur entre d'avantage de caractères que la variable nom ne peut en stocker, le programme tentera d'écrire en mémoire dans une zone en-dehors de la variable, écrasant soit d'autres variables soit du code exécutable.</p>
+</div>
+<div class="section" id="fonction-puts">
+<h3>Fonction puts<a class="headerlink" href="le-langage-c.html#fonction-puts" title="Permalink to this headline">¶</a></h3>
+<p>Rien de bien compliqué ici : la fonction <code>puts</code> se content d'écrire le contenu d'une variable en sortie. Son temps d'exécution est meilleur que celui de <code>printf</code>, mais elle ne permet aucune mise-en-forme. Elle peut être bénéfique en termes de performances si elle est utilisée dans une portion de code appelée très fréquemment. Dans le cas contraire, on lui préfèrera <code>printf</code>.</p>
+<pre class="code cpp literal-block">
+<span class="n">puts</span><span class="p">(</span><span class="n">variable</span><span class="p">);</span>
+</pre>
+</div>
+<div class="section" id="fonction-scanf">
+<h3>Fonction scanf<a class="headerlink" href="le-langage-c.html#fonction-scanf" title="Permalink to this headline">¶</a></h3>
+<p>De même que <code>puts</code> va de paire avec <code>fgets</code>, le fonctionnement de <code>scanf</code> est similaire à celui de <code>printf</code>, mais son rôle est de lire des informations en entrée. Pour ce faire, cette fonction prend en paramètres une chaîne de caractères comportant les flags représentant les variables à lire, identiques à ceux de <code>printf</code>. Ceci fait, les variables doivent être spécifiées après les guillemets, mais d'une manière différente que pour <code>printf</code> : en effet, scanf() doit connaître non pas le nom de la variable mais son adresse, c'est à dire la zone en mémoire où est stockée la variable. On obtient l'adresse d'une variable en préfixant son nom d'une esperluette <code>&amp;</code> mais vous verrez ce concept plus en détail en abordant les pointeurs. Les adresses des variables doivent être séparées par des virgules et dans le même ordre d'apparition que les flags.</p>
+<p>Dans l'ensemble, <code>scanf</code> s'utilise comme suit :</p>
+<pre class="code cpp literal-block">
+<span class="n">scanf</span><span class="p">(</span><span class="n">flags</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">variable</span><span class="p">...;)</span>
+</pre>
+<p>Ainsi, pour lire en entrée une variable entière, on peut employer le code suivant :</p>
+<pre class="code cpp literal-block">
+<span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">entier</span><span class="p">;</span><span class="w">
+</span><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">entier</span><span class="p">);</span>
+</pre>
+<p>Précision : pour lire une chaîne de caractères, il ne faut pas utiliser le &amp; préfixant le nom de la variable, car une telle variable est en réalité un pointeur sur la zone mémoire comportant les caractères. Vous verrez ce point plus en détail en abordant tableaux et pointeurs.</p>
+<div class="section" id="lire-une-chaine-de-caracteres">
+<h4>Lire une chaîne de caractères<a class="headerlink" href="le-langage-c.html#lire-une-chaine-de-caracteres" title="Permalink to this headline">¶</a></h4>
+<pre class="code cpp literal-block">
+<span class="kt">char</span><span class="w"> </span><span class="n">nom</span><span class="p">[</span><span class="mi">40</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">];</span><span class="w">
+</span><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%s&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">nom</span><span class="p">);</span>
+</pre>
+<p>Voici donc pour les principales fonctions d'Entrée/Sortie utiles aux débutants en C. Il s'agit d'un petit encart au parcours plus théorique d'apprentissage du langage pour permettre aux néophytes de coder rapidement de petites applications interactives, et ce avant d'aborder des concepts plus complexes.</p>
+</div>
+</div>
+</div>
+<div class="section" id="conclusion">
+<h2>Conclusion<a class="headerlink" href="le-langage-c.html#conclusion" title="Permalink to this headline">¶</a></h2>
+<p>Ceci n'est pas une fin mais un début : arrivés ici, vous commencez à maîtriser le langage C et les premiers concepts à connaître. Libre à vous maintenant d'exploiter ces constructions (boucles, conditions, entrées, sorties) pour coder des programmes de plus en plus complexes et interactifs.</p>
+<div class="section" id="pour-aller-plus-loin">
+<h3>Pour aller plus loin<a class="headerlink" href="le-langage-c.html#pour-aller-plus-loin" title="Permalink to this headline">¶</a></h3>
+<p>Il existe en France deux excellents moyens d'apprendre la programmation : l'association <a class="reference external" href="http://www.france-ioi.org/">France-IOI</a> et le concours national <a class="reference external" href="https://prologin.org/">Prologin</a>. Je vous les recommande chaudement et en particulier si vous êtes au collège ou au lycée ! Pour ma part, j'ai mieux appris (plus, plus facilement et de façon beaucoup plus marrante) aux stages d'entraînement France-IOI qu'à n'importe laquelle des autres institutions où j'ai étudié par la suite. Quinze ans plus tard, je m'estime encore incroyablement chanceux de les avoir découverts et reconnaissant envers nos entraîneurs de l'époque <a class="reference external" href="https://github.com/mathias-hiron">Mathias Hiron</a> et <a class="reference external" href="https://chargueraud.org/">Arthur Charguéraud</a> :)</p>
+<p>Voici un dernier code source d'exemple pour la route :</p>
+<div class="section" id="personne-c">
+<h4>personne.c<a class="headerlink" href="le-langage-c.html#personne-c" title="Permalink to this headline">¶</a></h4>
+<pre class="code cpp literal-block">
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span><span class="w">
+</span><span class="cm">/* Fonction principale */</span><span class="w">
+</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+   </span><span class="cm">/* Variables locales */</span><span class="w">
+   </span><span class="kt">int</span><span class="w"> </span><span class="n">age</span><span class="p">;</span><span class="w">
+   </span><span class="kt">double</span><span class="w"> </span><span class="n">taille</span><span class="p">;</span><span class="w">
+   </span><span class="kt">char</span><span class="w"> </span><span class="n">nom</span><span class="p">[</span><span class="mi">20</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">];</span><span class="w">
+
+   </span><span class="cm">/* Acquisition du nom */</span><span class="w">
+   </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Entrez votre nom :</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w">
+   </span><span class="n">fgets</span><span class="p">(</span><span class="n">nom</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="n">stdin</span><span class="p">);</span><span class="w">
+
+   </span><span class="cm">/* Acquisition de l'age */</span><span class="w">
+   </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Entrez votre age :</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w">
+   </span><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">age</span><span class="p">);</span><span class="w">
+
+   </span><span class="cm">/* Acquisition de la taille */</span><span class="w">
+   </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Entrez votre taile :</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w">
+   </span><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%lf&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">taille</span><span class="p">);</span><span class="w">
+
+   </span><span class="cm">/* Messages en sortie */</span><span class="w">
+   </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Bonjour %s !</span><span class="se">\n\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w">
+   </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Vous avez %d ans et vous mesurez %f metres.&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">nom</span><span class="p">,</span><span class="w"> </span><span class="n">age</span><span class="p">,</span><span class="w"> </span><span class="n">taille</span><span class="p">);</span><span class="w">
+   </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;J'en sais des choses non ?</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w">
+
+   </span><span class="cm">/* Fin d'exécution */</span><span class="w">
+   </span><span class="n">getchar</span><span class="p">();</span><span class="w">
+   </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">
+</span><span class="p">}</span>
+</pre>
+<p>Sur ce, bon courage dans vos aventures informatiques à venir !</p>
+</div>
+</div>
+</div>
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="le-langage-c.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="le-langage-c.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="le-langage-c.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("le-langage-c"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="le-langage-c.html">Page</a> published on <time class="dt-published" datetime="2004-04-04T00:00:00+0200">2004-04-04</time>, last edited on 2021-07-18.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

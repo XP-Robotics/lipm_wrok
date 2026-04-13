@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Vim keyboard shortcuts</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="You will spend a significant part of your time using a text editor, so you might as well pick a good one, be it Vim or Emacs or else. Below is a cheat sheet list of the commands I use every day. To get a better understanding of the logic …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Blog">
+        <meta name="keywords" content="Linux">
+
+        <meta property="og:title" content="Vim keyboard shortcuts">
+        <meta property="og:description" content="You will spend a significant part of your time using a text editor, so you might as well pick a good one, be it Vim or Emacs or else. Below is a cheat sheet list of the commands I use every day. To get a better understanding of the logic …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/blog/vim-keyboard-shortcuts.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/blog.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/blog.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <h1>Vim keyboard shortcuts</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p>You will spend a significant part of your time using a text editor, so you
+might as well pick a good one, be it Vim or Emacs or else. Below is a cheat
+sheet list of the commands I use every day. To get a better understanding of
+the logic behind the editor, check out <a class="reference external" href="http://stevelosh.com/blog/2010/09/coming-home-to-vim/">Coming Home to Vim</a> by Steve Losh.</p>
+<div class="section" id="first-contact-with-the-editor">
+<h2>First contact with the editor<a class="headerlink" href="vim-keyboard-shortcuts.html#first-contact-with-the-editor" title="Permalink to this headline">¶</a></h2>
+<p>Vim has three main modes: default, insert and visual. In the default mode, you
+don't insert text, but you can move around, copy-paste or type commands.
+Commands start with a column <code>:</code> and a word such as <code>e</code> (edit) or
+<code>q</code> (quit). For example:</p>
+<div class="section" id="open-and-close-files">
+<h3>Open and close files<a class="headerlink" href="vim-keyboard-shortcuts.html#open-and-close-files" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="shortcuts docutils">
+<colgroup>
+<col width="17%" />
+<col width="33%" />
+<col width="17%" />
+<col width="33%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>:e {file}</td>
+<td>edit another file</td>
+<td>:w</td>
+<td>write file</td>
+</tr>
+<tr><td>:wq</td>
+<td>write file and exit</td>
+<td>:q!</td>
+<td>exit without saving</td>
+</tr>
+</tbody>
+</table>
+<p>When using Vim, if for some reason you don't understand what is happenning,
+there is one recovery strategy: <strong>hit Escape repeatedly and you will always
+come back to the default mode</strong>. You can then exit with <code>:q</code> and start
+afresh.</p>
+<p>Once you are in default mode, you can move the cursor around by hitting
+directly the motion keys on your keyboard:</p>
+</div>
+<div class="section" id="motions">
+<h3>Motions<a class="headerlink" href="vim-keyboard-shortcuts.html#motions" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="shortcuts docutils">
+<colgroup>
+<col width="10%" />
+<col width="40%" />
+<col width="10%" />
+<col width="40%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>k</td>
+<td>up</td>
+<td>h</td>
+<td>left</td>
+</tr>
+<tr><td>l</td>
+<td>right</td>
+<td>j</td>
+<td>down</td>
+</tr>
+<tr><td>G</td>
+<td>end of buffer</td>
+<td>gg</td>
+<td>beginning of buffer</td>
+</tr>
+<tr><td>^</td>
+<td>beginning of line</td>
+<td>$</td>
+<td>end of line</td>
+</tr>
+<tr><td>{</td>
+<td>one paragraph backward</td>
+<td>}</td>
+<td>one paragraph forward</td>
+</tr>
+</tbody>
+</table>
+<p>To start typing text, switch to insert mode with one of the following keys:</p>
+</div>
+<div class="section" id="switching-to-insert-mode">
+<h3>Switching to insert mode<a class="headerlink" href="vim-keyboard-shortcuts.html#switching-to-insert-mode" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="shortcuts docutils">
+<colgroup>
+<col width="10%" />
+<col width="40%" />
+<col width="10%" />
+<col width="40%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>i</td>
+<td>insert text before the cursor</td>
+<td>I</td>
+<td>insert text from the beginning of the line</td>
+</tr>
+<tr><td>a</td>
+<td>append text after the cursor</td>
+<td>A</td>
+<td>append text at the end of the line</td>
+</tr>
+<tr><td>o</td>
+<td>insert text in a new line below the cursor</td>
+<td>O</td>
+<td>insert text in a new line above the cursor</td>
+</tr>
+</tbody>
+</table>
+<p>When you are done inserting, hit <em>Escape</em> to switch back to default mode.</p>
+</div>
+</div>
+<div class="section" id="basic-text-manipulation">
+<h2>Basic text manipulation<a class="headerlink" href="vim-keyboard-shortcuts.html#basic-text-manipulation" title="Permalink to this headline">¶</a></h2>
+<p>In Vim, whatever you delete (be it one character or a whole paragraph) gets
+copied to the &quot;yank ring&quot;. In default mode, you can move around characters or
+lines by deleting and pasting them:</p>
+<div class="section" id="cut-and-paste">
+<h3>Cut and paste<a class="headerlink" href="vim-keyboard-shortcuts.html#cut-and-paste" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="shortcuts docutils">
+<colgroup>
+<col width="10%" />
+<col width="40%" />
+<col width="10%" />
+<col width="40%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>x</td>
+<td>delete character under the cursor</td>
+<td>X</td>
+<td>delete character before the cursor</td>
+</tr>
+<tr><td>dd</td>
+<td>delete line</td>
+<td>D</td>
+<td>delete from cursor to end of line</td>
+</tr>
+<tr><td>p</td>
+<td>paste after the cursor</td>
+<td>P</td>
+<td>paste at the cursor</td>
+</tr>
+<tr><td>&quot;+p</td>
+<td>paste from system clipboard after the cursor</td>
+<td>&quot;+P</td>
+<td>paste from system clipboard at the cursor</td>
+</tr>
+</tbody>
+</table>
+<p>To select text, you will need to switch to visual mode, which is more or less
+a &quot;character selection&quot; mode.</p>
+</div>
+<div class="section" id="select-and-copy">
+<h3>Select and copy<a class="headerlink" href="vim-keyboard-shortcuts.html#select-and-copy" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="shortcuts docutils">
+<colgroup>
+<col width="10%" />
+<col width="40%" />
+<col width="10%" />
+<col width="40%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>v</td>
+<td>switch to visual mode</td>
+<td>V</td>
+<td>switch to visual line mode</td>
+</tr>
+<tr><td>y</td>
+<td>copy (yank)</td>
+<td>&quot;+y</td>
+<td>copy to system clipboard</td>
+</tr>
+</tbody>
+</table>
+<p>When you switch to visual mode, the current position of the cursor will become
+the beginning of your selection. You can then use the motion keys, as in
+default mode, to move over to the end of your selection. When you yank
+(<code>y</code>), Vim will automatically bring you back to default mode, with your
+selection copied into the yank ring. You can finally paste it with <code>p</code> or
+<code>P</code>.</p>
+</div>
+<div class="section" id="undo-and-redo">
+<h3>Undo and redo<a class="headerlink" href="vim-keyboard-shortcuts.html#undo-and-redo" title="Permalink to this headline">¶</a></h3>
+<p>Now is a good time to tell you how to undo and redo your changes:</p>
+<table border="1" class="shortcuts docutils">
+<colgroup>
+<col width="17%" />
+<col width="33%" />
+<col width="17%" />
+<col width="33%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>u</td>
+<td>undo</td>
+<td>Ctrl + r</td>
+<td>redo</td>
+</tr>
+</tbody>
+</table>
+<p>Vim will let you can rewind your changes as far as you like. The redo list
+will be emptied as soon as you make a new change.</p>
+</div>
+<div class="section" id="hard-line-wrapping">
+<h3>Hard line wrapping<a class="headerlink" href="vim-keyboard-shortcuts.html#hard-line-wrapping" title="Permalink to this headline">¶</a></h3>
+<p>In visual mode, you can re-apply hard line wrapping to the selected lines of a
+paragraph by:</p>
+<table border="1" class="shortcuts docutils">
+<colgroup>
+<col width="10%" />
+<col width="40%" />
+<col width="10%" />
+<col width="40%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>V</td>
+<td>switch to visual line selection mode</td>
+<td>gq</td>
+<td>wrap selected lines</td>
+</tr>
+<tr><td>{</td>
+<td>move cursor before the current paragraph</td>
+<td>}</td>
+<td>move cursor after the current paragraph</td>
+</tr>
+</tbody>
+</table>
+<p>The number of characters <code>N</code> that defines the paragraph width can be set
+on the fly or in your Vim configuration by <code>:set textwidth=N</code>.</p>
+</div>
+</div>
+<div class="section" id="windows">
+<h2>Windows<a class="headerlink" href="vim-keyboard-shortcuts.html#windows" title="Permalink to this headline">¶</a></h2>
+<p>In default mode, you can use the following:</p>
+<table border="1" class="shortcuts docutils">
+<colgroup>
+<col width="22%" />
+<col width="28%" />
+<col width="22%" />
+<col width="28%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Ctrl + w, v</td>
+<td>split window vertically</td>
+<td>Ctrl + w, s</td>
+<td>split window horizontally</td>
+</tr>
+<tr><td>Ctrl + w, j</td>
+<td>move next window downward</td>
+<td>Ctrl + w, k</td>
+<td>move to next window upward</td>
+</tr>
+<tr><td>Ctrl + w, h</td>
+<td>move to next window to the left</td>
+<td>Ctrl + w, l</td>
+<td>move to next window to the right</td>
+</tr>
+</tbody>
+</table>
+<p>To close a window simply execute <code>:q</code> as you would do to quit the editor. When there is more than one window, it will close the current one. When there is only one window left, it will close Vim as usual.</p>
+</div>
+<div class="section" id="commands">
+<h2>Commands<a class="headerlink" href="vim-keyboard-shortcuts.html#commands" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="search-and-replace">
+<h3>Search and replace<a class="headerlink" href="vim-keyboard-shortcuts.html#search-and-replace" title="Permalink to this headline">¶</a></h3>
+<p>In default mode, you can use the following:</p>
+<table border="1" class="shortcuts docutils">
+<colgroup>
+<col width="22%" />
+<col width="28%" />
+<col width="22%" />
+<col width="28%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>/{pattern}</td>
+<td>search forward from cursor</td>
+<td>?{pattern}</td>
+<td>search backward from cursor</td>
+</tr>
+<tr><td>n</td>
+<td>next occurrence of search pattern</td>
+<td>N</td>
+<td>previous occurrence of search pattern</td>
+</tr>
+<tr><td>:%s/{pattern}/{string}/</td>
+<td>replace all matches of a pattern</td>
+<td>:s/{pattern}/{string}</td>
+<td>(in visual mode) replace all matches of a pattern in the selected area</td>
+</tr>
+</tbody>
+</table>
+<p>Note that searching is not a command (it does not start with a column), but
+replacing is. The <code>%</code> in the first replacing command indicates that the
+scope of replacements is the whole file. The full syntax of the command is
+actually <code>:{range}s/{pattern}/{string}</code>. When you are in visual mode and
+press <code>:</code>, Vim should automatically complete it with <code>'&lt;'&gt;</code> (a
+range meaning &quot;in the current selection&quot;), so that appending
+<code>s/{pattern}/{string}</code> will only replace in the current selection.</p>
+</div>
+<div class="section" id="sort-lines">
+<h3>Sort lines<a class="headerlink" href="vim-keyboard-shortcuts.html#sort-lines" title="Permalink to this headline">¶</a></h3>
+<p>In visual line selection mode, you can sort the selected lines by:</p>
+<table border="1" class="shortcuts docutils">
+<colgroup>
+<col width="14%" />
+<col width="36%" />
+<col width="14%" />
+<col width="36%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>:sort</td>
+<td>sort selected lines</td>
+<td>:sort u</td>
+<td>sort lines, removing dupplicates</td>
+</tr>
+</tbody>
+</table>
+<p>The broader syntax of the command is <code>:{range}sort</code>, so that
+<code>:'a,.sort</code> will sort lines from mark <code>a</code> to the current line.</p>
+</div>
+</div>
+<div class="section" id="programming">
+<h2>Programming<a class="headerlink" href="vim-keyboard-shortcuts.html#programming" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="go-to-variable-definition">
+<h3>Go to variable definition<a class="headerlink" href="vim-keyboard-shortcuts.html#go-to-variable-definition" title="Permalink to this headline">¶</a></h3>
+<p>In default mode, you can use the following shortcuts to jump to the next
+occurrence of a symbol in your code, or to the definition of a symbol:</p>
+<table border="1" class="shortcuts docutils">
+<colgroup>
+<col width="14%" />
+<col width="36%" />
+<col width="14%" />
+<col width="36%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><tt class="docutils literal">*</tt></td>
+<td>search for the exact word under the cursor</td>
+<td>g*</td>
+<td>same as * but allows partial matches</td>
+</tr>
+<tr><td>gd</td>
+<td>go to (local) variable definition</td>
+<td>gD</td>
+<td>go to (global) variable definition</td>
+</tr>
+</tbody>
+</table>
+<p>Since <code>*</code> starts a search, you can then navigate between the next and previous
+occurrences using the standard <code>n</code> and <code>N</code>.</p>
+</div>
+<div class="section" id="go-to-function-definition">
+<h3>Go to function definition<a class="headerlink" href="vim-keyboard-shortcuts.html#go-to-function-definition" title="Permalink to this headline">¶</a></h3>
+<p>If you are programming in C or C++, you can use <a class="reference external" href="https://kulkarniamit.github.io/whatwhyhow/howto/use-vim-ctags.html">use vim with ctags</a>. The
+following shortcuts are available by default:</p>
+<table border="1" class="shortcuts docutils">
+<colgroup>
+<col width="14%" />
+<col width="36%" />
+<col width="14%" />
+<col width="36%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Ctrl + ]</td>
+<td>search for tag under the cursor and jump to first match</td>
+<td>Ctrl + T</td>
+<td>jump back in the tag stack</td>
+</tr>
+<tr><td>g]</td>
+<td>search for tag under the cursor and list matches</td>
+<td>:ts</td>
+<td>list matches for the last tag search</td>
+</tr>
+<tr><td>:tn</td>
+<td>jump to the next matching tag</td>
+<td>:tp</td>
+<td>jump to the previous matching tag</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="vim-keyboard-shortcuts.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="vim-keyboard-shortcuts.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="vim-keyboard-shortcuts.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("vim-keyboard-shortcuts"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="vim-keyboard-shortcuts.html">Page</a> published on <time class="dt-published" datetime="2016-02-04T00:00:00+0100">2016-02-04</time>, last edited on 2021-05-03.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

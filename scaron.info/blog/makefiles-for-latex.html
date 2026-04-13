@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Makefiles for LaTeX</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="To edit LaTeX documents, I use three programs for compiling, editing and viewing, glued together by awesome and run via a Makefile. These three usual suspects are: rubber to compile LaTeX documents enough times so that all references are defined vim / Neovim to edit the TeX file zathura to view …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Blog">
+        <meta name="keywords" content="Linux">
+
+        <meta property="og:title" content="Makefiles for LaTeX">
+        <meta property="og:description" content="To edit LaTeX documents, I use three programs for compiling, editing and viewing, glued together by awesome and run via a Makefile. These three usual suspects are: rubber to compile LaTeX documents enough times so that all references are defined vim / Neovim to edit the TeX file zathura to view …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/blog/makefiles-for-latex.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/blog.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/blog.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <h1>Makefiles for LaTeX</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p>To edit LaTeX documents, I use three programs for compiling, editing and
+viewing, glued together by <a class="reference external" href="https://awesomewm.org/">awesome</a> and run via a
+Makefile. These three usual suspects are:</p>
+<ul class="simple">
+<li><code>rubber</code> to compile LaTeX documents enough times so that all references are defined</li>
+<li><code>vim</code> / <a class="reference external" href="https://neovim.io/">Neovim</a> to edit the TeX file</li>
+<li><code>zathura</code> to view the output PDF (with vim-friendly bindings)</li>
+</ul>
+<p>We will now see how to write some Makefiles to automatically recompile LaTeX
+documents upon changes to the source TeX or figure files (PDF, SVG, etc.).</p>
+<div class="section" id="minimal-makefile">
+<h2>Minimal Makefile<a class="headerlink" href="makefiles-for-latex.html#minimal-makefile" title="Permalink to this headline">¶</a></h2>
+<p>Here is a minimal Makefile to recompile the document upon saving the TeX file.
+It relies on <code>inotifywait</code> to recompile the document upon changes to the
+TeX source. On Debian/Ubuntu, you will find this tool in the
+<code>inotify-tools</code> package (<code>sudo apt-get install inotify-tools</code>).</p>
+<pre class="code bash literal-block">
+<span class="c1"># LaTeX Makefile v0.33 -- LaTeX only
+</span><span class="w">
+</span><span class="nv">PAPER</span><span class="o">=</span>paper.tex<span class="w">  </span><span class="c1"># set the path to your TeX file here
+</span><span class="nv">SHELL</span><span class="o">=</span>/bin/zsh<span class="w">   </span><span class="c1"># for the while loop below
+</span><span class="w">
+</span>all:<span class="w">  </span><span class="c1">## Compile paper
+</span><span class="w">    </span>rubber<span class="w"> </span>--pdf<span class="w"> </span><span class="k">$(</span>PAPER<span class="k">)</span><span class="w">
+
+</span>clean:<span class="w">  </span><span class="c1">## Clean output files
+</span><span class="w">    </span>rubber<span class="w"> </span>--clean<span class="w"> </span><span class="k">$(</span>PAPER<span class="k">)</span><span class="w">
+
+</span>watch:<span class="w">  </span><span class="c1">## Recompile on updates to the source file
+</span><span class="w">    </span>&#64;while<span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="p">;</span><span class="w"> </span>inotifywait<span class="w"> </span><span class="k">$(</span>PAPER<span class="k">)</span><span class="p">;</span><span class="w"> </span>sleep<span class="w"> </span><span class="m">0</span>.01<span class="p">;</span><span class="w"> </span>make<span class="w"> </span>all<span class="p">;</span><span class="w"> </span><span class="k">done</span><span class="w">
+    </span><span class="c1"># for Bash users, replace the while loop with the following
+</span><span class="w">    </span><span class="c1"># &#64;while true; do; inotifywait $(PAPER); sleep 0.01; make all; done</span>
+</pre>
+<p>After setting <code>PAPER</code> to your TeX file’s name, run <code>make watch</code> and
+the document will be automatically recompiled any time you save it in your text
+editor. Your PDF viewer should also reload the file automatically upon updates
+(Zathura does it).</p>
+<div class="section" id="addendum">
+<h3>Addendum<a class="headerlink" href="makefiles-for-latex.html#addendum" title="Permalink to this headline">¶</a></h3>
+<p>An astute reader pointed out <a class="reference external" href="https://www.reddit.com/r/LaTeX/comments/4db853/makefiles_for_latex/d1qebn0">on Reddit</a>
+that the <code>latexmk</code> tool does exactly the job of <code>make watch</code> when
+using the <code>-pvc</code> (PreView Continuously) option:</p>
+<pre class="code bash literal-block">
+latexmk<span class="w"> </span>-pdf<span class="w"> </span>-pvc<span class="w"> </span>paper.tex
+</pre>
+<p>However, in my experience LaTeX errors sometimes put this tool in an
+inconsistent state, requiring a Ctrl-C and restart to update the PDF correctly.
+At any rate, we will see below how we can extend our <code>make watch</code> rule to
+recompile SVG figures as well upon updates, which <code>latexmk</code> doesn’t do.</p>
+</div>
+</div>
+<div class="section" id="adding-figures">
+<h2>Adding figures<a class="headerlink" href="makefiles-for-latex.html#adding-figures" title="Permalink to this headline">¶</a></h2>
+<p>Maybe you have SVG figures in your document, which you manually export to PDF
+and include in your document via <code>\includegraphics</code>. This process can be
+automated in the Makefile by calling <a class="reference external" href="https://inkscape.org/">Inkscape</a> from
+the command-line. Here is an extended Makefile that will automatically
+recompile PDF figures from their SVG sources upon saving:</p>
+<pre class="code bash literal-block">
+<span class="c1"># LaTeX Makefile v0.66 -- LaTeX + PDF figures
+</span><span class="w">
+</span><span class="nv">ALL</span><span class="o">=</span><span class="k">$(</span>wildcard<span class="w"> </span>*.sty<span class="w"> </span>*.tex<span class="w"> </span>figures/*.svg<span class="k">)</span><span class="w">
+</span><span class="nv">PAPER</span><span class="o">=</span>paper.tex<span class="w">
+</span><span class="nv">SHELL</span><span class="o">=</span>/bin/zsh<span class="w">
+
+</span><span class="nv">FIGURES_SVG</span><span class="o">=</span><span class="k">$(</span>wildcard<span class="w"> </span>figures/*.svg<span class="k">)</span><span class="w">
+</span><span class="nv">FIGURES_PDF</span><span class="o">=</span><span class="k">$(</span>FIGURES_SVG:.svg<span class="o">=</span>.pdf<span class="k">)</span><span class="w">
+
+</span>all:<span class="w"> </span><span class="k">$(</span>FIGURES_PDF<span class="k">)</span><span class="w">  </span><span class="c1">## Build full thesis (LaTeX + figures)
+</span><span class="w">    </span>rubber<span class="w"> </span>--pdf<span class="w"> </span><span class="k">$(</span>PAPER<span class="k">)</span><span class="w">
+
+</span>clean:<span class="w">  </span><span class="c1">## Clean LaTeX and output figure files
+</span><span class="w">    </span>rubber<span class="w"> </span>--clean<span class="w"> </span><span class="k">$(</span>PAPER<span class="k">)</span><span class="w">
+    </span>rm<span class="w"> </span>-f<span class="w"> </span><span class="k">$(</span>FIGURES_PDF<span class="k">)</span><span class="w">
+
+</span>figures/%.pdf:<span class="w"> </span>figures/%.svg<span class="w">  </span><span class="c1">## Figures for the manuscript
+</span><span class="w">    </span>inkscape<span class="w"> </span>-C<span class="w"> </span>-z<span class="w"> </span>--file<span class="o">=</span>$&lt;<span class="w"> </span>--export-pdf<span class="o">=</span><span class="nv">$&#64;</span><span class="w">
+
+</span>watch:<span class="w">  </span><span class="c1">## Recompile on any update of LaTeX or SVG sources
+</span><span class="w">    </span>&#64;while<span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="p">;</span><span class="w"> </span>inotifywait<span class="w"> </span><span class="k">$(</span>ALL<span class="k">)</span><span class="p">;</span><span class="w"> </span>sleep<span class="w"> </span><span class="m">0</span>.01<span class="p">;</span><span class="w"> </span>make<span class="w"> </span>all<span class="p">;</span><span class="w"> </span><span class="k">done</span>
+</pre>
+</div>
+<div class="section" id="makefile-of-my-phd-thesis">
+<h2>Makefile of my PhD thesis<a class="headerlink" href="makefiles-for-latex.html#makefile-of-my-phd-thesis" title="Permalink to this headline">¶</a></h2>
+<p>Rubber automates the compilation of LaTeX documents, and using
+<code>inotifywait</code> and <code>inkscape</code> automates the process further. As an
+example, below is the full Makefile I used to compile my PhD thesis, as well as
+associated resources such as the (HTML 5) slides of my defense. The directory
+structure was:</p>
+<pre class="code bash literal-block">
+$<span class="w"> </span>tree<span class="w"> </span>-L<span class="w"> </span><span class="m">2</span><span class="w"> </span>~/Documents/Thesis<span class="w">
+</span>/home/scaron/Documents/Thesis<span class="w">
+</span>├──<span class="w"> </span>cleanthesis.sty<span class="w">
+</span>├──<span class="w"> </span>content<span class="w">
+</span>├──<span class="w"> </span>defense<span class="w">
+</span>│<span class="w">&nbsp;&nbsp; </span>├──<span class="w"> </span>images<span class="w">
+</span>│<span class="w">&nbsp;&nbsp; </span>├──<span class="w"> </span>index.html<span class="w">
+</span>│<span class="w">&nbsp;&nbsp; </span>└──<span class="w"> </span>static<span class="w">
+</span>├──<span class="w"> </span>figures<span class="w">
+</span>│<span class="w">&nbsp;&nbsp; </span>├──<span class="w"> </span>pdf<span class="w">
+</span>│<span class="w">&nbsp;&nbsp; </span>├──<span class="w"> </span>static<span class="w">
+</span>│<span class="w">&nbsp;&nbsp; </span>└──<span class="w"> </span>svg<span class="w">
+</span>├──<span class="w"> </span>Makefile<span class="w">
+</span>├──<span class="w"> </span>refs.bib<span class="w">
+</span>└──<span class="w"> </span>thesis.tex
+</pre>
+<p>And the corresponding Makefile:</p>
+<pre class="code bash literal-block">
+<span class="c1"># LaTeX Makefile v1.0 -- LaTeX + PDF figures + PNG figures
+</span><span class="w">
+</span><span class="nv">ALL</span><span class="o">=</span><span class="k">$(</span>wildcard<span class="w"> </span>*.tex<span class="w"> </span>content/*.tex<span class="w"> </span>defense/index.html<span class="w"> </span>figures/svg/*.svg<span class="k">)</span><span class="w">
+</span><span class="nv">MAIN</span><span class="o">=</span>thesis.tex<span class="w">
+</span><span class="nv">LATEX</span><span class="o">=</span>rubber<span class="w"> </span>--pdf<span class="w">
+</span><span class="nv">SHELL</span><span class="o">=</span>/bin/zsh<span class="w">
+
+</span><span class="nv">FIGURES_SVG</span><span class="o">=</span><span class="k">$(</span>wildcard<span class="w"> </span>figures/svg/*.svg<span class="k">)</span><span class="w">
+</span><span class="nv">FIGURES_PDF</span><span class="o">=</span><span class="k">$(</span>subst<span class="w"> </span>svg/,pdf/,<span class="k">$(</span>FIGURES_SVG:.svg<span class="o">=</span>.pdf<span class="k">))</span><span class="w">
+</span><span class="nv">FIGURES_PNG</span><span class="o">=</span><span class="k">$(</span>subst<span class="w"> </span>figures/svg/,defense/images/,<span class="k">$(</span>FIGURES_SVG:.svg<span class="o">=</span>.png<span class="k">))</span><span class="w">
+
+</span>all:<span class="w"> </span><span class="k">$(</span>FIGURES_PDF<span class="k">)</span><span class="w"> </span><span class="k">$(</span>FIGURES_PNG<span class="k">)</span><span class="w">  </span><span class="c1">## Build full thesis (LaTeX + figures)
+</span><span class="w">    </span><span class="k">$(</span>LATEX<span class="k">)</span><span class="w"> </span><span class="k">$(</span>MAIN<span class="k">)</span><span class="w">                </span><span class="c1"># main run
+</span><span class="w">    </span>bibtex<span class="w"> </span><span class="k">$(</span>MAIN:.tex<span class="o">=</span><span class="k">)</span><span class="w">            </span><span class="c1"># bibliography
+</span><span class="w">    </span>makeglossaries<span class="w"> </span><span class="k">$(</span>MAIN:.tex<span class="o">=</span><span class="k">)</span><span class="w">    </span><span class="c1"># list of abbreviations, nomenclature
+</span><span class="w">    </span><span class="k">$(</span>LATEX<span class="k">)</span><span class="w"> </span><span class="k">$(</span>MAIN<span class="k">)</span><span class="w">                </span><span class="c1"># incremental run
+</span><span class="w">
+</span>clean:<span class="w">  </span><span class="c1">## Clean LaTeX and output figure files
+</span><span class="w">    </span>rubber<span class="w"> </span>--clean<span class="w"> </span><span class="k">$(</span>MAIN<span class="k">)</span><span class="w">
+    </span>rm<span class="w"> </span>-f<span class="w"> </span><span class="k">$(</span>FIGURES_PDF<span class="k">)</span><span class="w"> </span><span class="k">$(</span>FIGURES_PNG<span class="k">)</span><span class="w">
+
+</span>figures/pdf/%.pdf:<span class="w"> </span>figures/svg/%.svg<span class="w">  </span><span class="c1">## Figures for the manuscript
+</span><span class="w">    </span>inkscape<span class="w"> </span>-C<span class="w"> </span>-z<span class="w"> </span>--file<span class="o">=</span>$&lt;<span class="w"> </span>--export-pdf<span class="o">=</span><span class="nv">$&#64;</span><span class="w">
+
+</span>defense/images/%.png:<span class="w"> </span>figures/svg/%.svg<span class="w">  </span><span class="c1">## Figures for my defense slides
+</span><span class="w">    </span>inkscape<span class="w"> </span>-C<span class="w"> </span>-z<span class="w"> </span>--file<span class="o">=</span>$&lt;<span class="w"> </span>--export-png<span class="o">=</span><span class="nv">$&#64;</span><span class="w">
+
+</span>watch:<span class="w">  </span><span class="c1">## Recompile on any update of LaTeX or SVG sources
+</span><span class="w">    </span>&#64;while<span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="p">;</span><span class="w">          </span><span class="se">\
+</span><span class="w">        </span>inotifywait<span class="w"> </span><span class="k">$(</span>ALL<span class="k">)</span><span class="p">;</span><span class="w">    </span><span class="se">\
+</span><span class="w">        </span>sleep<span class="w"> </span><span class="m">0</span>.01<span class="p">;</span><span class="w">            </span><span class="se">\
+</span><span class="w">        </span>make<span class="w"> </span>all<span class="p">;</span><span class="w">              </span><span class="se">\
+</span><span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;\n----------\n&quot;</span><span class="p">;</span><span class="w"> </span><span class="se">\
+</span><span class="w">        </span><span class="k">done</span><span class="w">
+
+</span>help:<span class="w">  </span><span class="c1"># http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
+</span><span class="w">    </span>&#64;grep<span class="w"> </span>-P<span class="w"> </span><span class="s1">'^[a-zA-Z_-]+:.*?## .*$$'</span><span class="w"> </span><span class="k">$(</span>MAKEFILE_LIST<span class="k">)</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">'BEGIN {FS = &quot;:.*?## &quot;}; {printf &quot;\033[36m%-20s\033[0m %s\n&quot;, $$1, $$2}'</span><span class="w">
+</span>.DEFAULT_GOAL<span class="w"> </span>:<span class="o">=</span><span class="w"> </span><span class="nb">help</span><span class="w">
+</span>.PHONY:<span class="w"> </span><span class="nb">help</span>
+</pre>
+<p>It includes two minor changes compared to the previous Makefile: the
+compilation of both PDF and PNG figures (rewrite rules get a bit more complex)
+and the <a class="reference external" href="http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html">nice help snippet from the marmelab blog</a>.</p>
+</div>
+<div class="section" id="integrating-inkscape-and-latex">
+<h2>Integrating Inkscape and LaTeX<a class="headerlink" href="makefiles-for-latex.html#integrating-inkscape-and-latex" title="Permalink to this headline">¶</a></h2>
+<p>There is room for improvement in the integration between Inkscape and LaTeX. So
+far, I have been using the <a class="reference external" href="http://pav.iki.fi/software/textext/index.html">textext</a> extension to embed LaTeX
+equations into SVG files. However, with this approach one needs to coordinate
+by hand the font size between the SVG and LaTeX documents. For instance, when
+you scale the figure in <code>\includegraphics</code>, its text gets scaled as well.</p>
+<p>Looking at the <a class="reference external" href="http://wiki.inkscape.org/wiki/index.php/LaTeX">LaTeX page of the Inkscape wiki</a> and the related
+<a class="reference external" href="http://www.ctan.org/tex-archive/info/svg-inkscape">svg-inkscape</a> LaTeX
+package, it seems one can alternatively process SVG figures directly from
+LaTeX. This has the benefit not only of using the same text scaling between
+figure and document, but also enables you to use other contextual macros such
+as <code>\ref</code> and <code>\cite</code>. One should definitely try it out 😉</p>
+</div>
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="makefiles-for-latex.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="makefiles-for-latex.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="makefiles-for-latex.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("makefiles-for-latex"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="makefiles-for-latex.html">Page</a> published on <time class="dt-published" datetime="2016-04-04T00:00:00+0200">2016-04-04</time>.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

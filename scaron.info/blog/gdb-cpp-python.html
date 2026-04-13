@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Debugging C++ projects with GDB</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="I am currently working on a Python/C++ project where Python code calls methods from a C++ library, objects being carried from one to the other by Boost.Python. I was introduced (again...) to some elementary use of GDB, which I want to post here for sharing as well as …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Blog">
+        <meta name="keywords" content="C/C++">
+
+        <meta property="og:title" content="Debugging C++ projects with GDB">
+        <meta property="og:description" content="I am currently working on a Python/C++ project where Python code calls methods from a C++ library, objects being carried from one to the other by Boost.Python. I was introduced (again...) to some elementary use of GDB, which I want to post here for sharing as well as …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/blog/gdb-cpp-python.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/blog.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/blog.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <h1>Debugging C++ projects with GDB</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p>I am currently working on a Python/C++ project where Python code calls methods
+from a C++ library, objects being carried from one to the other by <a class="reference external" href="http://www.boost.org/doc/libs/1_54_0/libs/python/doc/index.html">Boost.Python</a>. I was
+introduced (again...) to some elementary use of GDB, which I want to post here
+for sharing as well as future reference. This is more of a hands-on
+demonstration than an introduction to GDB since I do not explain concepts such
+as the program stack.</p>
+<div class="section" id="getting-started">
+<h2>Getting started<a class="headerlink" href="gdb-cpp-python.html#getting-started" title="Permalink to this headline">¶</a></h2>
+<p>First, you need to compile the objects of your C++ library with the <em>-g</em>
+flag, for instance:</p>
+<div class="highlight"><pre><span></span>$<span class="w"> </span>g++<span class="w"> </span>-g<span class="w"> </span>-std<span class="o">=</span>c++0x<span class="w"> </span>-Wall<span class="w"> </span>-fPIC<span class="w"> </span>main.cpp<span class="w"> </span>bis.cpp
+</pre></div>
+<p>Then, you can run GDB on your executable directly. In the case of a Python
+script calling C++ functions, you can use the following syntax:</p>
+<div class="highlight"><pre><span></span>$<span class="w"> </span>gdb<span class="w"> </span>--args<span class="w"> </span>python<span class="w"> </span>script.py
+</pre></div>
+<p>The most frequently used GDB commands are the following (adapted from the GDB
+manpage):</p>
+<ul class="simple">
+<li><strong>r</strong>: start the program</li>
+<li><strong>bt</strong>: backtrace: display the program stack</li>
+<li><strong>b file.cpp:42</strong>: set a breakpoint at line 42 of file <em>file.cpp</em></li>
+<li><strong>c</strong>: resume execution (after stopping, e.g. at a breakpoint)</li>
+<li><strong>s</strong> (<strong>step</strong>): execute next program line (after stopping); step <em>into</em> any
+function calls in the line</li>
+<li><strong>n</strong> (<strong>next</strong>): execute next program line (after stopping); step <em>over</em>
+any function calls in the line</li>
+<li><strong>d</strong>: delete breakpoints</li>
+<li><strong>p expr</strong>: print the value of an expression <em>expr</em> (may be a single
+variable)</li>
+<li><strong>f n</strong>: go to frame <em>n</em> (see <strong>bt</strong>)</li>
+</ul>
+<p>When using the STL, you may want to include the following to your <a class="reference external" href="https://scaron.info/files/gdbinit">gdbinit
+script</a> (created by Dan Marinescu and Anders Elton). This
+script provides you with printers for your favorite STL containers, such as:</p>
+<ul class="simple">
+<li><strong>pvector v</strong>: print an <code>std::vector</code></li>
+<li><strong>plist l</strong>: print an <code>std::list</code></li>
+<li><strong>plist_member l</strong>: print one element from the list <em>l</em></li>
+</ul>
+</div>
+<div class="section" id="debugging-objects-at-execution">
+<h2>Debugging objects at execution<a class="headerlink" href="gdb-cpp-python.html#debugging-objects-at-execution" title="Permalink to this headline">¶</a></h2>
+<p>Consider the following situation: some buggy function segfaults at execution,
+and we want to survey the content of an object called <em>constraints</em> in the
+context where the function crashed. First, we use <strong>bt</strong> and <strong>f</strong> to get to
+this context:</p>
+<div class="highlight"><pre><span></span>(gdb) r
+[run until segfault]
+
+(gdb) bt
+...
+#42 0x00002aaac3bd67b7 in MyProject::BuggyFunction (constraints=...,
+    xlist=@0x7fffffffc6f8) at BuggyFile.cpp:528
+...
+
+(gdb) f 42
+#42 0x00002aaac3bd67b7 in MyProject::BuggyFunction (constraints=...,
+    xlist=@0x7fffffffc6f8) at BuggyFile.cpp:528
+528     double z = LetsCrash(constraints, xlist);
+</pre></div>
+<p>The output of <strong>f</strong> shows the current frame (#42), values of the parameters in
+the function call (I redacted <em>constraints</em> here, but e.g. the pointer value of
+the pointer <em>xlist</em> is show as a memory address) as well as the line of code
+where the execution is at (here, line 528 of file <em>BuggyFile.cpp</em>, where the
+function <em>LetsCrash</em> is called). Now <em>constraints</em> is in the current context
+and we can print it:</p>
+<div class="highlight"><pre><span></span>(gdb) p constraints
+$1 = (MyProject::Constraints &amp;) @0x1b7de60: {
+  &lt;MyProject::Constraints&gt; = {
+    _vptr.Constraints = 0x2aaac3dffb50,
+    trajectory = {
+      dimension = 2,
+      duration = 1,
+      degree = 3,
+      chunks_list = { ... }
+    },
+    n = 42
+  }, &lt;No data fields&gt;}
+</pre></div>
+<p>Let us take a peak at the <em>chunks_list</em> field of the trajectory:</p>
+<div class="highlight"><pre><span></span>(gdb) p constraints.trajectory.chunks_list
+$2 = {
+  &lt;std::_List_base&lt;MyProject::Chunk, std::allocator&lt;MyProject::Chunk&gt; &gt;&gt; = {
+    _M_impl = {
+      &lt;std::allocator&lt;std::_List_node&lt;MyProject::Chunk&gt; &gt;&gt; = {
+        &lt;__gnu_cxx::new_allocator&lt;std::_List_node&lt;MyProject::Chunk&gt; &gt;&gt; = {&lt;No data fields&gt;}, &lt;No data fields&gt;},
+      members of std::_List_base&lt;MyProject::Chunk, std::allocator&lt;MyProject::Chunk&gt; &gt;::_List_impl:
+      _M_node = {
+        _M_next = 0x1b930b0,
+        _M_prev = 0x1b930b0
+      }
+    }
+  }, &lt;No data fields&gt;}
+</pre></div>
+<p>We can call the <strong>plist</strong> pretty printer to get a more helpful output:</p>
+<div class="highlight"><pre><span></span>(gdb) plist constraints.trajectory.chunks_list
+List size = 1
+List type = std::list&lt;MyProject::Chunk, std::allocator&lt;MyProject::Chunk&gt; &gt;
+Use plist &lt;variable_name&gt; &lt;element_type&gt; to see the elements in the list.
+</pre></div>
+<p>It says we need to specify the <em>element_type</em> argument (indicated above in the
+&quot;List type&quot; line) to print out elements one by one. That is:</p>
+<div class="highlight"><pre><span></span>(gdb) plist constraints.trajectory.chunks_list Chunk
+elem[0]: $3 = {
+  dimension = 2,
+  degree = 3,
+  duration = 1,
+  sbegin = 0,
+  send = 1,
+  polynomials_vector = { ... }
+}
+List size = 1
+</pre></div>
+<p>We can access the first list element with <em>front()</em>:</p>
+<div class="highlight"><pre><span></span>(gdb) p constraints.trajectory.chunks_list.front()
+$4 = (MyProject::Chunk &amp;) @0x1b930c0: {
+  dimension = 2,
+  degree = 3,
+  duration = 1,
+  sbegin = 0,
+  send = 1,
+  polynomials_vector = { ... }
+}
+</pre></div>
+<p>However, we already had this element at hand. Had you noticed the <em>$i</em>
+printed out by GDB? They are registers that can be used to refer to printed
+objects. For instance:</p>
+<div class="highlight"><pre><span></span>(gdb) p $3
+$5 = (MyProject::Chunk &amp;) @0x1b930c0: {
+  dimension = 2,
+  degree = 3,
+  duration = 1,
+  sbegin = 0,
+  send = 1,
+  polynomials_vector = { ... }
+}
+</pre></div>
+<p>In particular, whenever you print a list or a vector, each element is
+bound to such a register so you can access it directly afterwards. We saw this
+above when we printed the chunks list and <em>$3</em> was mapped to the first element.
+If the list had had more elements, the second would have been bound to <em>$4</em>,
+the third to <em>$5</em>, ans so on. These registers can be used like variables in C++
+expressions, so we can e.g. access their fields:</p>
+<div class="highlight"><pre><span></span>(gdb) pvect $5.polynomialsvector
+elem[0]: $6 = {
+  degree = 3,
+  coefficients_vector = { ... }
+}
+elem[1]: $7 = {
+  degree = 3,
+  coefficients_vector = { ... }
+}
+Vector size = 2
+Vector capacity = 2
+Element type = MyProject::Polynomial *
+</pre></div>
+<p>As arguments to print commands are full-blown C++ expressions, one can use
+function calls (see <em>front()</em> above), membership operators (we used the dot,
+but <em>-&gt;</em> can also be used for pointers), etc.</p>
+</div>
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="gdb-cpp-python.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="gdb-cpp-python.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="gdb-cpp-python.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("gdb-cpp-python"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="gdb-cpp-python.html">Page</a> published on <time class="dt-published" datetime="2013-10-17T00:00:00+0200">2013-10-17</time>.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

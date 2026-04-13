@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Installing OpenRAVE on Ubuntu 16.04</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="The best solution to install OpenRAVE today is to build from source, which fortunately is not so difficult. The instructions in this post are for Ubuntu 16.04. You can also see this post for Ubuntu 14.04. Dependencies¶ First, make sure the following programs are installed on your system …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Robotics">
+        <meta name="keywords" content="OpenRAVE, Robotics">
+
+        <meta property="og:title" content="Installing OpenRAVE on Ubuntu 16.04">
+        <meta property="og:description" content="The best solution to install OpenRAVE today is to build from source, which fortunately is not so difficult. The instructions in this post are for Ubuntu 16.04. You can also see this post for Ubuntu 14.04. Dependencies¶ First, make sure the following programs are installed on your system …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/robotics/installing-openrave-on-ubuntu-16.04.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/robotics.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/robotics.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <h1>Installing OpenRAVE on Ubuntu 16.04</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p>The best solution to install OpenRAVE today is to build from source, which
+fortunately is not so difficult. The instructions in this post are for Ubuntu
+16.04. You can also see <a class="reference external" href="installing-openrave-on-ubuntu-14.04.html">this post for Ubuntu 14.04</a>.</p>
+<div class="section" id="dependencies">
+<h2>Dependencies<a class="headerlink" href="installing-openrave-on-ubuntu-16.04.html#dependencies" title="Permalink to this headline">¶</a></h2>
+<p>First, make sure the following programs are installed on your system:</p>
+<pre class="code bash literal-block">
+sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>cmake<span class="w"> </span>g++<span class="w"> </span>git<span class="w"> </span>ipython<span class="w"> </span>minizip<span class="w"> </span>python-dev<span class="w"> </span>python-h5py<span class="w"> </span>python-numpy<span class="w"> </span>python-scipy<span class="w"> </span>python-sympy<span class="w"> </span>qt4-dev-tools
+</pre>
+<p>Next, you will need to install the following libraries from the official Ubuntu
+repository:</p>
+<pre class="code bash literal-block">
+sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>libassimp-dev<span class="w"> </span>libavcodec-dev<span class="w"> </span>libavformat-dev<span class="w"> </span>libavformat-dev<span class="w"> </span>libboost-all-dev<span class="w"> </span>libboost-date-time-dev<span class="w"> </span>libbullet-dev<span class="w"> </span>libfaac-dev<span class="w"> </span>libglew-dev<span class="w"> </span>libgsm1-dev<span class="w"> </span>liblapack-dev<span class="w"> </span>liblog4cxx-dev<span class="w"> </span>libmpfr-dev<span class="w"> </span>libode-dev<span class="w"> </span>libogg-dev<span class="w"> </span>libpcrecpp0v5<span class="w"> </span>libpcre3-dev<span class="w"> </span>libqhull-dev<span class="w"> </span>libqt4-dev<span class="w"> </span>libsoqt-dev-common<span class="w"> </span>libsoqt4-dev<span class="w"> </span>libswscale-dev<span class="w"> </span>libswscale-dev<span class="w"> </span>libvorbis-dev<span class="w"> </span>libx264-dev<span class="w"> </span>libxml2-dev<span class="w"> </span>libxvidcore-dev
+</pre>
+<p>The next dependency is <code>collada-dom</code>, which you can clone from Github and
+build from source as well:</p>
+<pre class="code bash literal-block">
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/rdiankov/collada-dom.git<span class="w">
+</span><span class="nb">cd</span><span class="w"> </span>collada-dom<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>mkdir<span class="w"> </span>build<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>build<span class="w">
+</span>cmake<span class="w"> </span>..<span class="w">
+</span>make<span class="w"> </span>-j4<span class="w">
+</span>sudo<span class="w"> </span>make<span class="w"> </span>install
+</pre>
+<div class="section" id="openscenegraph">
+<h3>OpenSceneGraph<a class="headerlink" href="installing-openrave-on-ubuntu-16.04.html#openscenegraph" title="Permalink to this headline">¶</a></h3>
+<p>The following dependency is <a class="reference external" href="http://www.openscenegraph.org/">OpenSceneGraph</a>.
+The version provided on the Ubuntu repository is 3.2, but OpenRAVE requires
+3.4, so we are going to build it from source:</p>
+<pre class="code bash literal-block">
+sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>libcairo2-dev<span class="w"> </span>libjasper-dev<span class="w"> </span>libpoppler-glib-dev<span class="w"> </span>libsdl2-dev<span class="w"> </span>libtiff5-dev<span class="w"> </span>libxrandr-dev<span class="w">
+</span>git<span class="w"> </span>clone<span class="w"> </span>--branch<span class="w"> </span>OpenSceneGraph-3.4<span class="w"> </span>https://github.com/openscenegraph/OpenSceneGraph.git<span class="w">
+</span><span class="nb">cd</span><span class="w"> </span>OpenSceneGraph<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>mkdir<span class="w"> </span>build<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>build<span class="w">
+</span>cmake<span class="w"> </span>..<span class="w"> </span>-DDESIRED_QT_VERSION<span class="o">=</span><span class="m">4</span><span class="w">
+</span>make<span class="w"> </span>-j4<span class="w">
+</span>sudo<span class="w"> </span>make<span class="w"> </span>install
+</pre>
+<p>In case you have both Qt4 and Qt5 installed on your system, the
+<code>DESIRED_QT_VERSION</code> flag tells the compiler to use Qt4, which is the one
+expected by OpenRAVE (thanks to Fred Sukkar for pointing this out).
+Alternatively, if you don't need the OSG viewer, you can disable this
+dependency: run <code>ccmake .</code> from your OpenRAVE build directory (to install
+this tool: <code>sudo apt-get install cmake-curses-gui</code>), scroll to
+<code>OPENRAVE_PLUGIN_QTOSGRAVE</code> and switch it to <code>OFF</code>.</p>
+</div>
+<div class="section" id="flexible-collision-library">
+<h3>Flexible Collision Library<a class="headerlink" href="installing-openrave-on-ubuntu-16.04.html#flexible-collision-library" title="Permalink to this headline">¶</a></h3>
+<p>In new versions OpenRAVE defaults also require you to install the Flexible
+Collision Library:</p>
+<pre class="code bash literal-block">
+sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>libccd-dev<span class="w">
+</span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/flexible-collision-library/fcl.git<span class="w">
+</span><span class="nb">cd</span><span class="w"> </span>fcl<span class="w">
+</span>git<span class="w"> </span>checkout<span class="w"> </span><span class="m">0</span>.5.0<span class="w">  </span><span class="c1"># use FCL 0.5.0
+</span>mkdir<span class="w"> </span>build<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>build<span class="w">
+</span>cmake<span class="w"> </span>..<span class="w">
+</span>make<span class="w"> </span>-j4<span class="w">
+</span>sudo<span class="w"> </span>make<span class="w"> </span>install
+</pre>
+<p>Due to <a class="reference external" href="http://stackoverflow.com/questions/23284473/fatal-error-eigen-dense-no-such-file-or-directory">this bug</a>,
+I also needed to add the following symlink to get FCL to compile:</p>
+<pre class="code bash literal-block">
+sudo<span class="w"> </span>ln<span class="w"> </span>-sf<span class="w"> </span>/usr/include/eigen3/Eigen<span class="w"> </span>/usr/include/Eigen
+</pre>
+<p>Alternatively, you can disable the FCL plugin by running <code>ccmake .</code> from
+your OpenRAVE build directory. Scroll down to <code>OPENRAVE_PLUGIN_FCLRAVE</code>
+and switch it to <code>OFF</code>.</p>
+</div>
+</div>
+<div class="section" id="building-openrave">
+<h2>Building OpenRAVE<a class="headerlink" href="installing-openrave-on-ubuntu-16.04.html#building-openrave" title="Permalink to this headline">¶</a></h2>
+<p>Once all this software is installed, clone the <code>latest_stable</code> branch of
+OpenRAVE from GitHub:</p>
+<pre class="code bash literal-block">
+git<span class="w"> </span>clone<span class="w"> </span>--branch<span class="w"> </span>latest_stable<span class="w"> </span>https://github.com/rdiankov/openrave.git
+</pre>
+<p>At the time of writing these instructions (August 2016), the latest commit on
+this branch is <code>9c79ea26...</code>. If it is fine with you to run an old
+version of the software, you can check it out to raise your chances of a
+successful install:</p>
+<pre class="code bash literal-block">
+<span class="c1"># only run this if you don't need the latest version of OpenRAVE:
+</span>git<span class="w"> </span>checkout<span class="w"> </span>9c79ea260e1c009b0a6f7c03ec34f59629ccbe2c
+</pre>
+<p>What follows is the default procedure to build projects with CMake. By default,
+OpenSceneGraph installs its libraries in the non-standard
+<code>/usr/local/lib64</code>, so we add a flag so that CMake finds it:</p>
+<pre class="code bash literal-block">
+<span class="nb">cd</span><span class="w"> </span>openrave<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>mkdir<span class="w"> </span>build<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>build<span class="w">
+</span>cmake<span class="w"> </span>..<span class="w"> </span>-DOSG_DIR<span class="o">=</span>/usr/local/lib64/<span class="w">
+</span>make<span class="w"> </span>-j4<span class="w">
+</span>sudo<span class="w"> </span>make<span class="w"> </span>install
+</pre>
+<p>This can raise a number of errors depending on your system. See the
+<a class="reference external" href="troubleshooting-openrave-installation.html">troubleshooting OpenRAVE installation</a> page for a small list
+of known problems and fixes.</p>
+<div class="section" id="adding-openrave-to-your-path">
+<h3>Adding OpenRAVE to your path<a class="headerlink" href="installing-openrave-on-ubuntu-16.04.html#adding-openrave-to-your-path" title="Permalink to this headline">¶</a></h3>
+<p>Finally, you will need to add OpenRAVE to your Python path:</p>
+<pre class="code bash literal-block">
+<span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LD_LIBRARY_PATH</span>:<span class="k">$(</span>openrave-config<span class="w"> </span>--python-dir<span class="k">)</span>/openravepy/_openravepy_<span class="w">
+</span><span class="nb">export</span><span class="w"> </span><span class="nv">PYTHONPATH</span><span class="o">=</span><span class="nv">$PYTHONPATH</span>:<span class="k">$(</span>openrave-config<span class="w"> </span>--python-dir<span class="k">)</span>
+</pre>
+<p>Write these two lines in your <code>.bashrc</code> or <code>.zshrc</code> to save this
+configuration between sessions.</p>
+</div>
+</div>
+<div class="section" id="running-a-first-example">
+<h2>Running a first example<a class="headerlink" href="installing-openrave-on-ubuntu-16.04.html#running-a-first-example" title="Permalink to this headline">¶</a></h2>
+<p>You can check that your installation works by running one of the default
+examples:</p>
+<pre class="code bash literal-block">
+openrave.py<span class="w"> </span>--example<span class="w"> </span>graspplanning
+</pre>
+<p>This command should fire up the <a class="reference external" href="http://openrave.org/docs/latest_stable/openravepy/examples.graspplanning/">graspplanning</a>
+example:</p>
+<img alt="OpenRAVE viewer at startup" class="noborder gui align-center" src="../images/openrave/graspplanning.png" />
+<p>Now that your software is up and running, you can check out how to <a class="reference external" href="getting-started-with-openrave.html">set up your
+first environment</a>.</p>
+<div class="section" id="issue-435">
+<h3>Issue #435<a class="headerlink" href="installing-openrave-on-ubuntu-16.04.html#issue-435" title="Permalink to this headline">¶</a></h3>
+<p>If your robots have crazy model geometries in the viewer, you may be <a class="reference external" href="https://github.com/rdiankov/openrave/issues/435">running
+into bug #435</a> which seems
+related to Ubuntu 16.04. You can post the details of your configuration on the
+issue tracker to help address it.</p>
+</div>
+</div>
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="installing-openrave-on-ubuntu-16.04.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+        <p>
+        You can subscribe to this <i class="rss-icon"></i>&nbsp;<a href="https://scaron.info/feeds/comment.installing-openrave-on-ubuntu-16.04.atom.xml">Discussion's atom feed</a> to stay tuned.
+        </p>
+<ul>
+            <li class="with-border-top" id="comment-installing-on-ubuntu-20.04">
+                <div class="comment-left">
+                    <img src="../images/identicon/cea2db204a58a06652013d01ee1322e0.png"
+                         alt="Avatar"
+                         height="72"
+                         width="72">
+                </div>
+                <div class="comment-body">
+                    <div class="pull-right">
+                        <a class="btn" role="button" href="installing-openrave-on-ubuntu-16.04.html#comment-installing-on-ubuntu-20.04" rel="bookmark" title="Permalink to this comment">
+                            <i class="permalink-icon"></i>
+                            Permalink
+                        </a>
+                        <button onclick="CommentSystem.setReply('installing-on-ubuntu-20.04', 'Saber-Riadh');">
+                            <i class="reply-icon"></i>
+                            Reply
+                        </button>
+                    </div>
+                    <h4 class="author">
+                            Saber-Riadh
+                    </h4>
+                    <p class="posted-on">
+                        Posted on
+                        <time datetime="2023-10-05T16:27:00+02:00" title="2023-10-05T16:27:00+02:00">Thu 05 October 2023</time>
+                    </p>
+                    <div class="comment-content" >
+                        <p>I'm encountering some issues installing it on Ubuntu 20.04 if you can send me a tutorial on how to do it.</p>
+                    </div>
+                        <ul>
+                                        <li class="with-border-top" id="comment-reply-installing-on-ubuntu-20.04">
+                <div class="comment-left">
+                    <img src="../images/identicon/e32ff903a0e87efe5d3854e53f016a72.png"
+                         alt="Avatar"
+                         height="72"
+                         width="72">
+                </div>
+                <div class="comment-body">
+                    <div class="pull-right">
+                        <a class="btn" role="button" href="installing-openrave-on-ubuntu-16.04.html#comment-reply-installing-on-ubuntu-20.04" rel="bookmark" title="Permalink to this comment">
+                            <i class="permalink-icon"></i>
+                            Permalink
+                        </a>
+                        <button onclick="CommentSystem.setReply('reply-installing-on-ubuntu-20.04', 'St%C3%A9phane');">
+                            <i class="reply-icon"></i>
+                            Reply
+                        </button>
+                    </div>
+                    <h4 class="author">
+                            Stéphane
+                    </h4>
+                    <p class="posted-on">
+                        Posted on
+                        <time datetime="2022-10-07T12:29:00+02:00" title="2022-10-07T12:29:00+02:00">Fri 07 October 2022</time>
+                    </p>
+                    <div class="comment-content" >
+                        <p>I can't tell you how to install OpenRAVE on Ubuntu 20.04 as I have long switched to <a href="https://github.com/stack-of-tasks/pinocchio">Pinocchio</a>, which is straightforward to install via <code>conda</code> or <code>pip</code>. The best place to ask about the issue you encounter is the official <a href="https://github.com/rdiankov/openrave/issues">OpenRAVE issue tracker</a>.</p>
+                    </div>
+                </div>
+            </li>
+
+                        </ul>
+                </div>
+            </li>
+        </ul>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="installing-openrave-on-ubuntu-16.04.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="installing-openrave-on-ubuntu-16.04.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("installing-openrave-on-ubuntu-16.04"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="installing-openrave-on-ubuntu-16.04.html">Page</a> published on <time class="dt-published" datetime="2016-08-18T00:00:00+0200">2016-08-18</time>.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

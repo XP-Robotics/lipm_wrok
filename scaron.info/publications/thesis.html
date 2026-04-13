@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Computational Foundation for Planner-in-the-Loop Multi-Contact Whole-Body Control of Humanoid Robots</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="Stéphane Caron. PhD thesis. Defended on January 25, 2016 at the University of Tokyo (東京大学). My studies were sponsored by a Monbukagakusho (MEXT) scholarship for which I am very grateful. See the stories below for a more personal account of my time as a PhD student in …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Publications">
+        <meta name="keywords" content="Motion planning, PhD thesis, Robotics">
+
+        <meta property="og:title" content="Computational Foundation for Planner-in-the-Loop Multi-Contact Whole-Body Control of Humanoid Robots">
+        <meta property="og:description" content="Stéphane Caron. PhD thesis. Defended on January 25, 2016 at the University of Tokyo (東京大学). My studies were sponsored by a Monbukagakusho (MEXT) scholarship for which I am very grateful. See the stories below for a more personal account of my time as a PhD student in …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/publications/thesis.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/publications.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/publications.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <hgroup>
+                    <h1>Computational Foundation for Planner-in-the-Loop Multi-Contact Whole-Body Control of Humanoid Robots</h1>
+                    <h2>運動計画をフィードバックループに含むヒューマノイドロボットの多点接触全身制御のための計算基盤</h2>
+                </hgroup>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p class="authors"><strong>Stéphane Caron</strong>. PhD thesis. Defended on January 25, 2016 at the <em>University
+of Tokyo</em> (東京大学).</p>
+<p>My studies were sponsored by a <a class="reference external" href="https://en.wikipedia.org/wiki/Monbukagakusho_Scholarship">Monbukagakusho (MEXT) scholarship</a> for which I am
+very grateful. See the <a class="reference external" href="thesis.html#revision-history">stories</a> below for a more personal
+account of my time as a PhD student in Japan.</p>
+<div class="section" id="thesis-committee">
+<h2>Thesis committee<a class="headerlink" href="thesis.html#thesis-committee" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><strong>Yoshihiko Nakamura</strong>, Professor at the University of Tokyo (Chair)</li>
+<li><strong>Isao Shimoyama</strong>, Professor at the University of Tokyo (Examiner)</li>
+<li><strong>Masayuki Inaba</strong>, Professor at the University of Tokyo (Examiner)</li>
+<li><strong>Yasuo Kuniyoshi</strong>, Professor at the University of Tokyo (Examiner)</li>
+<li><strong>Wataru Takano</strong>, Professor at the University of Tokyo (Examiner)</li>
+<li><strong>Jean-Paul Laumond</strong>, Senior Scientist at CNRS (Examiner)</li>
+</ul>
+</div>
+<div class="section" id="abstract">
+<h2>Abstract<a class="headerlink" href="thesis.html#abstract" title="Permalink to this headline">¶</a></h2>
+<p>In this thesis, we explore the questions of motion planning and control for
+humanoid robots with the aim to integrate motion planning in a fast control
+loop. Our contributions towards this goal revolve around three axes:
+kinodynamic decoupling, force-space curtailment, and dimensional reduction of
+the control space. In the first one, we decouple the kinematic and dynamic
+components of the planning problem by an original integration with time-optimal
+control methods. This approach allows us to keep planning in a geometric space,
+the benefits of which we demonstrate both empirically and through theoretical
+proofs. In the second axis, we focus on the contact aspects of planning. To
+avoid slippage or other contact losses, planners usually consider a large
+number of contact forces and their associated Coulomb friction cones. We show
+how this redundant representation can be reduced to contact wrenches, unique to
+each contacting articulation, and propose the first analytical derivation of
+the associated frictional wrench cone for rectangular contact surfaces. We then
+connect these developments to the gravito-inertial wrench for whole-body motion
+planning. However, we note that using wrenches for planning leads to
+challenging open questions such as the interpolation of the non-holonomic
+angular momentum. We attack this problem with a paradigm shift: rather than
+controlling wrenches, we generalize the notion of ZMP (point where the
+tangential component of the gravito-inertial moment vanishes) to that of &quot;ZMP
+of a wrench&quot;. We then propose efficient algorithms to compute the associated
+support areas, and show how to use these tools to generate locomoting
+trajectories from simplified dynamics model such as the Linear Pendulum, even
+in arbitrary multi-contact scenarios. This reduction of the control space
+rounds the third and last axis of the computational foundations advanced by
+this thesis. We demonstrate the applicability of each by simulations and
+empirical experiments on the HRP-4 humanoid robot.</p>
+<img alt="Humanoid making a long stride using foot and hand contacts" class="noborder align-center" src="../images/zmp-motion.png" style="width: 100%;" />
+</div>
+<div class="section" id="resume">
+<h2>Résumé<a class="headerlink" href="thesis.html#resume" title="Permalink to this headline">¶</a></h2>
+<p>Cette thèse explore les questions de la planification et du contrôle du
+mouvement pour les robots humanoïdes, en se donnant pour objectif de jeter les
+bases calculatoires qui permettront d'inclure cette première dans une boucle de
+contrôle haute-fréquence. Ces bases se répartissent en trois axes&nbsp;:&nbsp;découplage kinodynamique, réduction de l'espace des forces, et réduction
+de l'espace de contrôle. Dans le premier, nous séparons les composantes
+géométrique et dynamique du problème de planification par des méthodes issues
+de la paramétrisation en temps optimal. Cette approche permet de maintenir un
+espace de planification purement géométrique, dont nous démontrons l'intérêt à
+la fois empiriquement et par des preuves théoriques. Nous nous concentrons
+ensuite sur l'aspect continger (Relatif au contact ; du latin <em>contingo</em> pour
+toucher, saisir.) de la planification humanoïde. La nécessité d'éviter les
+pertes de contact oblige généralement les planificateurs à considérer un grand
+nombre de forces de contact associées à des cônes de frottements de Coulomb.
+Nous montrons comment réduire cette représentation redondante à des torseurs de
+contact, uniques pour chaque articulation, et proposons la première dérivation
+analytique du cônes de frottement torsoriel pour les surfaces de contact
+rectangulaires. Nous connectons ensuite ce développement au cône du torseur
+gravito-inertiel pour la planification corps complet. Nous remarquons toutefois
+que l'utilisation de torseurs pour cette tâche pose des questions difficiles
+telles que l'interpolation du moment angulaire, qui est une grandeur
+non-holonome. Nous y répondons par un changement de paradigme&nbsp;:&nbsp;plutôt que d'utiliser ces torseurs directement, nous introduisons une
+généralisation de la notion du ZMP (point d'annulation de la composante
+tangentielle du moment gravito-inertiel) à des torseurs généraux. Nous
+proposons ensuite des méthodes efficaces pour calculer la zone de support du
+ZMP généralisée, et montrons comment celles-ci peuvent être utilisées générer
+des trajectoires locomotrices à partir de modèles dynamiques simplifiés tels
+que le pendule linéaire. Cette réduction de l'espace de contrôle à l'aide de
+modèle simplifiés constitue le troisième et dernier axe des bases calculatoires
+avancées par cette thèse. Nous démontrons l'applicabilité de l'ensemble de ces
+propositions par des simulations et expériences sur le robot humanoïde HRP-4.</p>
+</div>
+<div class="section" id="content">
+<h2>Content<a class="headerlink" href="thesis.html#content" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="files docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><img alt="pdf" class="icon" src="../images/icons/pdf.png" /></td>
+<td><a class="reference external" href="https://scaron.info/papers/thesis.pdf">Revised manuscript</a> (March 10, 2017)</td>
+</tr>
+<tr><td><img alt="pdf" class="icon" src="../images/icons/pdf.png" /></td>
+<td><a class="reference external" href="https://repository.dl.itc.u-tokyo.ac.jp/?action=repository_uri&amp;item_id=48878&amp;file_id=14&amp;file_no=1">Submitted manuscript</a> (March 24, 2016)</td>
+</tr>
+<tr><td><img alt="html" class="icon" src="../images/icons/html5.png" /></td>
+<td><a class="reference external" href="http://hdl.handle.net/2261/00074003">Official page on the University of Tokyo Repository</a></td>
+</tr>
+<tr><td><img alt="doi" class="icon" src="../images/icons/doi.png" /></td>
+<td><a class="reference external" href="https://doi.org/10.15083/00074003">10.15083/00074003</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="bibtex">
+<h2>BibTeX<a class="headerlink" href="thesis.html#bibtex" title="Permalink to this headline">¶</a></h2>
+<div class="highlight"><pre><span></span><span class="nc">@phdthesis</span><span class="p">{</span><span class="nl">caron2016thesis</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Computational Foundation for Planner-in-the-Loop Multi-Contact Whole-Body Control of Humanoid Robots}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Caron, St{\&#39;e}phane}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2016}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">month</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nv">jan</span><span class="p">,</span>
+<span class="w">  </span><span class="na">school</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{The University of Tokyo}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">url</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{https://scaron.info/papers/thesis.pdf}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">doi</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{10.15083/00074003}</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="section" id="revision-history">
+<h2>Revision history<a class="headerlink" href="thesis.html#revision-history" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>March 10, 2017: thanks to <a class="reference external" href="http://sylvain.miossec.free.fr/work/">Sylvain Miossec</a> for spotting an interpretation
+mistake on page 82.</li>
+<li>February 1, 2016: official version archived in the <a class="reference external" href="https://repository.dl.itc.u-tokyo.ac.jp/records/48878">UTokyo Repository</a>.</li>
+</ul>
+</div>
+<div class="section" id="stories-1">
+<h2>Stories<a class="headerlink" href="thesis.html#stories-1" title="Permalink to this headline">¶</a></h2>
+<p>I did my PhD studies at the <a class="reference external" href="http://roboticsynl.com/ynl2017">Nakamura Lab</a>
+(as of 2021 it has become the <em>Dynamics Control Systems Lab</em>). All undergrad
+and grad students mostly worked in a big open space, room 82C1 on the eight
+floor of Engineering Building number 2, on the historical Hongo campus of the
+University of Tokyo. The campus itself was an enjoyable area by Tokyo
+standards, with a small wood, a pond, and reminders that the Uni was one of
+Japan's red brick universities. PhD students in the lab sat by the windows.
+Here is what the view looked like from my desk:</p>
+<img alt="View from my desk during my PhD studies in Japan." class="center max-width-80pct" src="../images/phd-corner.jpg" />
+<p>The room was studious most of the time, but with so many students we also had
+our fair share of kerfuffle and heated discussions. When <em>Dark Souls II</em> was
+all the rage, <a class="reference external" href="http://zhangtianwei.info/">Tianwei Zhang</a> and I contributed
+heavily (^_^&quot;) Later on I moved to a quieter room with staff members.</p>
+<div class="section" id="darpa-robotics-challenge">
+<h3>DARPA Robotics Challenge<a class="headerlink" href="thesis.html#darpa-robotics-challenge" title="Permalink to this headline">¶</a></h3>
+<p>On the technical side, the highlight of my time as a PhD student came when our
+lab passed the qualification to participate to the DARPA Robotics Challenge
+(DRC) as <a class="reference external" href="https://www.popsci.com/meet-hydra-coolest-robot-not-competing-darpa-robotics-challenge/">Team Hydra</a>.
+This indirectly followed the acquisition of <a class="reference external" href="https://spectrum.ieee.org/schaft-robot-company-bought-by-google-darpa-robotics-challenge-winner">SHAFT</a>
+(the Japanese company that won the DRC Trials in December 2013) by Google,
+which had sent waves through the Japanese government and decided it to fund
+several teams for the DRC Finals in June 2015. While many teams were in the
+loop since the Virtual Robotics Challenge (June 2013) or DRC Trials (December
+2013), our teams started to get out of their labs in the winter of 2015.</p>
+<p>Things happened fast: from February 2015, we would go test our robots in an
+abandonned school campus in the <a class="reference external" href="https://en.wikipedia.org/wiki/Sagamihara">Sagamihara</a> suburb of Tokyo (way to get PhD
+students to learn how to wake up early!). In May 2015, the government had
+arranged rental of a warehouse near <a class="reference external" href="https://en.wikipedia.org/wiki/Las_Vegas">Las Vegas</a> where we flew with our robots,
+renting cars and a house to lodge the team together (intensity of colorful
+memories increases a notch :D). Finally, we all drove to <a class="reference external" href="https://en.wikipedia.org/wiki/Pomona,_California">Pomona, California</a> for the final event.</p>
+<img alt="Hydra at the DRC (June 2015), source: Popular Science. That's me on my laptop in the background (*^_^*)" class="center max-width-80pct" src="https://www.popsci.com/uploads/2019/03/18/5DW4ORZAUUDCGNFMER7P47ERHU-1024x619.jpg" />
+<p>The team went through a lot during these times, and many of the resulting
+stories and symbols stay with us (See You Again, In-N-Out Burger, ...) As I
+wrote in the foreword of my eventual thesis, we get to appreciate each others
+pragmatically during times of stress: personally, my respect went to Pr
+Kaminaga, Pr <a class="reference external" href="http://www.ric.hi-ho.ne.jp/z-lab/index-e.html">Sugihara</a> and Pr
+<a class="reference external" href="https://www.research.kobe-u.ac.jp/eng-robotics/en/yokokohji/index-e.html">Yokokohji</a>
+who, rain or shine, kept their minds focussed on making contributions that made
+sense.</p>
+</div>
+<div class="section" id="hotel-lancelot">
+<h3>Hotel Lancelot<a class="headerlink" href="thesis.html#hotel-lancelot" title="Permalink to this headline">¶</a></h3>
+<p>On the creative side, the highlight of my PhD happened in the lobby of the
+<a class="reference external" href="https://www.lancelothotel.com/">Hotel Lancelot</a> in Rome. It lasted 20 min
+:-) You see, in robotics in 2015, there was a gap between practicioners of big
+models (whole-body control) and reduced models (<a class="reference external" href="../robotics/linear-inverted-pendulum-model.html">linear inverted pendulum</a>). The former were
+successful at slow, carefully planned tasks, but the latter were successful at
+dynamic walking, which is where we wanted to go. Their solutions relied on the
+<a class="reference external" href="../robotics/zero-tilting-moment-point.html">zero-tilting moment point</a> rather than contact
+forces, and a corresponding <a class="reference external" href="../robotics/zmp-support-area.html">support area</a> defined as &quot;the convex hull of
+ground contact points&quot;. This definition seemed unnervingly arbitrary. Also, it
+only worked for walking on flat floors, while the big-model approach was able
+to handle all kinds of contacts. We were puzzled by this gap, but it was the
+state of knowledge at the time.</p>
+<p>I had been munching on this question for a while when we met with <a class="reference external" href="https://www.normalesup.org/~pham/">Quang-Cuong
+Pham</a> in Roma for the RSS 2015 conference.
+Cuong had been my advisor since the very start of my PhD, but we hadn't had a
+chance to talk for a long time because of the DRC. We sat in the lobby of our
+hotel to catch up, and first thing he knew, I unleashed on him a torrent of
+equations. I was stuck! All of these constructs were valid either on the
+big-model side or on the reduced-model side, but none of them crossed the gap
+nor answered our question. It is then that Cuong made this magic, inoccuous
+comment that sparked a eureka moment, and was the basis of what fellow
+roboticists would later call &quot;the umbrella paper&quot;:</p>
+<img alt="Illustration of the full and pendular ZMP support areas." class="center max-width-65pct" src="../images/two-areas.png" />
+<p>Honestly, I don't remember what the comment was (^_^) I just recall that Cuong
+was spontaneously curious about these objects we were dealing with, and that
+his first suggestion was something geometric, in the lines of &quot;what happens if
+we project the lines from the friction cones?&quot; It turned out to yield
+immediately an interesting object, which we called the <em>full support area</em>, and
+we already had all the tools to construct it. Things got exciting very fast!</p>
+<p>Weeks later, it would turn out not to be the &quot;useful&quot; idea for locomotion
+control, which we eventually derived and called the <em>pendular support area</em>.
+Yet this eureka idea was key in the discovery process. It essentially went like
+this: &quot;We have a support area that's derived from the big model, w00t! Wait,
+why is it so big? Oh, that's because the reduced-model pipeline makes these
+other assumptions we didn't take into account. They break our geometric
+construction... Do we need that construction? Oh, we don't, we can do
+polyhedral projections instead!&quot; And so forth.</p>
+<p>What I learned from this is that having a strong intuition that &quot;there is
+something there&quot; is not sufficient to reach new ideas. Many of your peers, past
+and present, have been there, felt the same, and didn't bring it out (or they
+did and you failed your lit' review, shame on you! ;p). In our case, it is
+Cuong's curiosity that teleported us out of the conceptual valley, and brought
+us a lot of fun on the new heights of &quot;hey, look at what this thing is doing!&quot;</p>
+</div>
+<div class="section" id="pre-defense-and-defense">
+<h3>Pre-defense and defense<a class="headerlink" href="thesis.html#pre-defense-and-defense" title="Permalink to this headline">¶</a></h3>
+<p>At the University of Tokyo, PhD theses go through a &quot;pre&quot; defense where an
+internal jury (other professors from the same university) decides if the work
+is ready for a public presentation. Unfortunately the jury is usually unchanged
+for the final defense, so that PhD students don't get the richness and
+challenge of a world-class jury of experts from their field (like it is the
+norm in Europe, for instance). With this system, the &quot;pre&quot; defense is the real
+thing for them, and the actual defense becomes more like a scripted show.
+Fortunately for me I was blessed with equally memorable pre-defense and
+defense! At pre-defense question time, one of my jury members pulled a trick on
+me that illustrated very well how <em>a clever falcon hides its claws</em> (^_^) Later
+on, my professor managed to invite <a class="reference external" href="https://www.di.ens.fr/jean-paul.laumond/">Jean-Paul Laumond</a> to my jury, which (as far as I
+understood involved getting the uni to update some of its internal regulations,
+and) contributed significantly to the quality of the final defense.</p>
+</div>
+</div>
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="thesis.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="thesis.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="thesis.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("thesis"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="thesis.html">Page</a> published on <time class="dt-published" datetime="2016-03-24T00:00:00+0100">2016-03-24</time>.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

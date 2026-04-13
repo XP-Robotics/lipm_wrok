@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Installing OpenRAVE on Ubuntu 14.04</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="The best solution to install OpenRAVE today is to build from source, which fortunately is not so difficult. Instructions from the official documentation suggest installing pre-built packages from the OpenRAVE PPA, however these packages are not up-to-date (as I write these lines, the latest update of the main OpenRAVE package …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Robotics">
+        <meta name="keywords" content="OpenRAVE, Robotics">
+
+        <meta property="og:title" content="Installing OpenRAVE on Ubuntu 14.04">
+        <meta property="og:description" content="The best solution to install OpenRAVE today is to build from source, which fortunately is not so difficult. Instructions from the official documentation suggest installing pre-built packages from the OpenRAVE PPA, however these packages are not up-to-date (as I write these lines, the latest update of the main OpenRAVE package …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/robotics/installing-openrave-on-ubuntu-14.04.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/robotics.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/robotics.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <h1>Installing OpenRAVE on Ubuntu 14.04</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p>The best solution to install OpenRAVE today is to build from source, which
+fortunately is not so difficult. Instructions from the <a class="reference external" href="http://openrave.org/docs/latest_stable/coreapihtml/installation_linux.html">official documentation</a>
+suggest installing pre-built packages from the <a class="reference external" href="https://launchpad.net/~openrave">OpenRAVE PPA</a>, however these packages are not up-to-date
+(as I write these lines, the latest update of the main OpenRAVE package is from
+two years ago).</p>
+<div class="section" id="dependencies">
+<h2>Dependencies<a class="headerlink" href="installing-openrave-on-ubuntu-14.04.html#dependencies" title="Permalink to this headline">¶</a></h2>
+<p>First, make sure the following programs are installed on your system:</p>
+<pre class="code bash literal-block">
+sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>cmake<span class="w"> </span>g++<span class="w"> </span>git<span class="w"> </span>ipython<span class="w"> </span>python-dev<span class="w"> </span>python-h5py<span class="w"> </span>python-numpy<span class="w"> </span>python-scipy<span class="w"> </span>python-sympy<span class="w"> </span>qt4-dev-tools<span class="w"> </span>zlib-bin
+</pre>
+<p>Next, you will need to install the following libraries, which are available
+from the Ubuntu package repository. (I made this list by running <code>cmake</code>
+again and again on a fresh system until no error remained.)</p>
+<pre class="code bash literal-block">
+sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>libassimp-dev<span class="w"> </span>libavcodec-dev<span class="w"> </span>libavformat-dev<span class="w"> </span>libavformat-dev<span class="w"> </span>libboost-all-dev<span class="w"> </span>libboost-date-time-dev<span class="w"> </span>libbullet-dev<span class="w"> </span>libfaac-dev<span class="w"> </span>libglew-dev<span class="w">  </span>libgsm1-dev<span class="w"> </span>liblapack-dev<span class="w"> </span>libmpfr-dev<span class="w"> </span>libode-dev<span class="w"> </span>libogg-dev<span class="w"> </span>libopenscenegraph-dev<span class="w"> </span>libpcrecpp0<span class="w"> </span>libpcre3-dev<span class="w"> </span>libqhull-dev<span class="w"> </span>libqt4-dev<span class="w"> </span>libsoqt-dev-common<span class="w"> </span>libsoqt4-dev<span class="w"> </span>libswscale-dev<span class="w"> </span>libswscale-dev<span class="w"> </span>libvorbis-dev<span class="w"> </span>libx264-dev<span class="w"> </span>libxml2-dev<span class="w"> </span>libxvidcore-dev
+</pre>
+<p>The only package for which you will need the OpenRAVE PPA is
+<code>collada-dom</code>:</p>
+<pre class="code bash literal-block">
+sudo<span class="w"> </span>add-apt-repository<span class="w"> </span>ppa:openrave/release<span class="w">
+</span>sudo<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">'echo &quot;deb-src http://ppa.launchpad.net/openrave/release/ubuntu `lsb_release -cs` main&quot; &gt;&gt; /etc/apt/sources.list.d/openrave-release-`lsb_release -cs`.list'</span><span class="w">
+</span>sudo<span class="w"> </span>apt-get<span class="w"> </span>update<span class="w">
+</span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>collada-dom-dev
+</pre>
+</div>
+<div class="section" id="building-from-source">
+<h2>Building from source<a class="headerlink" href="installing-openrave-on-ubuntu-14.04.html#building-from-source" title="Permalink to this headline">¶</a></h2>
+<p>Once all this software is installed, clone the <code>latest_stable</code> branch of
+OpenRAVE from GitHub:</p>
+<pre class="code bash literal-block">
+git<span class="w"> </span>clone<span class="w"> </span>--branch<span class="w"> </span>latest_stable<span class="w"> </span>https://github.com/rdiankov/openrave.git
+</pre>
+<p>At the time of writing these instructions (November 2015), the latest commit on
+this branch is <code>5cfc7444...</code>. If you are OK with running an old version
+of the software, you can check it out to raise your chances of a successful
+install:</p>
+<pre class="code bash literal-block">
+<span class="c1"># only run this if you don't need the latest version of OpenRAVE:
+</span>git<span class="w"> </span>checkout<span class="w"> </span>5cfc744410adfee464a35d19964f525efb819552
+</pre>
+<p>What follows is the default procedure to build projects with CMake:</p>
+<pre class="code bash literal-block">
+<span class="nb">cd</span><span class="w"> </span>openrave<span class="w">
+</span>mkdir<span class="w"> </span>build<span class="w">
+</span><span class="nb">cd</span><span class="w"> </span>build<span class="w">
+</span>cmake<span class="w"> </span>..<span class="w">
+</span>make<span class="w">
+</span>sudo<span class="w"> </span>make<span class="w"> </span>install
+</pre>
+<p>If you encounter an error during the <code>make</code>, you can check out the
+<a class="reference external" href="troubleshooting-openrave-installation.html">troubleshooting OpenRAVE installation</a> page for a small list
+of known problems and fixes.</p>
+</div>
+<div class="section" id="running-a-first-example">
+<h2>Running a first example<a class="headerlink" href="installing-openrave-on-ubuntu-14.04.html#running-a-first-example" title="Permalink to this headline">¶</a></h2>
+<p>Finally, you will need to add OpenRAVE to your Python path, e.g. by putting the
+following lines in your <code>.bashrc</code> or <code>.zshrc</code>:</p>
+<pre class="code bash literal-block">
+<span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LD_LIBRARY_PATH</span>:<span class="k">$(</span>openrave-config<span class="w"> </span>--python-dir<span class="k">)</span>/openravepy/_openravepy_<span class="w">
+</span><span class="nb">export</span><span class="w"> </span><span class="nv">PYTHONPATH</span><span class="o">=</span><span class="nv">$PYTHONPATH</span>:<span class="k">$(</span>openrave-config<span class="w"> </span>--python-dir<span class="k">)</span>
+</pre>
+<p>You can check that your installation works by running one of the <a class="reference external" href="http://openrave.org/docs/latest_stable/examples/">default
+examples</a>. For example:</p>
+<pre class="code bash literal-block">
+openrave.py<span class="w"> </span>--example<span class="w"> </span>graspplanning
+</pre>
+<p>should fire up the <a class="reference external" href="http://openrave.org/docs/latest_stable/openravepy/examples.graspplanning/">graspplanning</a> example:</p>
+<img alt="OpenRAVE viewer at startup" class="noborder gui align-center" src="../images/openrave/graspplanning.png" />
+<p>You may see some messages printed in yellow on your command line (e.g. the ones
+mentioning a missing <code>libconfigurationcache.so</code>). These are just warnings
+that won't prevent your installation from working.</p>
+<p>Now that your software is up and running, you can check out how to <a class="reference external" href="getting-started-with-openrave.html">set up your
+first environment</a>.</p>
+</div>
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="installing-openrave-on-ubuntu-14.04.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="installing-openrave-on-ubuntu-14.04.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="installing-openrave-on-ubuntu-14.04.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("installing-openrave-on-ubuntu-14.04"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="installing-openrave-on-ubuntu-14.04.html">Page</a> published on <time class="dt-published" datetime="2015-11-15T00:00:00+0100">2015-11-15</time>.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

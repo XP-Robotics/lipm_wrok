@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Getting started with OpenRAVE</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="You can acquire knowledge from Wikipedia, books, articles, manuals, conversations with knowledgeable people, etc. You will then learn when, by experience, you "wire" this knowledge into your brain. If trials are hard and time consuming, your wiring will basically be a long (painful) line. But when trials are cheap and …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Robotics">
+        <meta name="keywords" content="OpenRAVE, Robotics">
+
+        <meta property="og:title" content="Getting started with OpenRAVE">
+        <meta property="og:description" content="You can acquire knowledge from Wikipedia, books, articles, manuals, conversations with knowledgeable people, etc. You will then learn when, by experience, you "wire" this knowledge into your brain. If trials are hard and time consuming, your wiring will basically be a long (painful) line. But when trials are cheap and …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/robotics/getting-started-with-openrave.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/robotics.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/robotics.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <h1>Getting started with OpenRAVE</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p>You can acquire knowledge from Wikipedia, books, articles, manuals,
+conversations with knowledgeable people, etc. You will then <em>learn</em> when, by
+experience, you &quot;wire&quot; this knowledge into your brain. If trials are hard and
+time consuming, your wiring will basically be a long (painful) line. But when
+trials are cheap and fast, the wiring will spread wider as you are free to
+explore many possibilities.</p>
+<p>In motion planning, your first-hand experiences will mainly come from software,
+so you should get a good development environment. There are several options
+available today; the one I have been using during my PhD is <a class="reference external" href="http://openrave.org">OpenRAVE</a>. In my opinion, it is very good for learning as the
+scripting level is in Python, which allows you to explore your objects
+interactively. (Core functionalities themselves are implemented in C++ for
+better performances.) For instance, in <a class="reference external" href="https://ipython.org">IPython</a>:</p>
+<ul class="simple">
+<li><code>robot.&lt;TAB&gt;&lt;TAB&gt;</code> gives the list of methods available for <code>robot</code>;</li>
+<li><code>env.SetViewer?</code> provides documentation on the <code>SetViewer()</code> function of <code>env</code>.</li>
+</ul>
+<p>In this post, we will set up an initial environment, create our first robot and
+see how to manipulate it via the GUI. If you don't have it installed on your
+system, see the <a class="reference external" href="installing-openrave-on-ubuntu-14.04.html">installation instructions for Ubuntu 14.04</a>, or the <a class="reference external" href="http://openrave.org/docs/latest_stable/coreapihtml/installation.html">official
+documentation</a> if you
+run another system.</p>
+<div class="section" id="environment-and-robot">
+<h2>Environment and Robot<a class="headerlink" href="getting-started-with-openrave.html#environment-and-robot" title="Permalink to this headline">¶</a></h2>
+<p>A basic Python script for OpenRAVE looks like this:</p>
+<pre class="code python literal-block">
+<span class="ch">#!/usr/bin/env python</span><span class="w">
+
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">openravepy</span><span class="w">
+
+</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span><span class="w">
+</span>    <span class="n">env</span> <span class="o">=</span> <span class="n">openravepy</span><span class="o">.</span><span class="n">Environment</span><span class="p">()</span><span class="w">
+</span>    <span class="n">env</span><span class="o">.</span><span class="n">Load</span><span class="p">(</span><span class="s1">'env.xml'</span><span class="p">)</span><span class="w">
+</span>    <span class="n">env</span><span class="o">.</span><span class="n">SetViewer</span><span class="p">(</span><span class="s1">'qtcoin'</span><span class="p">)</span><span class="w">
+</span>    <span class="n">viewer</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">GetViewer</span><span class="p">()</span><span class="w">
+</span>    <span class="n">viewer</span><span class="o">.</span><span class="n">SetBkgndColor</span><span class="p">([</span><span class="mf">.8</span><span class="p">,</span> <span class="mf">.85</span><span class="p">,</span> <span class="mf">.9</span><span class="p">])</span>  <span class="c1"># RGB tuple</span><span class="w">
+</span>    <span class="n">robot</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">GetRobots</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+</pre>
+<p>To execute the script, run <code>ipython -i myscript.py</code>. The <code>-i</code> flag
+tells IPython to spaw an interactive shell at the end. To get a shorter
+command, you can also add the following two lines at the end of the Python
+script:</p>
+<pre class="code python literal-block">
+<span class="kn">import</span><span class="w"> </span><span class="nn">IPython</span><span class="w">
+</span><span class="n">IPython</span><span class="o">.</span><span class="n">embed</span><span class="p">()</span>
+</pre>
+<p>And then make the script executable by <code>chmod +x myscript.py</code>. This way,
+the interactive shell will always spawn at the end, and you can call your
+script directly by:</p>
+<pre class="code bash literal-block">
+./myscript.py
+</pre>
+<p>In this script, we define three objects: the environment <code>env</code>, the
+viewer and the robot. The environment object is your main interface with
+OpenRAVE, from which you will access robots, viewer, drawing primitives, etc.
+It is defined in an XML file.</p>
+<div class="section" id="env-xml">
+<h3>env.xml<a class="headerlink" href="getting-started-with-openrave.html#env-xml" title="Permalink to this headline">¶</a></h3>
+<p>In this example, our environment <code>env.xml</code> contains a single robot loaded
+from a separate file:</p>
+<pre class="code xml literal-block">
+<span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><span class="w">
+</span><span class="nt">&lt;Environment&gt;</span><span class="w">
+    </span><span class="nt">&lt;Robot</span><span class="w"> </span><span class="na">file=</span><span class="s">&quot;double-pendulum.xml&quot;</span><span class="w"> </span><span class="nt">/&gt;</span><span class="w">
+</span><span class="nt">&lt;/Environment&gt;</span>
+</pre>
+</div>
+<div class="section" id="double-pendulum-xml">
+<h3>double-pendulum.xml<a class="headerlink" href="getting-started-with-openrave.html#double-pendulum-xml" title="Permalink to this headline">¶</a></h3>
+<p>We define the double pendulum in <code>double-pendulum.xml</code> using <a class="reference external" href="http://openrave.programmingvision.com/wiki/index.php/Format:XML">OpenRAVE's
+XML format</a>.
+For more complex robots, you can also import COLLADA (1.5) models. The robots
+consists of three bodies (<code>Base</code>, <code>Arm0</code> and <code>Arm1</code>)
+connected by two circular joints. We also add some mass information for inverse
+dynamics, as well as some colors for readability:</p>
+<pre class="code xml literal-block">
+<span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><span class="w">
+</span><span class="nt">&lt;Robot</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;Pendulum&quot;</span><span class="nt">&gt;</span><span class="w">
+    </span><span class="nt">&lt;RotationAxis&gt;</span>0<span class="w"> </span>1<span class="w"> </span>0<span class="w"> </span>90<span class="nt">&lt;/RotationAxis&gt;</span><span class="w"> </span><span class="cm">&lt;!-- makes the pendulum vertical --&gt;</span><span class="w">
+    </span><span class="nt">&lt;KinBody&gt;</span><span class="w">
+        </span><span class="nt">&lt;Mass</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;mimicgeom&quot;</span><span class="nt">&gt;&lt;density&gt;</span>100000<span class="nt">&lt;/density&gt;&lt;/Mass&gt;</span><span class="w">
+        </span><span class="nt">&lt;Body</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;Base&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;dynamic&quot;</span><span class="nt">&gt;</span><span class="w">
+            </span><span class="nt">&lt;Translation&gt;</span>0.0<span class="w">  </span>0.0<span class="w">  </span>0.0<span class="nt">&lt;/Translation&gt;</span><span class="w">
+            </span><span class="nt">&lt;Geom</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;cylinder&quot;</span><span class="nt">&gt;</span><span class="w">
+                </span><span class="nt">&lt;rotationaxis&gt;</span>1<span class="w"> </span>0<span class="w"> </span>0<span class="w"> </span>90<span class="nt">&lt;/rotationaxis&gt;</span><span class="w">
+                </span><span class="nt">&lt;radius&gt;</span>0.03<span class="nt">&lt;/radius&gt;</span><span class="w">
+                </span><span class="nt">&lt;height&gt;</span>0.02<span class="nt">&lt;/height&gt;</span><span class="w">
+                </span><span class="nt">&lt;ambientColor&gt;</span>1.<span class="w"> </span>0.<span class="w"> </span>0.<span class="nt">&lt;/ambientColor&gt;</span><span class="w">
+                </span><span class="nt">&lt;diffuseColor&gt;</span>1.<span class="w"> </span>0.<span class="w"> </span>0.<span class="nt">&lt;/diffuseColor&gt;</span><span class="w">
+            </span><span class="nt">&lt;/Geom&gt;</span><span class="w">
+        </span><span class="nt">&lt;/Body&gt;</span><span class="w">
+        </span><span class="nt">&lt;Body</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;Arm0&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;dynamic&quot;</span><span class="nt">&gt;</span><span class="w">
+            </span><span class="nt">&lt;offsetfrom&gt;</span>Base<span class="nt">&lt;/offsetfrom&gt;</span><span class="w">
+            </span><span class="cm">&lt;!-- translation and rotation  will be relative to Base --&gt;</span><span class="w">
+            </span><span class="nt">&lt;Translation&gt;</span>0<span class="w"> </span>0<span class="w"> </span>0<span class="nt">&lt;/Translation&gt;</span><span class="w">
+            </span><span class="nt">&lt;Geom</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;box&quot;</span><span class="nt">&gt;</span><span class="w">
+                </span><span class="nt">&lt;Translation&gt;</span>0.1<span class="w"> </span>0<span class="w"> </span>0<span class="nt">&lt;/Translation&gt;</span><span class="w">
+                </span><span class="nt">&lt;Extents&gt;</span>0.1<span class="w"> </span>0.01<span class="w"> </span>0.01<span class="nt">&lt;/Extents&gt;</span><span class="w">
+                </span><span class="nt">&lt;ambientColor&gt;</span>1.<span class="w"> </span>0.<span class="w"> </span>0.<span class="nt">&lt;/ambientColor&gt;</span><span class="w">
+                </span><span class="nt">&lt;diffuseColor&gt;</span>1.<span class="w"> </span>0.<span class="w"> </span>0.<span class="nt">&lt;/diffuseColor&gt;</span><span class="w">
+            </span><span class="nt">&lt;/Geom&gt;</span><span class="w">
+        </span><span class="nt">&lt;/Body&gt;</span><span class="w">
+        </span><span class="nt">&lt;Joint</span><span class="w"> </span><span class="na">circular=</span><span class="s">&quot;true&quot;</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;Joint0&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;hinge&quot;</span><span class="nt">&gt;</span><span class="w">
+            </span><span class="nt">&lt;Body&gt;</span>Base<span class="nt">&lt;/Body&gt;</span><span class="w">
+            </span><span class="nt">&lt;Body&gt;</span>Arm0<span class="nt">&lt;/Body&gt;</span><span class="w">
+            </span><span class="nt">&lt;offsetfrom&gt;</span>Arm0<span class="nt">&lt;/offsetfrom&gt;</span><span class="w">
+            </span><span class="nt">&lt;weight&gt;</span>4<span class="nt">&lt;/weight&gt;</span><span class="w">
+            </span><span class="nt">&lt;axis&gt;</span>0<span class="w"> </span>0<span class="w"> </span>1<span class="nt">&lt;/axis&gt;</span><span class="w">
+            </span><span class="nt">&lt;maxvel&gt;</span>3.42<span class="nt">&lt;/maxvel&gt;</span><span class="w">
+            </span><span class="nt">&lt;resolution&gt;</span>1<span class="nt">&lt;/resolution&gt;</span><span class="w">
+        </span><span class="nt">&lt;/Joint&gt;</span><span class="w">
+        </span><span class="nt">&lt;Body</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;Arm1&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;dynamic&quot;</span><span class="nt">&gt;</span><span class="w">
+            </span><span class="nt">&lt;offsetfrom&gt;</span>Arm0<span class="nt">&lt;/offsetfrom&gt;</span><span class="w">
+            </span><span class="nt">&lt;Translation&gt;</span>0.2<span class="w"> </span>0<span class="w"> </span>0<span class="nt">&lt;/Translation&gt;</span><span class="w">
+            </span><span class="nt">&lt;Geom</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;box&quot;</span><span class="nt">&gt;</span><span class="w">
+                </span><span class="nt">&lt;Translation&gt;</span>0.1<span class="w"> </span>0<span class="w"> </span>0<span class="nt">&lt;/Translation&gt;</span><span class="w">
+                </span><span class="nt">&lt;Extents&gt;</span>0.1<span class="w"> </span>0.01<span class="w"> </span>0.01<span class="nt">&lt;/Extents&gt;</span><span class="w">
+                </span><span class="nt">&lt;ambientColor&gt;</span>0.<span class="w"> </span>0.<span class="w"> </span>1.<span class="nt">&lt;/ambientColor&gt;</span><span class="w">
+                </span><span class="nt">&lt;diffuseColor&gt;</span>0.<span class="w"> </span>0.<span class="w"> </span>1.<span class="nt">&lt;/diffuseColor&gt;</span><span class="w">
+            </span><span class="nt">&lt;/Geom&gt;</span><span class="w">
+        </span><span class="nt">&lt;/Body&gt;</span><span class="w">
+        </span><span class="nt">&lt;Joint</span><span class="w"> </span><span class="na">circular=</span><span class="s">&quot;true&quot;</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;Joint1&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;hinge&quot;</span><span class="nt">&gt;</span><span class="w">
+            </span><span class="nt">&lt;Body&gt;</span>Arm0<span class="nt">&lt;/Body&gt;</span><span class="w">
+            </span><span class="nt">&lt;Body&gt;</span>Arm1<span class="nt">&lt;/Body&gt;</span><span class="w">
+            </span><span class="nt">&lt;offsetfrom&gt;</span>Arm1<span class="nt">&lt;/offsetfrom&gt;</span><span class="w">
+            </span><span class="nt">&lt;weight&gt;</span>3<span class="nt">&lt;/weight&gt;</span><span class="w">
+            </span><span class="nt">&lt;axis&gt;</span>0<span class="w"> </span>0<span class="w"> </span>1<span class="nt">&lt;/axis&gt;</span><span class="w">
+            </span><span class="nt">&lt;maxvel&gt;</span>5.42<span class="nt">&lt;/maxvel&gt;</span><span class="w">
+            </span><span class="nt">&lt;resolution&gt;</span>1<span class="nt">&lt;/resolution&gt;</span><span class="w">
+        </span><span class="nt">&lt;/Joint&gt;</span><span class="w">
+    </span><span class="nt">&lt;/KinBody&gt;</span><span class="w">
+</span><span class="nt">&lt;/Robot&gt;</span>
+</pre>
+<p>After writing the two XML files and running the Python script, the GUI should
+pop up and display the pendulum, yet from above. To move the camera in front of
+it, do:</p>
+<pre class="code python literal-block">
+<span class="n">viewer</span><span class="o">.</span><span class="n">SetCamera</span><span class="p">([</span><span class="w">
+</span>    <span class="p">[</span><span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">],</span><span class="w">
+</span>    <span class="p">[</span><span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span><span class="w">
+</span>    <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span><span class="w">
+</span>    <span class="p">[</span><span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">]])</span>
+</pre>
+<p>Now, you should see something like this:</p>
+<img alt="OpenRAVE viewer at startup" class="noborder gui align-center" src="../images/openrave/double-pendulum.png" />
+</div>
+</div>
+<div class="section" id="using-the-gui">
+<h2>Using the GUI<a class="headerlink" href="getting-started-with-openrave.html#using-the-gui" title="Permalink to this headline">¶</a></h2>
+<p>The user interface has two modes: camera mode and object interaction mode.
+Press <strong>Esc</strong> to switch between the two.</p>
+<div class="section" id="camera-mode">
+<h3>Camera mode<a class="headerlink" href="getting-started-with-openrave.html#camera-mode" title="Permalink to this headline">¶</a></h3>
+<p>Camera mode is activated by default. If not, click on the left-hand icon
+(second icon from top) in the right-hand panel of the GUI. In camera mode, your
+mouse behaves as follows:</p>
+<ul class="simple">
+<li><strong>Left click:</strong> rotate the camera (you can also use the <code>RotX</code> and
+<code>RotY</code> wheels at the bottom-left corner of the window)</li>
+<li><strong>Shift + left click or Middle button:</strong> translate the camera</li>
+<li><strong>Left + middle button, or Mouse wheel:</strong> zoom in or out (you can also use
+the <code>Dolly</code> wheel at the bottom-right of the window)</li>
+<li><strong>S + left click:</strong> zoom in on the point clicked. After this, the camera will
+stay centered on the object when rotating.</li>
+</ul>
+</div>
+<div class="section" id="interaction-mode">
+<h3>Interaction mode<a class="headerlink" href="getting-started-with-openrave.html#interaction-mode" title="Permalink to this headline">¶</a></h3>
+<p>You can switch between camera and interaction by pressing the Escape key of
+your keyboard. Alternatively, click on the red-arrow icon (first icon from top)
+in the right-hand panel to activate interaction mode.</p>
+<p>In interaction mode, left-click on an object to select it. A cube appears
+around it, which you can use to perform two operations:</p>
+<ul class="simple">
+<li><strong>Translation:</strong> click on a face of the cube and drag it around. It will
+translate the object in the two directions corresponding to the face of the
+cube.</li>
+<li><strong>Rotation:</strong> click on an edge of the cube and drag it around. It will rotate
+the object along the rotation axis parallel to the selected edge and passing
+through the center of the cube.</li>
+</ul>
+<p>The control cube will vanish if you click again on the object.</p>
+<p>Interaction mode is also used to manipulate the joints of a robot directly.
+Doing <strong>Ctrl + left click</strong> on a robot's link selects the parent joint of the
+link (that is to say, the joint connecting the link to its parent in the
+kinematic chain). A cylinder will then appear at the joint, which you can turn
+around to rotate the joint. You can also vary the size of the cylinder by
+ctrl-cliking it. Here is what you should see by selecting the link <code>Arm1</code>
+of the pendulum:</p>
+<img alt="OpenRAVE viewer at startup" class="noborder align-center" src="../images/openrave/interaction-mode.png" style="width: 80%;" />
+<p>The text area at the top-left corner of the 3D viewer displays relevant
+information on the selected object. Here, it says that the pointer is on the
+link <code>Arm1</code> at the world-frame coordinates <code>(x, y, z) = (0.10,
+0.07, 0.27)</code>, with the surface normal at this point <code>n = (1., 0., 0.)</code>.
+The second line tells us that we selected the robot <code>Pendulum</code>, and the
+third gives us information on the selected joint: name (<code>Joint1</code>), index
+(1) and angle in radians and degrees. The joint index tells you the position of
+the joint coordinate in the DOF vectors, which we will use later on to
+manipulate the robot's configuration.</p>
+</div>
+<div class="section" id="summary-of-controls">
+<h3>Summary of controls<a class="headerlink" href="getting-started-with-openrave.html#summary-of-controls" title="Permalink to this headline">¶</a></h3>
+<p>Here is the summary of the controls we have seen so far. There are other
+buttons in the right-side panel, but honestly I never use them.</p>
+<ul class="simple">
+<li><strong>Esc:</strong> switch between camera and interaction modes</li>
+<li><strong>S + left click:</strong> center the camera on a surface point</li>
+<li><strong>Ctrl + left click:</strong> (interaction mode) select a robot joint</li>
+<li><strong>Left click:</strong> (camera mode) rotate the camera</li>
+<li><strong>Left click:</strong> (interaction mode) select an object</li>
+<li><strong>Shift + left click or Middle button:</strong> (camera mode) translate the camera</li>
+<li><strong>Wheel:</strong> (camera mode) zoom in or out</li>
+</ul>
+</div>
+<div class="section" id="saving-and-setting-the-camera">
+<h3>Saving and setting the camera<a class="headerlink" href="getting-started-with-openrave.html#saving-and-setting-the-camera" title="Permalink to this headline">¶</a></h3>
+<p>You will notice that the camera's position and orientation (its <em>transform</em>)
+are lost when you exit and run the script again. You can get the current camera
+transform via the <code>viewer</code> object:</p>
+<pre class="code python literal-block">
+<span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">viewer</span><span class="o">.</span><span class="n">GetCameraTransform</span><span class="p">()</span><span class="w">
+</span><span class="n">Out</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span><span class="w">
+</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">0.67725463</span><span class="p">,</span>  <span class="mf">0.23636616</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.69674759</span><span class="p">,</span>  <span class="mf">0.40368351</span><span class="p">],</span><span class="w">
+</span>       <span class="p">[</span> <span class="mf">0.73512462</span><span class="p">,</span>  <span class="mf">0.25638653</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.62758086</span><span class="p">,</span>  <span class="mf">0.43931767</span><span class="p">],</span><span class="w">
+</span>       <span class="p">[</span> <span class="mf">0.03029782</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.93722835</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.34739755</span><span class="p">,</span>  <span class="mf">0.42627937</span><span class="p">],</span><span class="w">
+</span>       <span class="p">[</span> <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">]])</span>
+</pre>
+<p>To save and restore your camera settings between sessions, set the camera
+transform at the beginning of your script via <code>viewer.SetCamera()</code>. In
+the case above:</p>
+<pre class="code python literal-block">
+<span class="n">viewer</span><span class="o">.</span><span class="n">SetCamera</span><span class="p">([</span><span class="w">
+</span>    <span class="p">[</span><span class="o">-</span><span class="mf">0.67725463</span><span class="p">,</span>  <span class="mf">0.23636616</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.69674759</span><span class="p">,</span>  <span class="mf">0.40368351</span><span class="p">],</span><span class="w">
+</span>    <span class="p">[</span> <span class="mf">0.73512462</span><span class="p">,</span>  <span class="mf">0.25638653</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.62758086</span><span class="p">,</span>  <span class="mf">0.43931767</span><span class="p">],</span><span class="w">
+</span>    <span class="p">[</span> <span class="mf">0.03029782</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.93722835</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.34739755</span><span class="p">,</span>  <span class="mf">0.42627937</span><span class="p">],</span><span class="w">
+</span>    <span class="p">[</span> <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">]])</span>
+</pre>
+</div>
+</div>
+<div class="section" id="forward-kinematics">
+<h2>Forward kinematics<a class="headerlink" href="getting-started-with-openrave.html#forward-kinematics" title="Permalink to this headline">¶</a></h2>
+<p>Let us go back to our Python script. All functions to manipulate the robot
+model are accessible via the robot object. First, to check its <a class="reference external" href="https://en.wikipedia.org/wiki/Degrees_of_freedom_(mechanics)">degree of
+freedom</a>, try:</p>
+<pre class="code python literal-block">
+<span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetDOF</span><span class="p">()</span><span class="w">
+</span><span class="n">Out</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="mi">2</span>
+</pre>
+<p>OpenRAVE also calls &quot;DOF&quot; the <a class="reference external" href="https://en.wikipedia.org/wiki/Generalized_coordinates">generalized coordinates</a> of the system, that
+is to say here the joint angles of the pendulum. The vector <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">q</mi></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+{\bf q}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6389em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord"><span class="mord mathbf">q</span></span></span></span></span></span> of
+generalized coordinates is called &quot;DOF values&quot;, the vector <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover accent="true"><mi mathvariant="bold">q</mi><mo>˙</mo></mover></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+\dot{\bf q}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8757em;vertical-align:-0.1944em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6813em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathbf">q</span></span></span><span style="top:-3.0134em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.0556em;"><span class="mord">˙</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span></span></span></span>
+of generalized velocities is called &quot;DOF velocities&quot;, etc. Initially, the two
+joint angles are zero, so:</p>
+<pre class="code python literal-block">
+<span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetDOFValues</span><span class="p">()</span><span class="w">
+</span><span class="n">Out</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">])</span>
+</pre>
+<p>To set the pendulum to a different configuration, for instance <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">q</mi><mo>=</mo><mo stretchy="false">(</mo><mi>π</mi><mi mathvariant="normal">/</mi><mn>4</mn><mo separator="true">,</mo><mi>π</mi><mi mathvariant="normal">/</mi><mn>4</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+{\bf q}
+= (\pi/4, \pi/4)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6389em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord"><span class="mord mathbf">q</span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span><span class="mord">/4</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span><span class="mord">/4</span><span class="mclose">)</span></span></span></span>, do:</p>
+<pre class="code python literal-block">
+<span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">robot</span><span class="o">.</span><span class="n">SetDOFValues</span><span class="p">([</span><span class="mf">3.14</span> <span class="o">/</span> <span class="mi">4</span><span class="p">,</span> <span class="mf">3.14</span> <span class="o">/</span> <span class="mi">4</span><span class="p">])</span>
+</pre>
+<p>You will see the robot updated to a different pose in the GUI. This operation,
+the geometric update of all links of the robot from the joint-angle vector, is
+called <a class="reference external" href="https://en.wikipedia.org/wiki/Forward_kinematics">forward kinematics</a>.</p>
+<div class="section" id="playing-a-trajectory">
+<h3>Playing a trajectory<a class="headerlink" href="getting-started-with-openrave.html#playing-a-trajectory" title="Permalink to this headline">¶</a></h3>
+<p>Let us interpolate and play trajectories on the pendulum. First, define
+a simple <code>Trajectory</code> class containing the duration <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+T</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span></span></span></span> and
+joint-angle function <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">q</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+{\bf q}(t)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord"><span class="mord mathbf">q</span></span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span></span></span></span> of the trajectory:</p>
+<pre class="code python literal-block">
+<span class="k">class</span><span class="w"> </span><span class="nc">Trajectory</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span><span class="w">
+
+</span>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">q_ftn</span><span class="p">):</span><span class="w">
+</span>        <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">=</span> <span class="n">T</span>  <span class="c1"># duration, in seconds</span><span class="w">
+</span>        <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="n">q_ftn</span>
+</pre>
+<p>We generate a simple linear interpolation between the current state of the
+robot (which may be anything: random, set by the user in the GUI, etc.) The
+default duration will be <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\def\bfA{\boldsymbol{A}}
+\def\bfB{\boldsymbol{B}}
+\def\bfC{\boldsymbol{C}}
+\def\bfD{\boldsymbol{D}}
+\def\bfE{\boldsymbol{E}}
+\def\bfF{\boldsymbol{F}}
+\def\bfG{\boldsymbol{G}}
+\def\bfH{\boldsymbol{H}}
+\def\bfI{\boldsymbol{I}}
+\def\bfJ{\boldsymbol{J}}
+\def\bfK{\boldsymbol{K}}
+\def\bfL{\boldsymbol{L}}
+\def\bfM{\boldsymbol{M}}
+\def\bfN{\boldsymbol{N}}
+\def\bfO{\boldsymbol{O}}
+\def\bfP{\boldsymbol{P}}
+\def\bfQ{\boldsymbol{Q}}
+\def\bfR{\boldsymbol{R}}
+\def\bfS{\boldsymbol{S}}
+\def\bfT{\boldsymbol{T}}
+\def\bfU{\boldsymbol{U}}
+\def\bfV{\boldsymbol{V}}
+\def\bfW{\boldsymbol{W}}
+\def\bfX{\boldsymbol{X}}
+\def\bfY{\boldsymbol{Y}}
+\def\bfZ{\boldsymbol{Z}}
+\def\bfalpha{\boldsymbol{\alpha}}
+\def\bfa{\boldsymbol{a}}
+\def\bfbeta{\boldsymbol{\beta}}
+\def\bfb{\boldsymbol{b}}
+\def\bfcd{\dot{\bfc}}
+\def\bfchi{\boldsymbol{\chi}}
+\def\bfc{\boldsymbol{c}}
+\def\bfd{\boldsymbol{d}}
+\def\bfe{\boldsymbol{e}}
+\def\bff{\boldsymbol{f}}
+\def\bfgamma{\boldsymbol{\gamma}}
+\def\bfg{\boldsymbol{g}}
+\def\bfh{\boldsymbol{h}}
+\def\bfi{\boldsymbol{i}}
+\def\bfj{\boldsymbol{j}}
+\def\bfk{\boldsymbol{k}}
+\def\bflambda{\boldsymbol{\lambda}}
+\def\bfl{\boldsymbol{l}}
+\def\bfm{\boldsymbol{m}}
+\def\bfn{\boldsymbol{n}}
+\def\bfomega{\boldsymbol{\omega}}
+\def\bfone{\boldsymbol{1}}
+\def\bfo{\boldsymbol{o}}
+\def\bfpdd{\ddot{\bfp}}
+\def\bfpd{\dot{\bfp}}
+\def\bfphi{\boldsymbol{\phi}}
+\def\bfp{\boldsymbol{p}}
+\def\bfq{\boldsymbol{q}}
+\def\bfr{\boldsymbol{r}}
+\def\bfsigma{\boldsymbol{\sigma}}
+\def\bfs{\boldsymbol{s}}
+\def\bftau{\boldsymbol{\tau}}
+\def\bftheta{\boldsymbol{\theta}}
+\def\bft{\boldsymbol{t}}
+\def\bfu{\boldsymbol{u}}
+\def\bfv{\boldsymbol{v}}
+\def\bfw{\boldsymbol{w}}
+\def\bfxi{\boldsymbol{\xi}}
+\def\bfx{\boldsymbol{x}}
+\def\bfy{\boldsymbol{y}}
+\def\bfzero{\boldsymbol{0}}
+\def\bfz{\boldsymbol{z}}
+\def\defeq{\stackrel{\mathrm{def}}{=}}
+\def\p{\boldsymbol{p}}
+\def\qdd{\ddot{\bfq}}
+\def\qd{\dot{\bfq}}
+\def\q{\boldsymbol{q}}
+\def\xd{\dot{x}}
+\def\yd{\dot{y}}
+\def\zd{\dot{z}}
+
+T = 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span> s.</p>
+<pre class="code python literal-block">
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="n">pi</span><span class="w">
+
+</span><span class="k">def</span><span class="w"> </span><span class="nf">get_swing_trajectory</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span><span class="w">
+</span>    <span class="n">q0</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetDOFValues</span><span class="p">()</span><span class="w">
+</span>    <span class="n">q1</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">pi</span><span class="p">,</span> <span class="mf">0.</span><span class="p">])</span><span class="w">
+
+</span>    <span class="k">def</span><span class="w"> </span><span class="nf">q</span><span class="p">(</span><span class="n">t</span><span class="p">):</span><span class="w">
+</span>        <span class="n">x</span> <span class="o">=</span> <span class="mf">0.</span> <span class="k">if</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mf">0.</span> <span class="k">else</span> <span class="mf">1.</span> <span class="k">if</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="n">T</span> <span class="k">else</span> <span class="p">(</span><span class="n">t</span> <span class="o">/</span> <span class="n">T</span><span class="p">)</span><span class="w">
+</span>        <span class="k">return</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">q0</span> <span class="o">+</span> <span class="n">x</span> <span class="o">*</span> <span class="n">q1</span><span class="w">
+
+</span>    <span class="k">return</span> <span class="n">Trajectory</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+</pre>
+<p>Finally, we play the trajectory by setting the DOF values at regular time
+intervals:</p>
+<pre class="code python literal-block">
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="kn">import</span> <span class="n">arange</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span><span class="w">
+
+</span><span class="k">def</span><span class="w"> </span><span class="nf">play_trajectory</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">traj</span><span class="p">):</span><span class="w">
+</span>    <span class="n">dt</span> <span class="o">=</span> <span class="mf">1e-2</span>  <span class="c1"># play at 100 Hz</span><span class="w">
+</span>    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">arange</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="n">traj</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="n">dt</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span><span class="w">
+</span>        <span class="n">robot</span><span class="o">.</span><span class="n">SetDOFValues</span><span class="p">(</span><span class="n">traj</span><span class="o">.</span><span class="n">q</span><span class="p">(</span><span class="n">t</span><span class="p">))</span><span class="w">
+</span>        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
+</pre>
+<p>You can check out the result with:</p>
+<pre class="code python literal-block">
+<span class="n">traj</span> <span class="o">=</span> <span class="n">get_swing_trajectory</span><span class="p">(</span><span class="n">robot</span><span class="p">)</span><span class="w">
+</span><span class="n">play_trajectory</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">traj</span><span class="p">)</span>
+</pre>
+<p>Whatever the current configuration of the robot is, you should see it swing up
+to its upward vertical configuration.</p>
+</div>
+</div>
+<div class="section" id="to-go-further">
+<h2>To go further<a class="headerlink" href="getting-started-with-openrave.html#to-go-further" title="Permalink to this headline">¶</a></h2>
+<p>You now have your first environment set up and you know how to visualize and
+update your robot from a joint-angle vector by forward kinematics. Next, you
+will want to compute your joint-angle vectors to achieve a particular goal, for
+instance: how to put the tip of the robot at a specific location in space? The
+answer to this question is called <a class="reference external" href="https://en.wikipedia.org/wiki/Inverse_kinematics">inverse kinematics</a> (IK).</p>
+<p>For robotic arms, OpenRAVE provides a closed-form symbolic IK solver that you
+can call via the <a class="reference external" href="http://openrave.org/docs/0.8.0/openravepy/databases.inversekinematics/">inversekinematics module</a>.
+With symbolic IK, you first spend time compiling the IK solution to your robot
+model into a C++ program. Then, you can compile and execute this program at
+runtime to solve for inverse kinematics faster than with any other numerical
+method. See <a class="reference external" href="http://www.programmingvision.com/rosen_diankov_thesis.pdf">Rosen Diankov's PhD thesis</a> for details.</p>
+<p>Unfortunately, symbolic IK only applies to robots with up to 6-7 degrees of
+freedoms. For large-DOF mobile robots such as humanoids, the state of the art
+is to use <a class="reference external" href="differential-inverse-kinematics.html">multi-task inverse kinematics</a> based on quadratic
+programming (QP) or hierarchical quadratic programming (HQP). A ready-to-use
+QP-based IK solver for OpenRAVE is provided in the <a class="reference external" href="https://github.com/stephane-caron/pymanoid">pymanoid</a> module.</p>
+</div>
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="getting-started-with-openrave.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="getting-started-with-openrave.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="getting-started-with-openrave.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("getting-started-with-openrave"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="getting-started-with-openrave.html">Page</a> published on <time class="dt-published" datetime="2015-11-15T00:00:00+0100">2015-11-15</time>.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

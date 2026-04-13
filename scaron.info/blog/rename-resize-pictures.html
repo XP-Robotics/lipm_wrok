@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Rename/resize pictures with the command line</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="Here are two command lines I use all the time to manage pictures on Linux: one to rename files with their shooting date (using exiv2) and the other to resize them to a given with (using mogrify). Renaming¶ Renaming pictures according to their shooting date is a straightforward way to …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Blog">
+        <meta name="keywords" content="Linux">
+
+        <meta property="og:title" content="Rename/resize pictures with the command line">
+        <meta property="og:description" content="Here are two command lines I use all the time to manage pictures on Linux: one to rename files with their shooting date (using exiv2) and the other to resize them to a given with (using mogrify). Renaming¶ Renaming pictures according to their shooting date is a straightforward way to …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/blog/rename-resize-pictures.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/blog.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/blog.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <h1>Rename/resize pictures with the command line</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p>Here are two command lines I use all the time to manage pictures on Linux: one
+to rename files with their shooting date (using <a class="reference external" href="http://www.exiv2.org/">exiv2</a>) and the other to
+resize them to a given with (using <a class="reference external" href="http://www.imagemagick.org/script/mogrify.php">mogrify</a>).</p>
+<div class="section" id="renaming">
+<h2>Renaming<a class="headerlink" href="rename-resize-pictures.html#renaming" title="Permalink to this headline">¶</a></h2>
+<p>Renaming pictures according to their shooting date is a straightforward way to
+merge photo sets coming from multiple cameras. On Linux, the <a class="reference external" href="http://www.exiv2.org/">exiv2</a> tool does
+the trick:</p>
+<div class="highlight"><pre><span></span>exiv2<span class="w"> </span>-r<span class="s1">&#39;%F_%H-%M-%S_:basename:&#39;</span><span class="w"> </span>rename<span class="w"> </span><span class="k">$(</span>ls<span class="w"> </span><span class="se">\*</span>.JPG<span class="k">)</span>
+</pre></div>
+<p>The date format is the same as in the standard <code>date</code> command (where
+<code>%F</code> is a shortcut for <code>%Y-%m-%d</code>). If you omit the
+<code>:basename:</code> part of the pattern, which is automatically replaced with
+the file's original name, you may run into multiple photos getting the same
+file name: in this case, <a class="reference external" href="http://www.exiv2.org/">exiv2</a> will ask whether to overwrite, rename or skip
+them. As far as I know, you can't get more time precision than seconds from
+EXIF metadata.</p>
+</div>
+<div class="section" id="resizing">
+<h2>Resizing<a class="headerlink" href="rename-resize-pictures.html#resizing" title="Permalink to this headline">¶</a></h2>
+<p>I usually resize images to an 800-pixel width before sending, which can be done
+seamlessly using the <a class="reference external" href="http://www.imagemagick.org/script/mogrify.php">mogrify</a> script from ImageMagick:</p>
+<div class="highlight"><pre><span></span>mogrify<span class="w"> </span>-resize<span class="w"> </span><span class="m">800</span><span class="w"> </span>-auto-orient<span class="w"> </span><span class="k">$(</span>ls<span class="w"> </span><span class="se">\*</span>.JPG<span class="k">)</span>
+</pre></div>
+<p>By default, this tool preserves the image aspect-ratio, so you don't need to
+specify the full output resolution and the width (800) is enough.</p>
+<p>Cameras usually store picture orientation in the image's metadata, while pixel
+data corresponds to the camera's sensor coordinates. That is, when you take a
+vertical photo, your camera just stores what it sees, and then adds a flag in
+the metadata saying &quot;this should be rotated by +/-90 degrees&quot;. Image viewers
+interpret this flag correctly, but web browsers and e-mail clients do not (e.g.
+when you insert the image directly in an e-mail); this is why I threw the
+<code>auto-orient</code> flag here, which automatically performs the orientation on
+the pixel data.</p>
+</div>
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="rename-resize-pictures.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="rename-resize-pictures.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="rename-resize-pictures.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("rename-resize-pictures"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="rename-resize-pictures.html">Page</a> published on <time class="dt-published" datetime="2013-06-09T00:00:00+0200">2013-06-09</time>.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

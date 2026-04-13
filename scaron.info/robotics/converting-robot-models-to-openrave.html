@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Converting robot models to OpenRAVE</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="OpenRAVE robot models can be written in OpenRAVE Custom XML Format, if you write them from scratch, but are most of the time written in the COLLADA 1.5 Robot Extensions. This format is not so widely used and converting to it can be tricky. In this post, we will …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Robotics">
+        <meta name="keywords" content="OpenRAVE, Robotics">
+
+        <meta property="og:title" content="Converting robot models to OpenRAVE">
+        <meta property="og:description" content="OpenRAVE robot models can be written in OpenRAVE Custom XML Format, if you write them from scratch, but are most of the time written in the COLLADA 1.5 Robot Extensions. This format is not so widely used and converting to it can be tricky. In this post, we will …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/robotics/converting-robot-models-to-openrave.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/robotics.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/robotics.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <h1>Converting robot models to OpenRAVE</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p>OpenRAVE robot models can be written in <a class="reference external" href="http://openrave.programmingvision.com/wiki/index.php/Format:XML">OpenRAVE Custom XML Format</a>, if you
+write them from scratch, but are most of the time written in the <a class="reference external" href="http://openrave.org/docs/latest_stable/collada_robot_extensions/">COLLADA 1.5
+Robot Extensions</a>. This
+format is not so widely used and converting to it can be tricky. In this post,
+we will review the conversion paths I've found to generate the humanoid robot
+models in the <a class="reference external" href="https://github.com/stephane-caron/openrave_models">openrave_models</a> repository.</p>
+<div class="section" id="from-vrml-to-collada-1-5">
+<h2>From VRML to COLLADA 1.5<a class="headerlink" href="converting-robot-models-to-openrave.html#from-vrml-to-collada-1-5" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="https://github.com/jvrc/model">JVRC-1 model</a>, similarly to robot models
+from the HRP series, is provided in VRML format. To convert it to COLLADA, you
+can use the <code>openhrp-export-collada</code> script provided in <a class="reference external" href="https://github.com/fkanehiro/openhrp3">OpenHRP 3</a>. After the regular CMake build
+process, you will find it in the <code>bin</code> folder of your build directory:</p>
+<pre class="code bash literal-block">
+<span class="nb">cd</span><span class="w"> </span>&lt;openhrp3-folder&gt;<span class="w">
+</span>./build/bin/openhrp-export-collada<span class="w"> </span>-i<span class="w"> </span>main.wrl<span class="w"> </span>-o<span class="w"> </span>JVRC-1.dae
+</pre>
+<p>Textures are not converted in this process. To palliate this, you can open the
+COLLADA file in a text editor (COLLADA is still XML so it can be read and
+edited by human beings) and change link colors by hand. You can check out
+<a class="reference external" href="https://github.com/stephane-caron/openrave_models/blob/master/JVRC-1/JVRC-1.dae">JVRC-1.dae</a>
+to see how this is done.</p>
+<img alt="JVRC-1 humanoid model in OpenRAVE" class="noborder gui align-center" src="../images/openrave/jvrc-1.png" />
+<p>More recently, the authors of OpenHRP have also developed <a class="reference external" href="https://github.com/fkanehiro/simtrans">simtrans</a> which is a more general set of
+conversion scripts.</p>
+</div>
+<div class="section" id="from-urdf-to-collada-1-5">
+<h2>From URDF to COLLADA 1.5<a class="headerlink" href="converting-robot-models-to-openrave.html#from-urdf-to-collada-1-5" title="Permalink to this headline">¶</a></h2>
+<p>Many robot models are provided in another XML dialect called Unified Robot
+Description Format (URDF). This was the case for instance with the <a class="reference external" href="https://github.com/ros-aldebaran/romeo_robot">Romeo</a> model. To convert it to
+COLLADA, you can use the <code>urdf_to_collada</code> tool provided in <a class="reference external" href="http://wiki.ros.org/collada_urdf">collada_urdf</a>. After the package is installed in your
+ROS distribution, run:</p>
+<pre class="code bash literal-block">
+rosrun<span class="w"> </span>collada_urdf<span class="w"> </span>urdf_to_collada<span class="w"> </span>romeo.urdf<span class="w"> </span>Romeo.dae
+</pre>
+<p>Textures are not converted in this process. To palliate this, you can open the
+COLLADA file in a text editor (COLLADA is still XML so it can be read and
+edited by human beings) and change link colors by hand. You can check out
+<a class="reference external" href="https://github.com/stephane-caron/openrave_models/blob/master/Romeo/Romeo.dae">Romeo.dae</a>
+to see how this is done.</p>
+<img alt="Romeo humanoid model in OpenRAVE" class="noborder gui align-center" src="../images/openrave/romeo.png" />
+<p>For a more recent tool, the <a class="reference external" href="https://github.com/fkanehiro/simtrans">simtrans</a>
+conversion scripts provide a less burdensome alternative</p>
+</div>
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="converting-robot-models-to-openrave.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="converting-robot-models-to-openrave.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="converting-robot-models-to-openrave.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("converting-robot-models-to-openrave"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="converting-robot-models-to-openrave.html">Page</a> published on <time class="dt-published" datetime="2018-11-03T00:00:00+0100">2018-11-03</time>.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

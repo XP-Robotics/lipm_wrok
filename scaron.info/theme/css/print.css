@@ -1,0 +1,16 @@
+/*
+ * Copyright (C) 2015-2023 Stéphane Caron
+ *
+ * This file is licensed under a Creative Commons Attribution 4.0 International
+ * License. See https://creativecommons.org/licenses/by/4.0/
+ */
+
+@media only print {
+    aside {
+        display: none;
+    }
+
+    footer .search-icon {
+        display: none;
+    }
+}

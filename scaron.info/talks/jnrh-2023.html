@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Open source robots: to make, or not to make?</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="Talk given at the Journées Nationales de la Robotique Humanoïde on 5 July 2023. Abstract¶ This short presentation recalls the principles behind The Open Source Definition and discusses how we should adapt them to the more general context of open source robots. It is also an invitation to check out …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Talks">
+        <meta name="keywords" content="Talks, Robotics">
+
+        <meta property="og:title" content="Open source robots: to make, or not to make?">
+        <meta property="og:description" content="Talk given at the Journées Nationales de la Robotique Humanoïde on 5 July 2023. Abstract¶ This short presentation recalls the principles behind The Open Source Definition and discusses how we should adapt them to the more general context of open source robots. It is also an invitation to check out …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/talks/jnrh-2023.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/talks.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/talks.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <h1>Open source robots: to make, or not to make?</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p class="authors">Talk given at the <a class="reference external" href="https://jnrh2023.sciencesconf.org/program">Journées Nationales de la Robotique Humanoïde</a> on 5 July 2023.</p>
+<div class="section" id="abstract">
+<h2>Abstract<a class="headerlink" href="jnrh-2023.html#abstract" title="Permalink to this headline">¶</a></h2>
+<p>This short presentation recalls the principles behind <a class="reference external" href="https://en.wikipedia.org/wiki/The_Open_Source_Definition">The Open Source Definition</a> and discusses how we should adapt them to the more general context of open source robots. It is also an invitation to check out and update the <a class="reference external" href="https://github.com/stephane-caron/awesome-open-source-robots">Awesome Open Source Robots</a> list, where we list robots and check the features that make them open source: license? Build instructions? Open source software?</p>
+</div>
+<div class="section" id="content">
+<h2>Content<a class="headerlink" href="jnrh-2023.html#content" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="files docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><img alt="pdf" class="icon" src="../images/icons/pdf.png" /></td>
+<td><a class="reference external" href="../slides/jnrh-2023.pdf">Slides</a></td>
+</tr>
+<tr><td><img alt="github" class="icon" src="../images/icons/github.png" /></td>
+<td><a class="reference external" href="https://github.com/stephane-caron/awesome-open-source-robots">Awesome Open Source Robots</a></td>
+</tr>
+<tr><td><img alt="github" class="icon" src="../images/icons/github.png" /></td>
+<td><a class="reference external" href="https://github.com/nmansard/jnrh2023">Pinocchio tutorial</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="pinocchio-tutorial-1">
+<h2>Pinocchio tutorial<a class="headerlink" href="jnrh-2023.html#pinocchio-tutorial-1" title="Permalink to this headline">¶</a></h2>
+<p>This tutorial gave a preview of Pinocchio 3 with a focus on combining <a class="reference external" href="https://github.com/stack-of-tasks/pinocchio">Pinocchio</a> with <a class="reference external" href="https://web.casadi.org/">CasADi</a> to solve robotics problems such as inverse geometry and trajectory optimization. For example, writing a CasADi computation graph to solve inverse geometry with Pinocchio looks like this:</p>
+<pre class="code python literal-block">
+<span class="kn">import</span><span class="w"> </span><span class="nn">casadi</span><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">pinocchio</span><span class="w"> </span><span class="kn">import</span> <span class="n">casadi</span> <span class="k">as</span> <span class="n">cpin</span><span class="w">
+
+</span><span class="n">cmodel</span> <span class="o">=</span> <span class="n">cpin</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span><span class="w">
+</span><span class="n">cdata</span> <span class="o">=</span> <span class="n">cmodel</span><span class="o">.</span><span class="n">createData</span><span class="p">()</span><span class="w">
+</span><span class="n">q_sym</span> <span class="o">=</span> <span class="n">casadi</span><span class="o">.</span><span class="n">SX</span><span class="o">.</span><span class="n">sym</span><span class="p">(</span><span class="s2">&quot;q&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">nq</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="w">
+</span><span class="n">cpin</span><span class="o">.</span><span class="n">framesForwardKinematics</span><span class="p">(</span><span class="n">cmodel</span><span class="p">,</span> <span class="n">cdata</span><span class="p">,</span> <span class="n">q_sym</span><span class="p">)</span><span class="w">
+
+</span><span class="n">error_function</span> <span class="o">=</span> <span class="n">casadi</span><span class="o">.</span><span class="n">Function</span><span class="p">(</span><span class="w">
+</span>    <span class="s2">&quot;end_effector_error&quot;</span><span class="p">,</span><span class="w">
+</span>    <span class="p">[</span><span class="n">q_sym</span><span class="p">],</span><span class="w">
+</span>    <span class="p">[</span><span class="w">
+</span>        <span class="n">cpin</span><span class="o">.</span><span class="n">log6</span><span class="p">(</span><span class="w">
+</span>            <span class="n">cdata</span><span class="o">.</span><span class="n">oMf</span><span class="p">[</span><span class="n">end_effector_id</span><span class="p">]</span><span class="o">.</span><span class="n">inverse</span><span class="p">()</span> <span class="o">*</span><span class="w">
+</span>            <span class="n">cpin</span><span class="o">.</span><span class="n">SE3</span><span class="p">(</span><span class="n">transform_target_to_world</span><span class="p">)</span><span class="w">
+</span>        <span class="p">)</span><span class="o">.</span><span class="n">vector</span><span class="w">
+</span>    <span class="p">],</span><span class="w">
+</span><span class="p">)</span><span class="w">
+
+</span><span class="n">opti</span> <span class="o">=</span> <span class="n">casadi</span><span class="o">.</span><span class="n">Opti</span><span class="p">()</span><span class="w">
+</span><span class="n">q_var</span> <span class="o">=</span> <span class="n">opti</span><span class="o">.</span><span class="n">variable</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">nq</span><span class="p">)</span><span class="w">
+</span><span class="n">cost_function</span> <span class="o">=</span> <span class="n">casadi</span><span class="o">.</span><span class="n">sumsqr</span><span class="p">(</span><span class="n">error_function</span><span class="p">(</span><span class="n">q_var</span><span class="p">))</span><span class="w">
+</span><span class="n">opti</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">cost_function</span><span class="p">)</span><span class="w">
+</span><span class="n">opti</span><span class="o">.</span><span class="n">solver</span><span class="p">(</span><span class="s2">&quot;ipopt&quot;</span><span class="p">)</span><span class="w">
+</span><span class="n">sol</span> <span class="o">=</span> <span class="n">opti</span><span class="o">.</span><span class="n">solve_limited</span><span class="p">()</span><span class="w">
+</span><span class="n">q_sol</span> <span class="o">=</span> <span class="n">opti</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">q_var</span><span class="p">)</span>
+</pre>
+<p>The tutorial ships a binary pre-release of Pinocchio 3 that can be installed by following <a class="reference external" href="https://github.com/nmansard/jnrh2023#getting-started">these instructions</a>.</p>
+<div class="section" id="jupyter-notebooks">
+<h3>Jupyter notebooks<a class="headerlink" href="jnrh-2023.html#jupyter-notebooks" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="files docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><img alt="html" class="icon" src="../images/icons/html5.png" /></td>
+<td><a class="reference external" href="https://github.com/nmansard/jnrh2023/blob/bad0f9638721b09e8e134188e8fad96624fbaa08/0_setup.ipynb">Installing Pinocchio 3's preview</a></td>
+</tr>
+<tr><td><img alt="html" class="icon" src="../images/icons/html5.png" /></td>
+<td><a class="reference external" href="https://github.com/nmansard/jnrh2023/blob/bad0f9638721b09e8e134188e8fad96624fbaa08/1_invgeom.ipynb">Inverse geometry</a></td>
+</tr>
+<tr><td><img alt="html" class="icon" src="../images/icons/html5.png" /></td>
+<td><a class="reference external" href="https://github.com/nmansard/jnrh2023/blob/bad0f9638721b09e8e134188e8fad96624fbaa08/2_trajopt_geom.ipynb">Trajectory optimization</a></td>
+</tr>
+<tr><td><img alt="html" class="icon" src="../images/icons/html5.png" /></td>
+<td><a class="reference external" href="https://github.com/nmansard/jnrh2023/blob/bad0f9638721b09e8e134188e8fad96624fbaa08/3_contact_dynamics.ipynb">Constrained dynamics</a></td>
+</tr>
+<tr><td><img alt="html" class="icon" src="../images/icons/html5.png" /></td>
+<td><a class="reference external" href="https://github.com/nmansard/jnrh2023/blob/bad0f9638721b09e8e134188e8fad96624fbaa08/4_with_obstacles.ipynb">Working with obstacles</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="slides-1">
+<h3>Slides<a class="headerlink" href="jnrh-2023.html#slides-1" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="files docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><img alt="pdf" class="icon" src="../images/icons/pdf.png" /></td>
+<td><a class="reference external" href="https://gepettoweb.laas.fr/talks/jnrh2023/presentation%20-%20Pinocchio.pdf">Overview of Pinocchio</a></td>
+</tr>
+<tr><td><img alt="pdf" class="icon" src="../images/icons/pdf.png" /></td>
+<td><a class="reference external" href="https://gepettoweb.laas.fr/talks/jnrh2023/setup.pdf">Installing Pinocchio 3's preview</a></td>
+</tr>
+<tr><td><img alt="pdf" class="icon" src="../images/icons/pdf.png" /></td>
+<td><a class="reference external" href="https://gepettoweb.laas.fr/talks/jnrh2023/1%20Inverse%20geometry.pdf">Inverse geometry</a></td>
+</tr>
+<tr><td><img alt="pdf" class="icon" src="../images/icons/pdf.png" /></td>
+<td><a class="reference external" href="https://gepettoweb.laas.fr/talks/jnrh2023/2%20trajectory%20optimization.pdf">Trajectory optimization</a></td>
+</tr>
+<tr><td><img alt="pdf" class="icon" src="../images/icons/pdf.png" /></td>
+<td><a class="reference external" href="https://gepettoweb.laas.fr/talks/jnrh2023/presentation%20-%20Constraint%20Dynamics.pdf">Constrained dynamics</a></td>
+</tr>
+<tr><td><img alt="pdf" class="icon" src="../images/icons/pdf.png" /></td>
+<td><a class="reference external" href="https://gepettoweb.laas.fr/talks/jnrh2023/jnrh_collision_detection.pdf">Collision detection</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="about-jnrh">
+<h2>About JNRH<a class="headerlink" href="jnrh-2023.html#about-jnrh" title="Permalink to this headline">¶</a></h2>
+<p>JNRH are one of the main French-speaking forum for the academic and industrial community studying humanoid and legged robots, biomechanics, and complex polyarticular systems that interact physically and cognitively with their environment. The goal of this forum is to bring together the national research community to discuss the various scientific topics related to these fields: mechanical and mechatronic design, modeling and simulation, control, numerical optimization, planning, learning, perception, motion analysis, etc. Doctoral students, postdoctoral researchers, and scientists are invited to present their latest work and research interests in the context of open scientific discussions. JNRH are also an opportunity to exchange ideas about the organization of our community, particularly in preparation for the IEEE/RAS Humanoids conference that will take place in Nancy in 2024.</p>
+</div>
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="jnrh-2023.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="jnrh-2023.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="jnrh-2023.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("jnrh-2023"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="jnrh-2023.html">Page</a> published on <time class="dt-published" datetime="2023-07-05T00:00:00+0200">2023-07-05</time>.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

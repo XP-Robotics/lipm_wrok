@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Reviewing a scientific paper</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="For scientists, the review process is sometimes a private matter: everyone does it, yet we don’t talk about it much. This may be related to the confidentiality and anonymity principles at the core of this process, which sound a bit like Swiss banking: reviewers should not tell others about …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Blog">
+        <meta name="keywords" content="Science">
+
+        <meta property="og:title" content="Reviewing a scientific paper">
+        <meta property="og:description" content="For scientists, the review process is sometimes a private matter: everyone does it, yet we don’t talk about it much. This may be related to the confidentiality and anonymity principles at the core of this process, which sound a bit like Swiss banking: reviewers should not tell others about …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/blog/reviewing-a-scientific-paper.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/blog.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/blog.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <h1>Reviewing a scientific paper</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p>For scientists, the review process is sometimes a private matter: everyone does
+it, yet we don’t talk about it much. This may be related to the confidentiality
+and anonymity principles at the core of this process, which sound a bit like
+Swiss banking: reviewers should not tell others about the work until it is
+published, and authors are not told who their reviewers are (in double-blind
+reviewers are not told who the authors are either). There are reasons behind
+these principles, but it doesn't mean we can't talk about reviews altogether.
+So here is some advice and pointers on things I learned along the way.</p>
+<div class="section" id="what-is-the-review-process">
+<h2>What is the review process<a class="headerlink" href="reviewing-a-scientific-paper.html#what-is-the-review-process" title="Permalink to this headline">¶</a></h2>
+<p>The goal of a review is to assess the contribution of a submitted manuscript. A
+meaningful contribution can come from novelty, new ideas that have not been
+already proposed, but it may also come from fresh observations, <em>e.g.</em> an
+extensive benchmark that sheds new light on how existing methods perform.
+Anyway, peers of the authors are asked for their evaluation, and on the way
+give their opinion and other comments to help improve the manuscript. For
+authors and reviewers alike, the review process is a way of interacting between
+peers and exchanging constructive feedback.</p>
+<div class="section" id="surviving-the-review-process">
+<h3>Surviving the review process<a class="headerlink" href="reviewing-a-scientific-paper.html#surviving-the-review-process" title="Permalink to this headline">¶</a></h3>
+<p>There is a great overview by Seth Hutchinson which I warmly advise you to read
+for starters: <a class="reference external" href="http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=5663683">Surviving the review process</a>.</p>
+</div>
+<div class="section" id="what-are-the-qualities-of-a-good-review">
+<h3>What are the qualities of a good review?<a class="headerlink" href="reviewing-a-scientific-paper.html#what-are-the-qualities-of-a-good-review" title="Permalink to this headline">¶</a></h3>
+<p>A good review is constructive in its criticism: it tells the authors how the
+work can be improved, and does not diminish their efforts (regardless of
+whether the review vouches for acceptance or rejection). To make sure you
+achieve this, there is a simple strategy: try to be as nice as possible;
+remember you are talking to one of your peers. When pointing out that something
+is wrong, make sure you (1) explain why it is wrong, and (2) point out how it
+can be improved, whenever possible.</p>
+</div>
+</div>
+<div class="section" id="a-simple-review-method">
+<h2>A simple review method<a class="headerlink" href="reviewing-a-scientific-paper.html#a-simple-review-method" title="Permalink to this headline">¶</a></h2>
+<p>Reading someone else’s work is an effort. It takes <em>hours</em>, especially when you
+are doing it for the first time. Your own curiosity in the topic is one way to
+balance it. Another way is to make your reading “interactive” as follows:</p>
+<ul class="simple">
+<li>Read the paper linearly, taking notes in the margin or in a file as you go.</li>
+<li>Complete your notes following <em>e.g.</em> the template below.</li>
+<li>Double-check by reading the introduction or conclusion of the manuscript again.</li>
+<li>Go to the review website and polish your review as you submit it.</li>
+</ul>
+<p>For me, notes usually start as a bullet list of oral comments: what I would
+like to say to the authors in response to specific parts of the manuscript. As
+I keep on reading, I usually shuffle this list, putting most important comments
+first and minor ones at the end. This is the “low level” part of the review.
+The “high level” part of the review (general comments and assessment of the
+manuscript) usually comes as a set of paragraphs that open your review, before
+going into detailed (bullet-list like) comments. You can use the following
+structure.</p>
+<div class="section" id="summary">
+<h3>1. Summary<a class="headerlink" href="reviewing-a-scientific-paper.html#summary" title="Permalink to this headline">¶</a></h3>
+<p>Start with a quick summary, using your own words (not the authors’), briefly
+describing the steps taken in the paper. The summary can simply list out what
+the paper does without commenting (yet). This step is also useful for the
+editor who rely on these alternative abstracts to piece together their
+understanding of the paper.</p>
+</div>
+<div class="section" id="contribution">
+<h3>2. Contribution<a class="headerlink" href="reviewing-a-scientific-paper.html#contribution" title="Permalink to this headline">¶</a></h3>
+<p>Now is the time for constructive criticism: single out what’s new in the
+manuscript compared to existing works, and discuss it. Sometimes, the
+contribution you identify will differ from the one the authors state, for
+example because they missed some prior art. In that case, a &quot;We introduce a
+novel way of doing X&quot; becomes &quot;This work proposes a variant of [1, 2] where the
+foo term in the blah process is modified in Y, Z ways.&quot;</p>
+<p>Here is for example the list of questions that the IEEE Robotics and Automation
+Society suggests you evaluate at this stage of your review:</p>
+<ul class="simple">
+<li>Is the contribution of the paper relevant to its field?</li>
+<li>Does it properly cite related existing works?</li>
+<li>Does it provide all technical material needed to understand and reproduce the contribution?</li>
+<li>How are its experimental results?</li>
+<li>Is the writing clear and comprehensible?</li>
+</ul>
+</div>
+<div class="section" id="link-to-prior-works">
+<h3>3. Link to prior works<a class="headerlink" href="reviewing-a-scientific-paper.html#link-to-prior-works" title="Permalink to this headline">¶</a></h3>
+<p>Next, discuss how the paper positions its contribution with respect to existing
+works. A delicate situation that happens sooner or later is reviewing a
+manuscript related to one's previous works yet that does not mention them. At
+this stage we can feel biased towards self-promotion or irate at the authors
+for ignoring our works! Keep in mind Hanlon's razor though: there are many
+not-so-unlikely ways in which your peers may have missed your works, especially
+in fast-moving domains like robotics or machine learning where the literature
+evolves so fast. One technique that can be useful in this situation is to treat
+your own works as if they had been done by others (which also helps keep the
+review anonymous), and make points at the conceptual level only.</p>
+<ul class="simple">
+<li><strong>Don't</strong> prompt for a citation without justification, <em>e.g.</em> &quot;at this point
+it would be nice to cite [vaguely related works X]&quot;.</li>
+<li><strong>Do</strong> explain conceptual decisions between papers, for instance &quot;this
+manuscript chooses to do X while [closely related work Y] started the same
+but did Z instead&quot;.</li>
+</ul>
+<p>Avoiding the <a class="reference external" href="writing-a-scientific-paper.html">laundry list syndrom</a>
+is part of the authors' writing duty, so as a reviewer it is only logical we
+are held to the same standard when pointing out missing citations to existing
+works.</p>
+</div>
+<div class="section" id="strengths-and-weaknesses">
+<h3>4. Strengths and weaknesses<a class="headerlink" href="reviewing-a-scientific-paper.html#strengths-and-weaknesses" title="Permalink to this headline">¶</a></h3>
+<p>To wrap up the first paragraphs of your review, list both the strengths and
+weaknesses of the manuscript as a whole. Systematically discussing both pros
+and cons is usually a good strategy: if you liked the paper, it reminds you to
+try to look for its downsides, and conversely.</p>
+</div>
+<div class="section" id="numbered-list-of-comments">
+<h3>5. Numbered list of comments<a class="headerlink" href="reviewing-a-scientific-paper.html#numbered-list-of-comments" title="Permalink to this headline">¶</a></h3>
+<p>Now that the first overview paragraphs are written down, we can jump into less
+structured and more specific comments on the work. This part is a more direct
+address to the authors, as the area chairs or editors are more likely to focus
+on the overview.</p>
+<p>If the venue's review process allows for a rebuttal phase (which, if it is a
+good venue, it does), number all your questions and comments. This bit of
+structure will facilitate the back and forth in the ensuing discussions.</p>
+</div>
+</div>
+<div class="section" id="good-practices">
+<h2>Good practices<a class="headerlink" href="reviewing-a-scientific-paper.html#good-practices" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="separate-facts-and-judgements">
+<h3>Separate facts and judgements<a class="headerlink" href="reviewing-a-scientific-paper.html#separate-facts-and-judgements" title="Permalink to this headline">¶</a></h3>
+<p>Strive to separate facts from judgements clearly, in your reviews, and in
+general ;) If there is a calculation mistake, or a missing technical detail, a
+claim of novelty for something that was already proposed, etc., that's a fact
+and you can state it bluntly. If on the other hand you don't see the benefit of
+the approach, or you disagree with the authors on some foreseen consequences,
+etc., that's a judgement (a fact about your beliefs, not a fact about the work)
+and it's best to own it by writing it down as &quot;I/this reviewer believes...&quot; or
+&quot;I/this reviewer disagrees with the authors regarding...&quot;.</p>
+<p>Judgements in reviews are totally fine. They are not the ground upon which a
+work should be evaluated, yet they are part of the scientific conversation
+between peers (and can be useful feedback for the authors). Don't discard your
+opinions, especially if you are early in your career and unsure about them:
+your input is valuable, that's why you were asked for a review! Keep the tone
+friendly and constructive, and also keep in mind that some things <a class="reference external" href="https://perceiving-systems.blog/en/news/novelty-in-science">like novelty</a> are delicate to
+judge because of hindsight bias.</p>
+</div>
+<div class="section" id="language-and-typos">
+<h3>Language and typos<a class="headerlink" href="reviewing-a-scientific-paper.html#language-and-typos" title="Permalink to this headline">¶</a></h3>
+<p>It is common practice to group minor suggestions and typos in a short list at
+the end of your review. These points should not count in the overall evaluation
+of the work, unless the language is so problematic that it harms understanding.</p>
+</div>
+</div>
+<div class="section" id="q-a">
+<h2>Q &amp; A<a class="headerlink" href="reviewing-a-scientific-paper.html#q-a" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="what-is-the-point-of-the-anonymity-principle">
+<h3>What is the point of the anonymity principle?<a class="headerlink" href="reviewing-a-scientific-paper.html#what-is-the-point-of-the-anonymity-principle" title="Permalink to this headline">¶</a></h3>
+<p>It tries to remove bias. Of course it is not a panacea so don’t expect it to
+eliminate all kinds of biases encountered in the scientific community, but
+think of the following situation: a PhD student reviews a technically flawed
+manuscript from the lab of a famous professor in their field (one they may
+<em>e.g.</em> like to join for post-doc…). Without anonymity, the student faces two
+conflicting objectives: writing an honest review, and avoiding potential harm
+to their future career. Anonymity helps unbias such situations.</p>
+</div>
+<div class="section" id="what-about-a-symmetric-situation-a-famous-professor-reviews-a-paper-on-a-topic-someone-in-their-lab-is-currently-working-on">
+<h3>What about a symmetric situation: a famous professor reviews a paper on a topic someone in their lab is currently working on?<a class="headerlink" href="reviewing-a-scientific-paper.html#what-about-a-symmetric-situation-a-famous-professor-reviews-a-paper-on-a-topic-someone-in-their-lab-is-currently-working-on" title="Permalink to this headline">¶</a></h3>
+<p>This is one of the conflicting situations that is not solved by <em>rules</em> of the
+current system. (There are not rules for everything.) It then becomes a
+question of <a class="reference external" href="https://en.wikipedia.org/wiki/Ethics">ethics</a>. You will observe
+both ethical and unethical behaviors from people in your community. Do your
+best to reward and interact more with ethical people, while avoiding
+interactions with unethical ones.</p>
+</div>
+<div class="section" id="i-m-reviewing-a-paper-that-s-not-100-my-expertise-how-deep-should-i-dive">
+<h3>I'm reviewing a paper that's not 100% my expertise, how deep should I dive?<a class="headerlink" href="reviewing-a-scientific-paper.html#i-m-reviewing-a-paper-that-s-not-100-my-expertise-how-deep-should-i-dive" title="Permalink to this headline">¶</a></h3>
+<p>Associate editors/area chairs pick reviewers not only for the quality of the feedback they expect, but also to be representative of segments of the community. For instance, younger reviewers tend to provide more detailed and technical reviews, while older reviewers tend to connect to more related works. All of those are meaningful feedback both to the authors (to improve their paper) and editors (to evaluate the work), thus editors tend to <em>sample</em> from their pool of reviewers to get a group as representative as possible of their community. Here is how the IEEE Transactions on Robotics puts it in their <a class="reference external" href="https://www.ieee-ras.org/publications/t-ro/information-for-associate-editors">Information for Associate Editors</a>:</p>
+<blockquote>
+A good mix of senior and junior Reviewers is desirable as they provide
+reviews from different perspectives and at different levels of detail. For
+example, a junior Reviewer may carefully check the various technical
+details of the paper, but may also lack the depth to assess the
+significance of the contribution, while a senior Reviewer may be in a
+position to judge whether the paper brings a real contribution to the
+community. A mix of Reviewers from different geographical regions is also
+desirable.</blockquote>
+<p>If you are not 100% expert in the paper an editor asked you to review, it is likely the editor already anticipated this. It is not necessary to dive deep into every aspect of the paper you are reading (for example, searching related works for missing details), unless of course you get curious to do so. Your review, using the expertise you had at the time you accepted it, is still valuable work that you provide to your peers. (For free: reviewing is a service we give each other.)</p>
+</div>
+</div>
+<div class="section" id="to-go-further">
+<h2>To go further<a class="headerlink" href="reviewing-a-scientific-paper.html#to-go-further" title="Permalink to this headline">¶</a></h2>
+<p>I like the personal method Nato Lambert recounts in <a class="reference external" href="https://www.natolambert.com/guides/how-to-review-a-paper">How to review a paper</a>. In particular
+this bit on the overall attitude rings right:</p>
+<blockquote>
+You’ll give a good review if you read the paper as if you would a close
+friend or colleague who asked for feedback. There is no reason to put on a
+tough face for a review because it happens to be in a conference. Also, you
+should and can be supportive of what authors have done well in a paper
+review.</blockquote>
+<p>The idea of having an open ended section for discussion that is not part of
+evaluation is also nice, and it would fit well in the review method above.</p>
+<p>Here are some other relevant reads on this topic:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=5663683">Surviving the review process</a> by Seth
+Hutchinson.</li>
+<li><a class="reference external" href="https://agupubs.onlinelibrary.wiley.com/doi/pdf/10.1029/2011EO280001">A Quick Guide to Writing a Solid Peer Review</a>,
+proposing a flow chart of the process.</li>
+<li><a class="reference external" href="https://perceiving-systems.blog/en/news/novelty-in-science">Pitfalls to mind when judging the novelty of a paper under review</a> by Michael
+Black.</li>
+<li><a class="reference external" href="http://www.ieee-ras.org/publications/t-ro/information-for-reviewers">Information for Reviewers</a> from
+the IEEE Transactions on Robotics.</li>
+</ul>
+<p>You can also check out the <em>Solicited Reviews</em> section of <a class="reference external" href="http://www.semantic-web-journal.net/content/dbpedia-large-scale-multilingual-knowledge-base-extracted-wikipedia">this page</a>
+for examples of reviews written by senior researchers.</p>
+</div>
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="reviewing-a-scientific-paper.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="reviewing-a-scientific-paper.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="reviewing-a-scientific-paper.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("reviewing-a-scientific-paper"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="reviewing-a-scientific-paper.html">Page</a> published on <time class="dt-published" datetime="2018-03-20T00:00:00+0100">2018-03-20</time>.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

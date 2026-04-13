@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Modèles simplifiés pour la locomotion des robots humanoïdes en terrain accidenté</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="Présentation donnée à la Journée Francophone de la Recherche au Japon, Maison Franco-Japonaise de Tokyo, novembre 2015. Résumé¶ La robotique humanoïde distingue deux domaines : planification et locomotion. Tous deux servent le même objectif, qui est de permettre au robot de se déplacer d'un endroit à un autre. La locomotion repose …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Talks">
+        <meta name="keywords" content="Talks, Walking trajectory generation, Robotics">
+
+        <meta property="og:title" content="Modèles simplifiés pour la locomotion des robots humanoïdes en terrain accidenté">
+        <meta property="og:description" content="Présentation donnée à la Journée Francophone de la Recherche au Japon, Maison Franco-Japonaise de Tokyo, novembre 2015. Résumé¶ La robotique humanoïde distingue deux domaines : planification et locomotion. Tous deux servent le même objectif, qui est de permettre au robot de se déplacer d'un endroit à un autre. La locomotion repose …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/talks/jfr-2015.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/talks.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/talks.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <h1>Modèles simplifiés pour la locomotion des robots humanoïdes en terrain accidenté</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p class="authors">Présentation donnée à la <a class="reference external" href="https://sites.google.com/site/sciencescopejfr2015/">Journée Francophone de la Recherche au Japon</a>, Maison Franco-Japonaise
+de Tokyo, novembre 2015.</p>
+<img alt="Journée Francophone de la Recherche au Japon" class="noborder padtop align-center" src="../images/jfr-logo.jpg" style="width: 600px;" />
+<div class="section" id="resume">
+<h2>Résumé<a class="headerlink" href="jfr-2015.html#resume" title="Permalink to this headline">¶</a></h2>
+<p>La robotique humanoïde distingue deux domaines&nbsp;: planification et locomotion.
+Tous deux servent le même objectif, qui est de permettre au robot de se
+déplacer d'un endroit à un autre. La locomotion repose sur des mouvements
+répétés (comme les pas d'une démarche) ou générés par des modèles simplifiés du
+robot (comme le pendule inversé, que nous allons voir). Elle nécessite
+généralement un sol plat ou peu accidenté. La planification fait moins
+d'hypothèses, ce qui la rend  adaptée aux déplacements dans les environnements
+encombrés. Toutefois, elle nécessite d'avantage de calculs et a tendance à
+produire des mouvements peu naturels. Marcher en forêt relève par exemple de la
+locomotion, tandis qu'escalader une montagne relève de la planification.</p>
+<p>La locomotion des robots humanoïdes sur sol horizontal est un problème bien
+résolu aujourd'hui. La solution la plus connue repose sur le ZMP (point
+d'annulation du moment tangentiel, Zero-tilting Moment Point en anglais), un
+point qui joue un rôle clef dans la locomotion bipède. Sa position dans le
+polygone de sustentation (l'ensemble des points situés «&nbsp;entre les pieds&nbsp;») est
+un indicateur de la stabilité d'une démarche. Pour ne pas tomber, le robot doit
+éviter que le ZMP sorte de ce polygone.</p>
+<p>La définition historique du ZMP nécessite un sol horizontal, ce qui a empêché
+son extension aux terrains accidentés. Depuis 10 ans, la piste du ZMP s'est
+ainsi retrouvée progressivement abandonnée au profit de différentes
+alternatives comme le contrôle direct des forces de contact. Dans les travaux
+que nous présentons aujourd'hui, nous proposons une nouvelle façon de définir
+le ZMP et de calculer ses polygones de sustentation. Cette révision permet de
+s'affranchir de l'hypothèse d'un sol horizontal et d'utiliser le ZMP même en
+terrain accidenté. Nous montrons ainsi comment le modèle de locomotion bien
+connu du pendule (inversé ou non) peut être utilisé dans de nouvelles
+situations où le robot utilise pieds et mains pour se déplacer (ici, en
+s'appuyant contre un mur pour effectuer une longue enjambée).</p>
+</div>
+<div class="section" id="materiel-et-methode">
+<h2>Matériel et méthode<a class="headerlink" href="jfr-2015.html#materiel-et-methode" title="Permalink to this headline">¶</a></h2>
+<p>Dans <a class="reference external" href="https://doi.org/10.1109/TSMCA.2004.832811">un survey paper de 2004</a>,
+Sardain et Bessonnet définirent le ZMP à partir d'un axe non-central
+particulier du torseur gravito-inertiel. Nous généralisons leur approche en
+définissant le ZMP pour n'importe quel axe non-central de n'importe quel
+torseur. Le coeur de notre contribution est le développement de nouvelles
+méthodes de calcul des polygones de sustentation associés aux points ainsi
+définis, qui reposent sur la notion de dualité des ensembles coniques
+polyhédraux, en particulier sur l'algorithme de la double-description. Nous
+vérifions la validité des polygones ainsi construits en simulations.</p>
+</div>
+<div class="section" id="logiciels">
+<h2>Logiciels<a class="headerlink" href="jfr-2015.html#logiciels" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Langage de programmation&nbsp;: <a class="reference external" href="http://python.org">Python</a></li>
+<li>Environnement de développement robotique&nbsp;(visualisation et calculs
+cinématiques) : <a class="reference external" href="http://openrave.org/">OpenRAVE</a></li>
+<li>Bibliothèque d'optimisation quadratique (utilisée pour la cinématique
+inverse) : <a class="reference external" href="http://cvxopt.org">CVXOPT</a></li>
+</ul>
+<p>Le code source développé pour ce travail est publié sous license GPLv3 dans
+la bibliothèque <a class="reference external" href="https://github.com/stephane-caron/pymanoid">pymanoid</a>.</p>
+</div>
+<div class="section" id="liste-de-publications">
+<h2>Liste de publications<a class="headerlink" href="jfr-2015.html#liste-de-publications" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="../publications/rss-2015.html">Leveraging Cone Double Description for Multi-contact Stability of
+Humanoids...</a></li>
+<li><a class="reference external" href="../publications/iftomm-2015.html">Planning with the Center-of-Mass rather than Stances for Humanoids Walking
+on Uneven Terrains</a></li>
+<li><a class="reference external" href="../publications/icra-2015.html">Stability of Surface Contacts for Humanoid Robots Closed-Form Formulae of
+the...</a></li>
+</ul>
+</div>
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="jfr-2015.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="jfr-2015.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="jfr-2015.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("jfr-2015"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="jfr-2015.html">Page</a> published on <time class="dt-published" datetime="2015-11-13T00:00:00+0100">2015-11-13</time>.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

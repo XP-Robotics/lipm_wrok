@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>How to get around the Wii Error Code 20110</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="On May 2014, Nintendo stopped online gaming for games such as Mario Kart Wii or Super Smash Bros. Brawl. Since then, if you try to play online on these games, you will get an error like Nintendo Wi-Fi Connection service for this software has been discontinued. Visit support.nintendo.com …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Blog">
+        <meta name="keywords" content="Others">
+
+        <meta property="og:title" content="How to get around the Wii Error Code 20110">
+        <meta property="og:description" content="On May 2014, Nintendo stopped online gaming for games such as Mario Kart Wii or Super Smash Bros. Brawl. Since then, if you try to play online on these games, you will get an error like Nintendo Wi-Fi Connection service for this software has been discontinued. Visit support.nintendo.com …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/blog/wii-error-code-20110.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/blog.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/blog.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <h1>How to get around the Wii Error Code 20110</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p>On May 2014, Nintendo stopped online gaming for games such as <em>Mario Kart Wii</em>
+or <em>Super Smash Bros. Brawl</em>. Since then, if you try to play online on these
+games, you will get an error like</p>
+<blockquote>
+<p>Nintendo Wi-Fi Connection service for this software has been discontinued.
+Visit support.nintendo.com for a list of current Nintendo Wi-Fi
+Connection-compatible software.</p>
+<p>Error Code: 20110</p>
+</blockquote>
+<p>Of course, the &quot;list of current [compatible] software&quot; will point you to more
+recent games. This may or may not be an attempt from the company to push
+players to buy their latest games. Whatever it is, it shows the essential
+problem with centralized services: players still want to play (I do!) but
+Nintendo doesn't want to maintain the service forever. If the service had
+a decentralized structure instead of a centralized one, there would be no such
+problem: in a decentralized system, those who want to play are also those who
+put up the service.</p>
+<p>Anyway, it is still possible to play <em>Mario Kart Wii</em> or <em>Super Smash Bros.
+Brawl</em> online. Here is how to do it.</p>
+<div class="section" id="install-homebrew">
+<h2>Install Homebrew<a class="headerlink" href="wii-error-code-20110.html#install-homebrew" title="Permalink to this headline">¶</a></h2>
+<p>The first step is to install the <em>Homebrew</em> channel on your Wii. You will need
+an SD card formatted as FAT (size doesn't matter: 8 MB is enough to install
+just the system; if you want to download games later, scale it up to gigabytes)
+and two pieces of information:</p>
+<ul class="simple">
+<li>the system version of your Wii (shown in the top-right corner of the Wii's
+System Settings)</li>
+<li>the MAC address of your Wii (shown in the Network settings)</li>
+</ul>
+<p>If your system version starts with 4.3, go and fetch <a class="reference external" href="http://please.hackmii.com/">LetterBomb</a>: input your system version and MAC address on
+this page, fill the captcha and cut the red wire. This will give you a ZIP
+archive that you can decompress at the root of your SD card.</p>
+<p>Next, insert the SD card in your Wii and go to the Messages panel. At the date
+of today or yesterday, you should see a red enveloppe. Click it and follow the
+on-screen instructions to install the channel on your system.</p>
+<p>If you don't see any message, it may be because you have the latest updates of
+the Wii system (Nintendo patched it to prevent players from installing
+Homebrew, thus keeping control of your system). In this case, go to the third
+page of system settings and revert to factory settings.</p>
+<p>For step-by-step instructions with screenshots, you can check out <a class="reference external" href="http://nintendo.about.com/od/nintendowiibasics/ss/homebrew_setup.htm">this
+tutorial on about.com</a>.</p>
+<img alt="Homebrew Channel" class="single align-center" src="../images/homebrew.png" style="width: 80%;" />
+</div>
+<div class="section" id="install-wiimmfi">
+<h2>Install Wiimmfi<a class="headerlink" href="wii-error-code-20110.html#install-wiimmfi" title="Permalink to this headline">¶</a></h2>
+<p>The people from <a class="reference external" href="http://wiimmfi.de/stat">wiimmfi.de</a> put up an alternate
+gaming server where you can play <em>Mario Kart Wii</em>, <em>Super Smash Bros. Brawl</em>
+and <em>Tatsunoko VS. Capcom: Ultimate All Stars</em>. To use it,</p>
+<ul class="simple">
+<li>Download the <a class="reference external" href="http://chadsoft.co.uk/downloads/autowiimmfipatcher0.3.zip">autowiimmfipatcher</a> (if this link
+doesn't work, <a class="reference external" href="https://scaron.info/files/autowiimmfipatcher0.3.zip">here</a> is the file
+I used).</li>
+<li>Extract its contents (<cite>apps</cite> and <cite>bslug</cite> folders) to the root of your SD card.</li>
+<li>Make sure your Wii is connected to your Wi-Fi router.</li>
+<li>Insert the SD card and game disc in your Wii.</li>
+<li>Launch Homebrew Channel and run the <cite>Auto Wiimmfi Patcher</cite>.</li>
+</ul>
+<p>The patcher will eventually run the game. On a side note, you can also run
+games from other regions this way (e.g. a US version of SSBB can run on
+a European Wii).</p>
+</div>
+<div class="section" id="on-a-side-note">
+<h2>On a side note<a class="headerlink" href="wii-error-code-20110.html#on-a-side-note" title="Permalink to this headline">¶</a></h2>
+<p>With the <em>Homebrew channel</em> installed on your Wii, you can do many things that
+were not allowed by Nintendo: play videos or DVDs with <a class="reference external" href="http://wiibrew.org/wiki/MPlayerWii">MPlayerWii</a>, emulate previous consoles with e.g.
+<a class="reference external" href="http://wiibrew.org/wiki/Snes9x_GX">Snes9x GX</a> or <a class="reference external" href="http://wiibrew.org/wiki/Wii64">Wii64</a>, etc. In other words, you have gained more
+control over your device.</p>
+</div>
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="wii-error-code-20110.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="wii-error-code-20110.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="wii-error-code-20110.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("wii-error-code-20110"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="wii-error-code-20110.html">Page</a> published on <time class="dt-published" datetime="2015-03-22T00:00:00+0100">2015-03-22</time>.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

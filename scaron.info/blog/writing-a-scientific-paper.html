@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Writing a scientific paper</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="Like software engineering, or playing a game of the Dark Souls series, writing scientific papers is a challenging activity that blends multiple goals and pitfalls. As in software engineering, one way to learn the tricks of the trade is to look and comment upon harmful behaviors, known as anti-patterns. Anti-patterns …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Blog">
+        <meta name="keywords" content="Science">
+
+        <meta property="og:title" content="Writing a scientific paper">
+        <meta property="og:description" content="Like software engineering, or playing a game of the Dark Souls series, writing scientific papers is a challenging activity that blends multiple goals and pitfalls. As in software engineering, one way to learn the tricks of the trade is to look and comment upon harmful behaviors, known as anti-patterns. Anti-patterns …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/blog/writing-a-scientific-paper.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/blog.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/blog.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <h1>Writing a scientific paper</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p>Like software engineering, or playing a game of the <em>Dark Souls</em> series,
+writing scientific papers is a challenging activity that blends multiple goals
+and pitfalls. As in software engineering, one way to learn the tricks of the
+trade is to look and comment upon harmful behaviors, known as <em>anti-patterns</em>.</p>
+<div class="section" id="anti-patterns">
+<h2>Anti-patterns<a class="headerlink" href="writing-a-scientific-paper.html#anti-patterns" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="we-needed-to-do-this">
+<h3>We needed to do this<a class="headerlink" href="writing-a-scientific-paper.html#we-needed-to-do-this" title="Permalink to this headline">¶</a></h3>
+<p>This one applies to both scientific writing and presentations.</p>
+<p><strong>Description:</strong> the solution to a problem is presented as necessary.</p>
+<ul class="simple">
+<li>Oral: &quot;And so, to do this, we <em>needed to</em> measure...&quot;</li>
+<li>Written: &quot;To achieve this, one needs to update...&quot;</li>
+</ul>
+<p>Necessity has a precise meaning: a solution is necessary when <em>there is no
+other way</em>. While it is reassuring to think that your method emerged as &quot;the&quot;
+logical response to your problem, truth is, it bundles a natural chain of
+contingencies, and there are most likely other ways to solve the same problem.
+Doubt is a crucial practice in science. The mistake that appears in this
+anti-pattern is to shun it out.</p>
+<p><strong>Remedy:</strong> cut to the point.</p>
+<ul class="simple">
+<li>Oral:&quot; And so, to do this, we measured...&quot;</li>
+<li>Written: &quot;To achieve this, we updated...&quot;</li>
+</ul>
+</div>
+<div class="section" id="laundry-list">
+<h3>Laundry list<a class="headerlink" href="writing-a-scientific-paper.html#laundry-list" title="Permalink to this headline">¶</a></h3>
+<p>This one applies to <em>related work</em> sections. It is discussed in the short
+presentation <a class="reference external" href="https://www.youtube.com/watch?v=L_6xoMjFr70">How to Write Papers So People Can Read Them</a> by Derek Dreyer.</p>
+<p><strong>Description:</strong> the paper merely enumerates other works on the topic without
+comparing them to its own solution: &quot;A <em>et al.</em> did this. B <em>et al.</em> did that.
+C <em>et al.</em> did that. etc.&quot;</p>
+<p><strong>Remedy:</strong> explain in detail how your work addresses your problem in a way
+that related work doesn't.</p>
+</div>
+</div>
+<div class="section" id="general-writing-advice">
+<h2>General writing advice<a class="headerlink" href="writing-a-scientific-paper.html#general-writing-advice" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="flow">
+<h3>Flow<a class="headerlink" href="writing-a-scientific-paper.html#flow" title="Permalink to this headline">¶</a></h3>
+<p>Keep in mind that reading, like watching a movie, is not a fully conscious
+process. To be receptive to the ideas conveyed by your writing, you want to
+keep your reader in a <a class="reference external" href="https://en.wikipedia.org/wiki/Flow_(psychology)">state of flow</a>. Linear storytelling is a
+common strategy to realize this, using temporal or logical connectives to
+stitch paragraphs one after the other. This point is well explained in the
+short talk <a class="reference external" href="https://www.youtube.com/watch?v=L_6xoMjFr70">How to Write Papers So People Can Read Them</a> by Derek Dreyer.</p>
+</div>
+<div class="section" id="active-or-passive-voice">
+<h3>Active or passive voice<a class="headerlink" href="writing-a-scientific-paper.html#active-or-passive-voice" title="Permalink to this headline">¶</a></h3>
+<p>There is a bit of debate surrounding this question, as it certainly boils down
+to a personal choice of writing style. Some scientists argue that, the
+objective of scientific papers being the communication of <em>facts</em> and
+observations, scientists themselves should be grammatically excluded as
+subjects. Neither &quot;we&quot; as in &quot;we developed...&quot;, nor &quot;our&quot; as in &quot;our
+method...&quot;. This line of thought yields to an intensive use of the passive
+voice.</p>
+<blockquote>
+Science is built up of facts, as a house is with stones. But a collection
+of facts is no more a science than a heap of stones is a house. (Henri
+Poincaré)</blockquote>
+<p>However, passive-voice sentences are a slippery path: they use more words, and
+have a tendency to produce more complex and <em>vague</em> sentence structures.
+Vagueness is the main matter of concern here, the nemesis of scientific
+writers. For this reason, unless there is a clear motivation to use the passive
+voice (to emphasize the action over its actor, to describe actions from
+anonymous actors, ...), try to <strong>use the active voice whenever possible</strong>.</p>
+</div>
+<div class="section" id="thesaurus-and-dictionary">
+<h3>Thesaurus and dictionary<a class="headerlink" href="writing-a-scientific-paper.html#thesaurus-and-dictionary" title="Permalink to this headline">¶</a></h3>
+<p>Two advices especially targetted to non-native speakers like me:</p>
+<ul class="simple">
+<li>Beware of <a class="reference external" href="https://en.wikipedia.org/wiki/False_friend">false friends</a>:
+whenever unsure, check the definition in a <a class="reference external" href="https://en.wiktionary.org/">dictionary</a>.</li>
+<li>Use a <a class="reference external" href="http://www.thesaurus.com/">thesaurus</a> to avoid repetitions, and to
+improve your phrasing by selecting words that express best what you want to
+say.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="to-go-further">
+<h2>To go further<a class="headerlink" href="writing-a-scientific-paper.html#to-go-further" title="Permalink to this headline">¶</a></h2>
+<p>Anti-patterns and useful techniques don't cover the whole topic of paper
+writing. The underlying challenge for you, as a writer, is to put yourself in
+the position of your readers. Some researchers have shared their experience on
+this in reports and talks that are definitely worth checking out:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://www.youtube.com/watch?v=L_6xoMjFr70">How to Write Papers So People Can Read Them</a> by Derek Dreyer</li>
+<li><em>How to Write a Great Research Paper:</em> <a class="reference external" href="https://scaron.info/files/how-write-research-paper.pdf">slides</a> and <a class="reference external" href="https://www.youtube.com/watch?v=VK51E3gHENc">talk</a> by Simon Peyton Jones</li>
+<li><a class="reference external" href="http://ccr.sigcomm.org/online/files/p83-keshavA.pdf">How to Read a Paper</a> by Srinivasan Keshav</li>
+<li><a class="reference external" href="https://doi.org/10.1038/d41586-019-02918-5">Novelist Cormac McCarthy’s tips on how to write a great science paper</a> in Nature's career column</li>
+</ul>
+</div>
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="writing-a-scientific-paper.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+        <p>
+        You can subscribe to this <i class="rss-icon"></i>&nbsp;<a href="https://scaron.info/feeds/comment.writing-a-scientific-paper.atom.xml">Discussion's atom feed</a> to stay tuned.
+        </p>
+<ul>
+            <li class="with-border-top" id="comment-jihong-zhu">
+                <div class="comment-left">
+                    <img src="../images/identicon/0b2fbf61951f70e412407cd98e1e87f5.png"
+                         alt="Avatar"
+                         height="72"
+                         width="72">
+                </div>
+                <div class="comment-body">
+                    <div class="pull-right">
+                        <a class="btn" role="button" href="writing-a-scientific-paper.html#comment-jihong-zhu" rel="bookmark" title="Permalink to this comment">
+                            <i class="permalink-icon"></i>
+                            Permalink
+                        </a>
+                        <button onclick="CommentSystem.setReply('jihong-zhu', 'Jihong');">
+                            <i class="reply-icon"></i>
+                            Reply
+                        </button>
+                    </div>
+                    <h4 class="author">
+                            <a href="https://jihong-zhu.github.io/">Jihong</a>
+                    </h4>
+                    <p class="posted-on">
+                        Posted on
+                        <time datetime="2022-05-19T14:01:00+02:00" title="2022-05-19T14:01:00+02:00">Thu 19 May 2022</time>
+                    </p>
+                    <div class="comment-content" >
+                        <p>Hey Stéphane, thanks a lot for writing up a post on writing and I come back
+often to refresh my understanding. Great now you also allow posting comments.</p>
+                    </div>
+                        <ul>
+                                        <li class="with-border-top" id="comment-reply-jihong-zhu">
+                <div class="comment-left">
+                    <img src="../images/identicon/e32ff903a0e87efe5d3854e53f016a72.png"
+                         alt="Avatar"
+                         height="72"
+                         width="72">
+                </div>
+                <div class="comment-body">
+                    <div class="pull-right">
+                        <a class="btn" role="button" href="writing-a-scientific-paper.html#comment-reply-jihong-zhu" rel="bookmark" title="Permalink to this comment">
+                            <i class="permalink-icon"></i>
+                            Permalink
+                        </a>
+                        <button onclick="CommentSystem.setReply('reply-jihong-zhu', 'St%C3%A9phane');">
+                            <i class="reply-icon"></i>
+                            Reply
+                        </button>
+                    </div>
+                    <h4 class="author">
+                            Stéphane
+                    </h4>
+                    <p class="posted-on">
+                        Posted on
+                        <time datetime="2022-05-23T09:42:00+02:00" title="2022-05-23T09:42:00+02:00">Mon 23 May 2022</time>
+                    </p>
+                    <div class="comment-content" >
+                        <p>I'm glad if this could help somehow :-) Feel free to let me know if there are
+other points you have picked up in the course of your career that could be
+mentioned here.</p>
+
+                    </div>
+                </div>
+            </li>
+
+                        </ul>
+                </div>
+            </li>
+        </ul>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="writing-a-scientific-paper.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="writing-a-scientific-paper.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("writing-a-scientific-paper"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="writing-a-scientific-paper.html">Page</a> published on <time class="dt-published" datetime="2017-06-29T00:00:00+0200">2017-06-29</time>.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

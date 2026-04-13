@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Is the Internet cheap?</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="This post is adapted from some homework I received at the University of Tokyo (the original question was "Why is the Internet cheap?"). The word “cheap” has three main understandings: (1) low and/or reduced in price; (2) of poor quality; (3) of little worth. In the present question, the …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Blog">
+        <meta name="keywords" content="Thoughts">
+
+        <meta property="og:title" content="Is the Internet cheap?">
+        <meta property="og:description" content="This post is adapted from some homework I received at the University of Tokyo (the original question was "Why is the Internet cheap?"). The word “cheap” has three main understandings: (1) low and/or reduced in price; (2) of poor quality; (3) of little worth. In the present question, the …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/blog/is-the-internet-cheap.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/blog.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/blog.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <h1>Is the Internet cheap?</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p>This post is adapted from some homework I received at the University of Tokyo
+(the original question was &quot;Why is the Internet cheap?&quot;).</p>
+<p>The word “cheap” has three main understandings: (1) low and/or reduced in
+price; (2) of poor quality; (3) of little worth. In the present question, the
+intended meaning is of course (1). Let us remark at the same time how this
+definition is relative: “reduced in price” implies two levels, the one before
+and the one after reduction; similarly, “low” implies the existence of a “high”
+reference. In what follows, we will try to select a suitable reference every
+time we using the word “cheap”.</p>
+<p>So, is the Internet cheap? And for whom? To answer this question, it seems we
+need to define who is paying and for what service. As we have seen in the
+previous section, there are different groups of persons, physical or moral,
+subsidizing the Internet. We can split them into two groups: last-mile
+customers and ISPs. Last-mile customers pay for connectivity, that is, the
+ability to exchange data with any other machine connected to the Internet and
+willing to do so. Meanwhile, as we have noted before, ISPs pay for bandwidth.
+Competition between ISPs in the bandwidth market is significant and the
+question of the “value” of bandwidth is still being decided by this ongoing
+process. We will not go into this discussion further, and rather focus on the
+former group of Internet users.</p>
+<p>Is the Internet cheap for last-mile customers? If the reference is the running
+cost of network infrastructure for ISPs, it turns out the Internet is sometimes
+quite expensive. For instance, until September 2002, the average monthly fee
+for a DSL connection in France was around 50 euros (ca. $70 using today's
+exchange rate) due to an officious agreement between the three major ISPs of
+that time. This phenomenon resulted in a slow deployment of DSL until a new ISP
+(Proxad SA) entered the market with a lowered monthly fee of 30 euros.</p>
+<p>Still, assuming the market works efficiently, is the Internet cheap for
+last-mile customers? If the reference is the cost per byte uploaded, then the
+Sneakernet is cheaper. Using the Skeakernet means transferring one's data on
+a high-capacity hard drive directly connected to the machine, then sending this
+hard drive by express mail. According to this post from Jeff Atwood, in the
+USA, the cost per gigabyte uploaded using the Sneakernet is $0.06, versus $0.42
+for Premium DSL or $0.54 for Premium Cable service. In that sense, the Internet
+is not cheap. (We should note here that the common use of the network by
+customers is in the download direction, in which all three options revolve
+around the same per-gigabyte cost of $0.05.)</p>
+<p>From the previous discussion, it appears difficult to judge of the cheapness of
+the Internet with respect to an objective criterion. Rather, as customers, we
+can feel that “the Internet is cheap” when the price we pay is below our
+willingness to pay. This economic criterion is the ideal value we ought to
+compare Internet prices to, therefore rephrasing the question as: how much are
+customers willing to pay for Internet access?</p>
+<p>To the best of our knowledge, no scientific study has been published yet
+regarding Internet users willingness to pay. We can, however, draw some
+insights by looking at the penetration rate of Internet access on a per country
+basis (this rate is defined as the fraction of the population accessing the
+Internet from private devices). For example, France and Italy have a similar
+population count (ca. 60 million citizens) and GDP (ca. $2 trillion), yet the
+penetration rate in France is 83% while that of Italy is only 58% (cf. List of
+countries by number of Internet users on Wikipedia). In this case, we can state
+that the Internet is cheaper in France than in Italy. Still, despite the
+Internet being a global network, countries worldwide show a lot of variety in
+population or GDP, which makes general statements on the cheapness of the
+Internet out of our reach.</p>
+<p>Let us summarize our point. Among the various groups of Internet subsidizers,
+we chose to focus on last-mile private customers. From their point of view, we
+tried to define an objective criterion on which to judge whether the Internet
+is cheap or not. We came to the conclusion that the relevant criterion is that
+of willingness to pay, while noting that it varies greatly from one country to
+the other. As a consequence, we believe that it is not possible to state
+globally whether the Internet is cheap or not. It is however possible to draw
+some partial conclusions by comparing Internet penetration on
+a country-to-country basis, taking into account other relevant factors such as
+population and GDP.</p>
+<img alt="Network cable" class="align-center" src="../images/cable.jpg" />
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="is-the-internet-cheap.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="is-the-internet-cheap.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="is-the-internet-cheap.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("is-the-internet-cheap"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="is-the-internet-cheap.html">Page</a> published on <time class="dt-published" datetime="2014-07-28T00:00:00+0200">2014-07-28</time>.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

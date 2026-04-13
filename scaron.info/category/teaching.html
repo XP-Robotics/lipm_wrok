@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Teaching - Stéphane Caron</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="Stéphane Caron's teaching">
+        <meta name="generator" content="Pelican 4.8.0">
+
+        <meta property="og:title" content="Teaching - Stéphane Caron">
+        <meta property="og:description" content="Stéphane Caron's teaching">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info">
+        <meta property="og:type" content="website">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/teaching.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/teaching.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="publications.html">Publications</a></li>
+                <li><a href="robotics.html">Robotics</a></li>
+                <li><a href="talks.html">Talks</a></li>
+                <li><a href="teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+    <h1>Teaching</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+
+
+<h2 id="lectures">
+    Lectures
+    <a class="headerlink" href="teaching.html#lectures" title="Permalink to this publication category">¶</a>
+</h2>
+    <ul class="list-all-articles">
+        <li>
+        <a class="paper" href="../teaching/kinematics-rigid-transformations.html">Kinematics and rigid transformations  </a>
+        <div class="article-in-list">
+        <div>Silvère Bonnabel and Stéphane Caron. Fall 2025 course at Master MVA, Paris. <label class="collapse" for="db3cacd9ca2e9d35e99b417b4030231a">(abstract)</label><input id="db3cacd9ca2e9d35e99b417b4030231a" type="checkbox"><p class="abstract">Robotics is about producing motion. In this lecture, we dive into the mathematical representation of robots as articulated systems of rigid bodies, and define formally what motion means. We start by defining the concepts of translation, rotation, rigid transformation and velocities in 2D, where these operations naturally define the groups SO(2) and SE(2). From there, we move to 3D with the groups SO(3) and SE(3), equipping ourselves with rotation matrices, quaternions, exponential and logarithm maps. These groups give us a principled language to define forward kinematics, how a robot moves in the world given its joint angular motions, and inverse kinematics, the inverse problem of figuring out a robot motion that achieves some targets in the world. As a bonus, for those interested in digging deeper, we show how these Lie-group tools extend beyond single-frame geometry to higher-dimensional groups that couple frames, body velocities, and sensor biases, revealing hidden linear structure in major problems that appear nonlinear at first sight.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../teaching/modeling-control-locomotion.html">Modeling and control of legged locomotion  </a>
+        <div class="article-in-list">
+        <div>Stéphane Caron. Fall class at École normale supérieure, Paris. <label class="collapse" for="f60cb33f597f9a3b7d925076f9612fdb">(abstract)</label><input id="f60cb33f597f9a3b7d925076f9612fdb" type="checkbox"><p class="abstract">The objective of this lecture is to understand the physics of balancing and how we can leverage them to design locomotion controllers.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../teaching/reinforcement-learning-legged-robots.html">Reinforcement learning for legged robots  </a>
+        <div class="article-in-list">
+        <div>Stéphane Caron. Fall class at École normale supérieure, Master MVA and Mines de Paris. <label class="collapse" for="70be52c9434d2d892fe99634665a6647">(abstract)</label><input id="70be52c9434d2d892fe99634665a6647" type="checkbox"><p class="abstract">This is a crash course on applying reinforcement learning to train policies that balance real legged robots. We first review the necessary basics: partially-observable Markov decision processes, value functions, the goal of reinforcement learning. We then focus on policy optimization: REINFORCE, policy gradient and proximal policy optimization (PPO). We finally focus on techniques to train real-robot policies from simulation data: domain randomization, simulation augmentation, teacher-student distillation, reward shaping, ...</p></div>
+        </div>
+        </li>
+    </ul>
+
+<h2 id="courses">
+    Courses
+</h2>
+<h3 id="école-normale-supérieure">
+    École normale supérieure
+    <a class="headerlink" href="teaching.html#école-normale-supérieure" title="Permalink to this publication category">¶</a>
+</h3>
+    <ul class="list-all-articles">
+        <li>
+        <a class="paper" href="../teaching/ens-2025.html">Planification de mouvement en robotique et en animation graphique - Fall 2025  </a>
+        <div class="article-in-list">
+        <div>Stéphane Caron, Justin Carpentier and Yann de Mont-Marin. Fall 2025 course at École normale supérieure, Paris. <label class="collapse" for="bcf529dc640f678c28b33ed64f415300">(abstract)</label><input id="bcf529dc640f678c28b33ed64f415300" type="checkbox"><p class="abstract">La planification de mouvement s’intéresse au calcul automatique de chemins sans collision pour un système mécanique (robot mobile, bras manipulateur, personnage animé...) évoluant dans un environnement encombré d’obstacles. Les méthodes consistent à explorer l’espace des configurations du système : une configuration regroupe l’ensemble des paramètres permettant de localiser le système dans son environnement. Aux obstacles de l’environnement correspondent des domaines à éviter dans l’espace des configurations. La planification de mouvement pour le système mécanique se trouve ainsi ramenée au problème de la planification de mouvement d’un point dans une variété non simplement connexe.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../teaching/ens-2024.html">Planification de mouvement en robotique et en animation graphique - Fall 2024  </a>
+        <div class="article-in-list">
+        <div>Stéphane Caron, Justin Carpentier and Yann de Mont-Marin. Fall 2024 course at École normale supérieure, Paris. <label class="collapse" for="bcf529dc640f678c28b33ed64f415300">(abstract)</label><input id="bcf529dc640f678c28b33ed64f415300" type="checkbox"><p class="abstract">La planification de mouvement s’intéresse au calcul automatique de chemins sans collision pour un système mécanique (robot mobile, bras manipulateur, personnage animé...) évoluant dans un environnement encombré d’obstacles. Les méthodes consistent à explorer l’espace des configurations du système : une configuration regroupe l’ensemble des paramètres permettant de localiser le système dans son environnement. Aux obstacles de l’environnement correspondent des domaines à éviter dans l’espace des configurations. La planification de mouvement pour le système mécanique se trouve ainsi ramenée au problème de la planification de mouvement d’un point dans une variété non simplement connexe.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../teaching/ens-2023.html">Planification de mouvement en robotique et en animation graphique - Fall 2023  </a>
+        <div class="article-in-list">
+        <div>Stéphane Caron, Justin Carpentier and Yann de Mont-Marin. Fall 2023 course at École normale supérieure, Paris. <label class="collapse" for="bcf529dc640f678c28b33ed64f415300">(abstract)</label><input id="bcf529dc640f678c28b33ed64f415300" type="checkbox"><p class="abstract">La planification de mouvement s’intéresse au calcul automatique de chemins sans collision pour un système mécanique (robot mobile, bras manipulateur, personnage animé...) évoluant dans un environnement encombré d’obstacles. Les méthodes consistent à explorer l’espace des configurations du système : une configuration regroupe l’ensemble des paramètres permettant de localiser le système dans son environnement. Aux obstacles de l’environnement correspondent des domaines à éviter dans l’espace des configurations. La planification de mouvement pour le système mécanique se trouve ainsi ramenée au problème de la planification de mouvement d’un point dans une variété non simplement connexe.</p></div>
+        </div>
+        </li>
+    </ul>
+<h3 id="master-mva">
+    Master MVA
+    <a class="headerlink" href="teaching.html#master-mva" title="Permalink to this publication category">¶</a>
+</h3>
+    <ul class="list-all-articles">
+        <li>
+        <a class="paper" href="../teaching/mva-2025.html">Robotics - Master MVA - Fall 2025  </a>
+        <div class="article-in-list">
+        <div>Silvère Bonnabel, Stéphane Caron, Justin Carpentier, Ajay Sathya and Pierre-Brice Wieber. Fall 2025 course at Master MVA, Paris. <label class="collapse" for="a8259cecf2113436626c8014d36b5ac2">(abstract)</label><input id="a8259cecf2113436626c8014d36b5ac2" type="checkbox"><p class="abstract">A large part of the recent progress in robotics has sided with advances in machine learning, optimization and computer vision. The objective of this course is to introduce the general conceptual tools behind these advances and show how they have enabled robots to perceive the world and perform tasks ranging, beyond factory automation, to highly-dynamic saltos or mountain hikes. The course covers modeling and simulation of robotic systems, motion planning, inverse problems for motion control, optimal control, and reinforcement learning. It also includes practical exercises with state-of-the-art robotics libraries, and a broader reflection on our responsibilities when it comes to doing research and innovation in robotics.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../teaching/mva-2024.html">Robotics - Master MVA - Fall 2024  </a>
+        <div class="article-in-list">
+        <div>Silvère Bonnabel, Stéphane Caron, Justin Carpentier, Ajay Sathya and Pierre-Brice Wieber. Fall 2024 course at Master MVA, Paris. <label class="collapse" for="a8259cecf2113436626c8014d36b5ac2">(abstract)</label><input id="a8259cecf2113436626c8014d36b5ac2" type="checkbox"><p class="abstract">A large part of the recent progress in robotics has sided with advances in machine learning, optimization and computer vision. The objective of this course is to introduce the general conceptual tools behind these advances and show how they have enabled robots to perceive the world and perform tasks ranging, beyond factory automation, to highly-dynamic saltos or mountain hikes. The course covers modeling and simulation of robotic systems, motion planning, inverse problems for motion control, optimal control, and reinforcement learning. It also includes practical exercises with state-of-the-art robotics libraries, and a broader reflection on our responsibilities when it comes to doing research and innovation in robotics.</p></div>
+        </div>
+        </li>
+        <li>
+        <a class="paper" href="../teaching/mva-2023.html">Robotics - Master MVA - Fall 2023  </a>
+        <div class="article-in-list">
+        <div>Silvère Bonnabel, Stéphane Caron, Justin Carpentier and Pierre-Brice Wieber. Fall 2023 course at Master MVA, Paris. <label class="collapse" for="9a54974bb5940ae0f6c98487a746b873">(abstract)</label><input id="9a54974bb5940ae0f6c98487a746b873" type="checkbox"><p class="abstract">A large part of the recent progress in robotics has sided with advances in machine learning, optimization and computer vision. The objective of this lecture is to introduce the general conceptual tools behind these advances and show how they have enabled robots to perceive the world and perform tasks ranging, beyond factory automation, to highly-dynamic saltos or mountain hikes. The course covers modeling and simulation of robotic systems, motion planning, inverse problems for motion control, optimal control, and reinforcement learning. It also includes practical exercises with state-of-the-art robotics libraries, and a broader reflection on our responsibilities when it comes to doing research and innovation in robotics.</p></div>
+        </div>
+        </li>
+    </ul>
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

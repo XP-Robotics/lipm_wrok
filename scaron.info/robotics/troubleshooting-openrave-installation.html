@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Troubleshooting OpenRAVE installation</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="While installing OpenRAVE on Ubuntu 14.04 or on Ubuntu 16.04, you may run into a number of problems as packages get out of sync. I report here on issues I ran into while installing OpenRAVE on new systems. Setup¶ What follows assumes that you are trying to install …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Robotics">
+        <meta name="keywords" content="OpenRAVE, Robotics">
+
+        <meta property="og:title" content="Troubleshooting OpenRAVE installation">
+        <meta property="og:description" content="While installing OpenRAVE on Ubuntu 14.04 or on Ubuntu 16.04, you may run into a number of problems as packages get out of sync. I report here on issues I ran into while installing OpenRAVE on new systems. Setup¶ What follows assumes that you are trying to install …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/robotics/troubleshooting-openrave-installation.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/robotics.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/robotics.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <h1>Troubleshooting OpenRAVE installation</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p>While <a class="reference external" href="installing-openrave-on-ubuntu-14.04.html">installing OpenRAVE on Ubuntu 14.04</a> or on <a class="reference external" href="installing-openrave-on-ubuntu-16.04.html">Ubuntu 16.04</a>, you may run into a
+number of problems as packages get out of sync. I report here on issues I ran
+into while installing OpenRAVE on new systems.</p>
+<div class="section" id="setup">
+<h2>Setup<a class="headerlink" href="troubleshooting-openrave-installation.html#setup" title="Permalink to this headline">¶</a></h2>
+<p>What follows assumes that you are trying to install from the
+<code>latest_stable</code> branch of OpenRAVE's GitHub repository:</p>
+<pre class="code bash literal-block">
+git<span class="w"> </span>clone<span class="w"> </span>--branch<span class="w"> </span>latest_stable<span class="w"> </span>https://github.com/rdiankov/openrave.git<span class="w">
+</span><span class="nb">cd</span><span class="w"> </span>openrave<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>mkdir<span class="w"> </span>build<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>build<span class="w">
+</span>cmake<span class="w"> </span>..<span class="w">
+</span>make<span class="w"> </span>-j4<span class="w">
+</span>sudo<span class="w"> </span>make<span class="w"> </span>install
+</pre>
+<p>I could successfully install OpenRAVE with the commit numbers
+<code>5cfc7444...</code> for Ubuntu 14.04 and <code>9c79ea26...</code> for 16.04.</p>
+</div>
+<div class="section" id="known-issues">
+<h2>Known issues<a class="headerlink" href="troubleshooting-openrave-installation.html#known-issues" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="missing-field-in-collisionreport">
+<h3>Missing field in CollisionReport<a class="headerlink" href="troubleshooting-openrave-installation.html#missing-field-in-collisionreport" title="Permalink to this headline">¶</a></h3>
+<p>Depending on your configuration, you may run into the following error:</p>
+<pre class="code bash literal-block">
+openrave/plugins/bulletrave/bulletcollision.h:<span class="w"> </span>In<span class="w"> </span>member<span class="w"> </span><span class="k">function</span><span class="w"> </span>‘bool<span class="w"> </span>BulletCollisionChecker::CheckCollisionP<span class="o">(</span>btOverlapFilterCallback,<span class="w"> </span>OpenRAVE::CollisionReportPtr<span class="o">)</span>’:<span class="w">
+</span>openrave/plugins/bulletrave/bulletcollision.h:335:25:<span class="w"> </span>error:<span class="w"> </span>‘class<span class="w"> </span>OpenRAVE::CollisionReport’<span class="w"> </span>has<span class="w"> </span>no<span class="w"> </span>member<span class="w"> </span>named<span class="w"> </span>‘numCols’
+</pre>
+<p>A quickfix is to add the field <code>int numCols;</code> to the class
+<code>CollisionReport</code> in <code>include/openrave/collisionchecker.h:57</code>. See
+<a class="reference external" href="https://github.com/rdiankov/openrave/issues/333">this issue</a> on GitHub.</p>
+</div>
+<div class="section" id="undefined-bind-per-primitive">
+<h3>Undefined BIND_PER_PRIMITIVE<a class="headerlink" href="troubleshooting-openrave-installation.html#undefined-bind-per-primitive" title="Permalink to this headline">¶</a></h3>
+<p>Newer versions of OpenSceneGraph changed the API, so the commit above (<code>5cfc744410...</code> on branch <code>latest_stable</code>) will not compile directly on a fresh Ubuntu install.  Rather, it will fail with the error &quot;‘BIND_PER_PRIMITIVE’ is not a member of ‘osg::Geometry’&quot;. You can fix this by <a class="reference external" href="https://github.com/georgmartius/lpzrobots/commit/bfdcee3af43930d6676019738f90c7e4ecb2ae18">updating</a> line 341 of <code>plugins/qtosgrave/Item.cpp</code> into:</p>
+<pre class="code cpp literal-block">
+<span class="n">geom</span><span class="o">-&gt;</span><span class="n">setNormalBinding</span><span class="p">(</span><span class="n">osg</span><span class="o">::</span><span class="n">Geometry</span><span class="o">::</span><span class="n">BIND_PER_PRIMITIVE_SET</span><span class="p">);</span>
+</pre>
+<p>Of course you can also try to compile using more recent commits, however on a
+fresh Ubuntu install (as of May 12th, 2016) it won't compile either due to the
+use of the function <code>osg::DrawElementsUInt::resizeElements</code>, which is in
+the OpenSceneGraph API but not available on the one distributed with Ubuntu.</p>
+</div>
+<div class="section" id="undefined-symbol-for-boost-assertions">
+<h3>Undefined symbol for Boost assertions<a class="headerlink" href="troubleshooting-openrave-installation.html#undefined-symbol-for-boost-assertions" title="Permalink to this headline">¶</a></h3>
+<p>As documented in <a class="reference external" href="http://openrave-users-list.185357.n3.nabble.com/error-with-example-hanoi-td4026030.html">this thread</a>, you may run into the following issue with newer versions of Boost:</p>
+<pre class="code bash literal-block">
+ImportError:<span class="w"> </span>./convexdecompositionpy.so:<span class="w"> </span>undefined<span class="w"> </span>symbol:<span class="w"> </span>_ZN5boost20assertion_failed_msgEPKcS1_S1_S1_l<span class="o">)</span>
+</pre>
+<p>The solution <a class="reference external" href="http://www.aizac.info/installing-openrave0-9-on-ubuntu-trusty-14-04-64bit/">proposed here</a> is to go to <code>python/bindings</code> and update three files:</p>
+<ul class="simple">
+<li>convexdecompositionpy.cpp</li>
+<li>bindings.cpp</li>
+<li>pyann.cpp</li>
+</ul>
+<p>At the top of each file, spot the line containing <code>BOOST_ENABLE_ASSERT_HANDLER</code> and replace it by:</p>
+<pre class="code bash literal-block">
+<span class="c1">#define BOOST_DISABLE_ASSERTS</span>
+</pre>
+<p>It is dirty (disabling a number of checks in these three modules) but effective.</p>
+</div>
+<div class="section" id="i-don-t-get-the-same-gui-as-in-your-examples">
+<h3>I don't get the same GUI as in your examples<a class="headerlink" href="troubleshooting-openrave-installation.html#i-don-t-get-the-same-gui-as-in-your-examples" title="Permalink to this headline">¶</a></h3>
+<p>You are most likely getting the OpenSceneGraph GUI instead of the QtCoin GUI,
+which is the one I use. Both are compiled as plugins when you build OpenRAVE
+from source. In Python, the GUI plugin is selected when you call
+<code>SetViewer()</code> on your Environment object. For the QtCoin interface, do:</p>
+<pre class="code python literal-block">
+<span class="n">env</span><span class="o">.</span><span class="n">SetViewer</span><span class="p">(</span><span class="s1">'qtcoin'</span><span class="p">)</span>
+</pre>
+<p>If you compiled OpenRAVE from source, you can enable these GUI plugins at the
+CMake level: run <code>ccmake .</code> in your build folder, and check the following
+two parameters:</p>
+<ul class="simple">
+<li><code>OPENRAVE_PLUGIN_QTOSGRAVE</code>: turn it ON to enable OpenSceneGraph</li>
+<li><code>OPENRAVE_PLUGIN_QTCOINRAVE</code>: turn it ON to enable QtCoin</li>
+</ul>
+</div>
+</div>
+<div class="section" id="another-issue">
+<h2>Another issue?<a class="headerlink" href="troubleshooting-openrave-installation.html#another-issue" title="Permalink to this headline">¶</a></h2>
+<p>If the problem you encounter is not listed above, you can ask your question on
+the <a class="reference external" href="http://openrave-users-list.185357.n3.nabble.com/">OpenRAVE Users List</a>
+or on the <a class="reference external" href="https://github.com/rdiankov/openrave/issues">issue tracker on GitHub</a>. Be sure to provide the <em>first</em>
+(topmost) error that appears in your logs.</p>
+</div>
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="troubleshooting-openrave-installation.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="troubleshooting-openrave-installation.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="troubleshooting-openrave-installation.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("troubleshooting-openrave-installation"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="troubleshooting-openrave-installation.html">Page</a> published on <time class="dt-published" datetime="2015-11-15T00:00:00+0100">2015-11-15</time>.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>

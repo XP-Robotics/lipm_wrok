@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>How to play any DVD on Ubuntu</title>
+
+        <meta name="author" content="Stéphane Caron">
+        <meta name="description" content="I recently found myself in a situation where I couldn’t read a DVD I’d just bought in the USA because of the protections and region-lock on the disc. This got me pretty upset since every device on the chain and every piece of software involved were legal (my …">
+        <meta name="generator" content="Pelican 4.8.0">
+        <meta name="category" content="Blog">
+        <meta name="keywords" content="Linux">
+
+        <meta property="og:title" content="How to play any DVD on Ubuntu">
+        <meta property="og:description" content="I recently found myself in a situation where I couldn’t read a DVD I’d just bought in the USA because of the protections and region-lock on the disc. This got me pretty upset since every device on the chain and every piece of software involved were legal (my …">
+        <meta property="og:image" content="https://scaron.info/theme/images/og-image.jpg">
+        <meta property="og:url" content="https://scaron.info/blog/play-any-dvd-on-ubuntu.html">
+        <meta property="og:type" content="article">
+
+        <link rel="shortcut icon" href="../theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../theme/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+        <link rel="stylesheet" type="text/css" href="../theme/css/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="../theme/css/katex.min.css" integrity="sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/">
+
+        <link href="../feeds/blog.atom.xml" type="application/atom+xml" rel="alternate" title="Stéphane Caron's Atom Feed" />
+        <link href="../feeds/blog.rss.xml" type="application/rss+xml" rel="alternate" title="Stéphane Caron's RSS Feed" />
+    </head>
+    <body>
+        <nav role="navigation">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <section id="logo">
+                <img src="../images/upkie-sketch.png">
+            </section>
+            <section id="icons">
+                <a title="E-mail" href="mailto:stephane.caron@isir.upmc.fr"><img class="icon" src="../theme/images/thunderbird.png"></a>
+                &nbsp;
+                <a title="Atom feed" href="../feeds/all.atom.xml"><img class="icon" src="../theme/images/atom-feed.png"></a>
+                &nbsp;
+                <a title="GitHub" href="https://github.com/stephane-caron"><img class="icon" src="../theme/images/github.png"></a>
+                &nbsp;
+                <a rel="me" title="Mastodon" href="https://fosstodon.org/@locoscaron"><img class="icon" src="../theme/images/mastodon.png"></a>
+            </section>
+            <ul id="nav-menu">
+                <li><a href="../category/blog.html">Blog</a></li>
+                <li><a href="../category/publications.html">Publications</a></li>
+                <li><a href="../category/robotics.html">Robotics</a></li>
+                <li><a href="../category/talks.html">Talks</a></li>
+                <li><a href="../category/teaching.html">Teaching</a></li>
+            </ul>
+            <section id="basho">
+                <img src="../theme/images/basho.png" id="basho">
+            </section>
+        </nav>
+        <main>
+            <header>
+                <h1>How to play any DVD on Ubuntu</h1>
+            </header>
+            <article class="h-entry">
+                <div class="e-content">
+
+<p>I recently found myself in a situation where I couldn’t read a DVD I’d just
+bought in the USA because of the protections and region-lock on the disc. This
+got me pretty upset since every device on the chain and every piece of software
+involved were legal (my machine is a factory Sony Vaio Z running Ubuntu 11.04).
+So here is the summary of the additional software (legal as well) I had to
+install to get things working.</p>
+<div class="section" id="installing">
+<h2>Installing<a class="headerlink" href="play-any-dvd-on-ubuntu.html#installing" title="Permalink to this headline">¶</a></h2>
+<p>First, we need to install libdvdcss2:</p>
+<div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>libdvdread4
+$<span class="w"> </span>sudo<span class="w"> </span>/usr/share/doc/libdvdread4/install-css.sh
+</pre></div>
+<p>My DVD player was set on the wrong region so I had to use regionset too:</p>
+<div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>regionset
+$<span class="w"> </span>sudo<span class="w"> </span>regionset
+</pre></div>
+<p>Beware to answer every question manually: the default behavior if you just
+press return is to exit without making any change. In my case, I set the region
+code to 1 (US). The next step is Medibuntu:</p>
+<div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>wget<span class="w"> </span>--output-document<span class="o">=</span>/etc/apt/sources.list.d/medibuntu.list<span class="w"> </span>http://www.medibuntu.org/sources.list.d/<span class="k">$(</span>lsb_release<span class="w"> </span>-cs<span class="k">)</span>.list<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>--quiet<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>--yes<span class="w"> </span>--quiet<span class="w"> </span>--allow-unauthenticated<span class="w"> </span>install<span class="w"> </span>medibuntu-keyring<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>--quiet<span class="w"> </span>update
+$<span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>--yes<span class="w"> </span>install<span class="w"> </span>app-install-data-medibuntu<span class="w"> </span>apport-hooks-medibuntu
+</pre></div>
+<p>Now you should reboot your machine (you may get yet-another strange decoding
+error otherwise).</p>
+</div>
+<div class="section" id="playing">
+<h2>Playing<a class="headerlink" href="play-any-dvd-on-ubuntu.html#playing" title="Permalink to this headline">¶</a></h2>
+<p>Here is an excerpt from the README of libdvdcss2:</p>
+<blockquote>
+<p>The behaviour of the library can be affected by changing two environment
+variables:
+DVDCSS_METHOD={title|disc|key}: method for key decryption</p>
+<p>title: decrypted title key is guessed from the encrypted sectors of the
+stream. Thus it should work with a file as well as the DVD device. But it
+sometimes takes much time to decrypt a title key and may even fail. With
+this method, the key is only checked at the beginning of each title, so it
+won’t work if the key changes in the middle of a title.</p>
+<p>disc: the disc key is first cracked ; then all title keys can be decrypted
+instantly, which allows us to check them often,</p>
+<p>key: the same as “disc” if you don’t have a file with player keys at
+compilation time.  If you do, the decryption of the disc key will be faster
+with this method.  It is the one that was used by libcss.  This is the
+default method.</p>
+</blockquote>
+<p>So the default method is key, but on a sample of 3-4 DVDs it worked only once
+for me. I had better results using the title method:</p>
+<div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">DVDCSS_METHOD</span><span class="o">=</span>title
+</pre></div>
+<p>Last advice: sometimes decoding may not work if you go through the main menu,
+but you can skip this step with VLC and go directly to chapter
+1 of your movie, e.g.</p>
+<div class="highlight"><pre><span></span>$<span class="w"> </span>vlc<span class="w"> </span>dvd://@1
+</pre></div>
+</div>
+<div class="section" id="conclusion">
+<h2>Conclusion<a class="headerlink" href="play-any-dvd-on-ubuntu.html#conclusion" title="Permalink to this headline">¶</a></h2>
+<p>My bet is that the people who developed the “protection” software of DVDs spent
+time so that we could in turn lose time making things work… Many thanks to the
+hierarchy of human workers and “deciders” which made all of this possible.</p>
+<p>Most of the help I found online came from two articles in the Ubuntu
+Documentation: <a class="reference external" href="https://help.ubuntu.com/community/RestrictedFormats/PlayingDVDs">Restricted Formats / Playing DVDs</a> and
+<a class="reference external" href="https://help.ubuntu.com/community/Medibuntu">Medibuntu</a>. Maybe some of the
+instructions I provide here are redundant or unnecessary: this is exactly what
+I’ve done on my system to get things working, I just hope it may help others
+after me.</p>
+</div>
+
+<section id="discussion">
+    <h2>
+        Discussion
+        <a class="headerlink" href="play-any-dvd-on-ubuntu.html#discussion" title="Permalink to this discussion">¶</a>
+    </h2>
+    <p>
+    Feel free to post a comment by e-mail using the form below. Your e-mail address will not be disclosed.
+    </p>
+        <section id="post-a-comment">
+        <form id="comment-form" action="play-any-dvd-on-ubuntu.html#">
+            <legend>
+                📝 You can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> with <code>$\LaTeX$</code> formulas in your comment.
+            </legend>
+            <input type="hidden" id="comment-form-input-replyto">
+            <fieldset>
+                <label for="comment-form-input-name">
+                    Name
+                </label>
+                <input id="comment-form-input-name" type="text"
+                       placeholder="Your name or nickname"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-website">
+                    Website
+                </label>
+                <input id="comment-form-input-website" type="text"
+                       placeholder="Your personal website (optional)"
+                       class="form-input" />
+            </fieldset>
+            <fieldset>
+                <label for="comment-form-input-textarea">
+                    Comment
+                </label>
+                <textarea id="comment-form-input-textarea" rows="5"
+                          style="resize:vertical;" placeholder="Your question or comment"
+                          class="form-input"></textarea>
+                <p class="use-markdown">
+                </p>
+                <div style="display: none; " id="comment-form-display-replyto"></div>
+            </fieldset>
+            <p id="agree-cc-by">
+            By clicking the button below, you agree to the publication of your comment on this page.
+            </p>
+            <button type="submit" id="comment-form-button-submit">
+                Post by e-mail
+            </button>
+            <p id="email-button-comment">
+                Opens your e-mail client.
+            </p>
+        </form>
+    </section>
+</section>
+
+<script type="text/javascript" src="../theme/js/jquery.min.js"></script>
+<script type="text/javascript" src="../theme/js/comments.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        CommentSystem.email_user   = "stephane.caron";
+        CommentSystem.email_domain = "normalesup.org";
+        CommentSystem.display_replyto_html = function(comment_content, article_slug, author) {
+            return ''
+                + '<button style="float:right;" onclick="CommentSystem.cancelReply(); return false;" title="Cancel the reply">'
+                +     '×'
+                + '</button>'
+                + '<p>This comment will be posted as a reply to \'<a title="'+comment_content+'" href="play-any-dvd-on-ubuntu.html#comment-'+article_slug+'">'+author+'</a>\'</p>';
+        };
+
+        $('#comment-form').on("submit",
+            function( event )
+            {
+                event.preventDefault();
+                $(location).attr('href', CommentSystem.getMailtoLink("play-any-dvd-on-ubuntu"));
+            }
+        );
+    });
+</script>
+
+                </div>
+                <footer>
+                    Copyright 2026 <a ref="author" class="p-author h-card" href="../index.html">Stéphane Caron</a>.
+                    <a href="../tags.html"><div class="search-icon">&pi;</div></a>
+                    <br>
+                    <a class="u-url" href="play-any-dvd-on-ubuntu.html">Page</a> published on <time class="dt-published" datetime="2011-10-17T00:00:00+0200">2011-10-17</time>.
+                    <br>
+                    Content licensed under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> license.
+                    <br>
+                    Contact me on
+                    <a href="https://codeberg.org/stephane-caron">Codeberg</a>,
+                    <a href="https://github.com/stephane-caron">GitHub</a>,
+                    <a href="https://fosstodon.org/@locoscaron">Mastodon</a>,
+                    or by <a href="mailto:stephane.caron@isir.upmc.fr">e-mail</a>.
+                    <br>
+                    Subscribe to the <a href="../feeds/all.atom.xml">Atom feed</a> for updates.
+                </footer>
+            </article>
+        </main>
+    </body>
+</html>
